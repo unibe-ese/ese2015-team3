@@ -1,8 +1,11 @@
 package org.sample.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 
@@ -13,37 +16,20 @@ public class TutorClasses {
     @GeneratedValue
     private Long id;
  
-    @OneToMany
-    private Tutor tutor;
+//    @ManyToOne
+    private Long tutor;
     
-    @OneToMany
-    private Classes classes; //foreign key
+//    @ManyToOne
+    private Long classes; //foreign key
     
     private float grade;
 
-    
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Tutor getTutor() {
-		return tutor;
-	}
-
-	public void setTutor(Tutor tutor) {
-		this.tutor = tutor;
-	}
-
-	public Classes getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Classes classes) {
-		this.classes = classes;
 	}
 
 	public float getGrade() {

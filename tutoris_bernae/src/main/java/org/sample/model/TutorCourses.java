@@ -13,11 +13,11 @@ public class TutorCourses {
     @GeneratedValue
     private Long id;
     
-    @ManyToOne
-    private Tutor tutor;
+    //    @ManyToOne
+    private Long tutor;
     
-    @ManyToOne
-    private StudyCourse studycourse;
+    //    @ManyToOne
+    private Long studycourse;
     
     private boolean isMajor;
 
@@ -28,22 +28,6 @@ public class TutorCourses {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Tutor getTutor() {
-		return tutor;
-	}
-
-	public void setTutor(Tutor tutor) {
-		this.tutor = tutor;
-	}
-
-	public StudyCourse getStudycourse() {
-		return studycourse;
-	}
-
-	public void setStudycourse(StudyCourse studycourse) {
-		this.studycourse = studycourse;
 	}
 
 	public boolean isMajor() {

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -13,8 +14,11 @@ public class Classes {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    private StudyCourse studycourse; //foreign key
+//    @ManyToOne
+    private Long studycourse; //foreign key
+    
+//    @OneToMany
+    private Long tutorclasses;
     
     private String name;
 
@@ -25,14 +29,6 @@ public class Classes {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public StudyCourse getStudycourse() {
-		return studycourse;
-	}
-
-	public void setStudycourse(StudyCourse studycourse) {
-		this.studycourse = studycourse;
 	}
 
 	public String getName() {

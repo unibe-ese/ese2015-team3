@@ -23,7 +23,7 @@ public class User {
     private Tutor tutor;
     
     private boolean isTimetableActive;
-    private Object timetable;
+//    private Object timetable;
     
     
 	public Long getId() {
@@ -74,10 +74,10 @@ public class User {
 	public void setTimetableActive(boolean isTimetableActive) {
 		this.isTimetableActive = isTimetableActive;
 	}
-	public Object getTimetable() {
-		return timetable;
-	}
-	public void setTimetable(Object timetable) {
-		this.timetable = timetable;
-	}
+//	public Object getTimetable() {
+//		return timetable;
+//	}
+//	public void setTimetable(Object timetable) {
+//		this.timetable = timetable;
+//	}
 }

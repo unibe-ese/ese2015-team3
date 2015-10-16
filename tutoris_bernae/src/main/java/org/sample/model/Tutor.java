@@ -17,11 +17,11 @@ public class Tutor {
     @OneToOne
     private User student; //foreign key to student
     
-    @OneToMany
-    private TutorCourses courses; //Studiengang
+//    @OneToMany
+    private Long courses; //Studiengang
     
-    @OneToMany
-    private TutorClasses classes;
+//    @OneToMany
+    private Long classes;
 
     
 	public Long getId() {
@@ -40,19 +40,4 @@ public class Tutor {
 		this.student = student;
 	}
 
-	public TutorCourses getCourses() {
-		return courses;
-	}
-
-	public void setCourses(TutorCourses courses) {
-		this.courses = courses;
-	}
-
-	public TutorClasses getClasses() {
-		return classes;
-	}
-
-	public void setClasses(TutorClasses classes) {
-		this.classes = classes;
-	}
 }

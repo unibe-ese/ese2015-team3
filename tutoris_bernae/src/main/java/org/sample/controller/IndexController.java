@@ -6,7 +6,7 @@ import javax.validation.Valid;
 
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.SignupForm;
-import org.sample.controller.service.SampleService;
+import org.sample.controller.service.FormService;
 import org.sample.model.Team;
 import org.sample.model.User;
 import org.sample.model.dao.TeamDao;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class IndexController {
 
     @Autowired
-    SampleService sampleService;
+    FormService sampleService;
     
     private final TeamDao teamRepository;
 
@@ -45,7 +45,7 @@ public class IndexController {
         return model;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    /* @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ModelAndView create(@Valid SignupForm signupForm, BindingResult result, RedirectAttributes redirectAttributes) {
     	ModelAndView model;    	
     	if (!result.hasErrors()) {
@@ -60,7 +60,7 @@ public class IndexController {
         	model = new ModelAndView("index");
         }   	
     	return model;
-    }
+    }*/
     
     @RequestMapping(value = "/security-error", method = RequestMethod.GET)
     public String securityError(RedirectAttributes redirectAttributes) {

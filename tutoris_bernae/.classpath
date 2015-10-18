@@ -22,8 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Patrick/.m2/repository/org/springframework/spring-test/3.2.3.RELEASE/spring-test-3.2.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Patrick/.m2/repository/org/slf4j/slf4j-simple/1.7.5/slf4j-simple-1.7.5-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Patrick/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

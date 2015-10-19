@@ -6,12 +6,14 @@ import org.sample.controller.exceptions.InvalidUserPasswordException;
 import org.sample.controller.pojos.LoginForm;
 import org.sample.controller.service.FormService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@Controller
 public class LoginController {
 
     @Autowired
@@ -26,7 +28,7 @@ public class LoginController {
     
     @RequestMapping(value = "/login-create", method = RequestMethod.POST)
     public ModelAndView create(@Valid LoginForm loginForm, BindingResult result, RedirectAttributes redirectAttributes) {
-    	ModelAndView model;    	
+    	ModelAndView model;
     	if (!result.hasErrors()) {
             try {
             	formService.saveFrom(loginForm);

@@ -1,3 +1,16 @@
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata
+bin/
+tmp/
+
+# Maven/Spring MVC
+log/
+target/
+.springbeans
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

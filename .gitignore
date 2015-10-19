@@ -6,6 +6,9 @@
 bin/
 tmp/
 
+#special:
+tutoris/bernae.classpath
+
 # Maven/Spring MVC
 log/
 target/

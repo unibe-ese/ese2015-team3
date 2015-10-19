@@ -1,10 +1,13 @@
 package org.sample.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -14,13 +17,14 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     @Column(nullable=false)
     private String firstName;
     @Column(nullable=false)
     private String lastName;
-    @Column(unique = true, nullable=false)
+    @Column(unique = true)
     private String email; //should be unique!
-    @Column(unique = true, nullable=false)
+    @Column(unique = true)
     private String username;
    
     @Column(nullable=false)
@@ -28,8 +32,8 @@ public class User {
     
     private boolean isTutor;
     
-    @OneToOne
-    @Column(nullable=true)
+    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(columnDefinition="integer", nullable=true)
     private Tutor tutor;
     
     private boolean isTimetableActive = false;

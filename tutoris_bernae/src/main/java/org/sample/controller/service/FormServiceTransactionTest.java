@@ -65,8 +65,8 @@ public class FormServiceTransactionTest {
         assertEquals("user",user.getUsername());
         assertEquals("test@test.com",user.getEmail());
         assertEquals("123456",user.getPassword());
-        assertEquals(false,user.isTutor());
-        assertEquals(false,user.isTimetableActive());
+        assertEquals(false,user.getIsTutor());
+        assertEquals(false,user.getIsTimetableActive());
     }
     
     @Test(expected=InvalidUserException.class) 

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 
@@ -15,7 +16,7 @@ public class Classes {
     private Long id;
 
     @ManyToOne
-    @Column(nullable=false)
+//    @JoinColumn(columnDefinition="integer", nullable = false)
     private StudyCourse studycourse;
     
     @Column(nullable=false)

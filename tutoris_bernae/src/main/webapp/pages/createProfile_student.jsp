@@ -20,12 +20,12 @@
             </div>
         </div>
             
-        <c:set var="userNameErrors"><form:errors path="userName"/></c:set>
+        <c:set var="usernameErrors"><form:errors path="username"/></c:set>
         <div class="control-group<c:if test="${not empty userNameErrors}"> error</c:if>">
-            <label class="control-label" for="field-userName">Username</label>
+            <label class="control-label" for="field-username">Username</label>
             <div class="controls">
-                <form:input path="userName" id="field-userName" tabindex="1" maxlength="35" placeholder="Username"/>
-                <form:errors path="userName" cssClass="help-inline" element="span"/>
+                <form:input path="username" id="field-username" tabindex="1" maxlength="35" placeholder="Username"/>
+                <form:errors path="username" cssClass="help-inline" element="span"/>
             </div>
         </div>
             
@@ -47,21 +47,17 @@
             </div>
         </div>
         
-        <c:set var="passwordErrors"><form:errors path="passWord"/></c:set>
+        <c:set var="passwordErrors"><form:errors path="password"/></c:set>
         <div class="control-group<c:if test="${not empty passWordErrors}"> error</c:if>">
             <label class="control-label" for="password-email">Password</label>
             <div class="controls">
-                <form:input path="password" id="field-password" tabindex="1" maxlength="35" placeholder="Password"/>
+                <form:input type="password" path="password" id="field-password" tabindex="1" maxlength="35" placeholder="Password"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
         
-        <div class="redirection">
-            <button type="submit" >Become a Tutor</button>
-        </div>
-            
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Sign up</button>
+            <button type="submit" class="btn btn-primary">Register</button>
             <button type="button" class="btn">Cancel</button>
         </div>
     </fieldset>
@@ -75,3 +71,5 @@
         ${page_error}
     </div>
 </c:if>
+
+<c:import url="template/footer.jsp"/>

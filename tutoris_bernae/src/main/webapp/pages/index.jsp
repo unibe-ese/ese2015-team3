@@ -8,7 +8,7 @@
 
 
 <h1>Welcome</h1>
-
+<a href="/tutoris_baernae/registerStudent" class="button">Register</a>
 
 <c:if test="${page_error != null }">
     <div class="alert alert-error">

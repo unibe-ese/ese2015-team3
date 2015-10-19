@@ -11,16 +11,16 @@
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
 		<!--[if lte IE 8]><script src="/Skeleton/css/ie/html5shiv.js"></script><![endif]-->
-		<script src="/Skeleton/js/jquery.min.js"></script>
-		<script src="/Skeleton/js/jquery.dropotron.min.js"></script>
-		<script src="/Skeleton/js/skel.min.js"></script>
-		<script src="/Skeleton/js/skel-layers.min.js"></script>
-		<script src="/Skeleton/js/init.js"></script>
+		<script src="/tutoris_baernae/js/jquery.min.js"></script>
+		<script src="/tutoris_baernae/js/jquery.dropotron.min.js"></script>
+		<script src="/tutoris_baernae/js/skel.min.js"></script>
+		<script src="/tutoris_baernae/js/skel-layers.min.js"></script>
+		<script src="/tutoris_baernae/js/init.js"></script>
 		
 		<noscript>
-			<link rel="stylesheet" href="/Skeleton/css/skel.css" />
-			<link rel="stylesheet" href="/Skeleton/css/style.css" />
-			<link rel="stylesheet" href="/Skeleton/css/style-desktop.css" />
+			<link rel="stylesheet" href="/tutoris_baernae/css/skel.css" />
+			<link rel="stylesheet" href="/tutoris_baernae/css/style.css" />
+			<link rel="stylesheet" href="/tutoris_baernae/css/style-desktop.css" />
 		</noscript>
 		<!--[if lte IE 8]><link rel="stylesheet" href="/Skeleton/css/ie/v8.css" /><![endif]-->
 	</head>
@@ -32,13 +32,13 @@
 				
 					<!-- Logo -->
 						<div id="logo">
-							<h1><a href="index">ESE 2015</a></h1>
+							<h1><a href="/tutoris_baernae">ESE 2015</a></h1>
 						</div>
 					
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
-								<li><a href="index">Welcome</a></li>
+								<li><a href="/tutoris_baernae">Welcome</a></li>
 								<li><a href="#">Find Tutor</a></li>
 								<li><a href="#">About</a></li>
                                                                 <li><a href="#">Contact</a></li>

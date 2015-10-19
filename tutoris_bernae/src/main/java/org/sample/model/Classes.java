@@ -1,5 +1,6 @@
 package org.sample.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,8 +15,10 @@ public class Classes {
     private Long id;
 
     @ManyToOne
+    @Column(nullable=false)
     private StudyCourse studycourse;
     
+    @Column(nullable=false)
     private String name;
 
     

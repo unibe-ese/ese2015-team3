@@ -14,22 +14,33 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable=false)
     private String firstName;
+    @Column(nullable=false)
     private String lastName;
-    @Column(unique = true)
+    @Column(unique = true, nullable=false)
     private String email; //should be unique!
-    @Column(unique = true)
+    @Column(unique = true, nullable=false)
     private String username;
    
-
+    @Column(nullable=false)
 	private String password;
+    
     private boolean isTutor;
     
     @OneToOne
+    @Column(nullable=true)
     private Tutor tutor;
     
-    private boolean isTimetableActive;
+    private boolean isTimetableActive = false;
 //    private Object timetable;
+    
+/*    // In order to set default values
+    @PrePersist
+    public void prePersist(){
+    	if(isTimetableActive == null)
+    		isTimetableActive = false;
+    }*/
 
     public String getUsername() {
 		return username;
@@ -79,11 +90,11 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean isTutor() {
+	public boolean getIsTutor() {
 		return isTutor;
 	}
 
-	public void setTutor(boolean isTutor) {
+	public void setIsTutor(boolean isTutor) {
 		this.isTutor = isTutor;
 	}
 
@@ -95,7 +106,7 @@ public class User {
 		this.tutor = tutor;
 	}
 
-	public boolean isTimetableActive() {
+	public boolean getIsTimetableActive() {
 		return isTimetableActive;
 	}
 

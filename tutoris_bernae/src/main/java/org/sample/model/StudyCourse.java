@@ -3,6 +3,7 @@ package org.sample.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ public class StudyCourse implements Serializable {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable=false)
     private String name;
     private String faculty; //maybe?
     

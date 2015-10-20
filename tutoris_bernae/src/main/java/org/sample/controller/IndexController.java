@@ -1,3 +1,5 @@
+package org.sample.controller;
+
 import java.util.ArrayList;
 
 import javax.validation.Valid;

@@ -41,7 +41,7 @@
 								<li><a href="/tutoris_baernae">Welcome</a></li>
 								<li><a href="#">Find Tutor</a></li>
 								<li><a href="#">About</a></li>
-                                                                <li><a href="#">Contact</a></li>
+                                                                <li><a href="/login">Login</a></li>
 							</ul>
 						</nav>
 					

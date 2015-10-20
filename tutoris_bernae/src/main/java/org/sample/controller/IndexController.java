@@ -23,14 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class IndexController {
 
     @Autowired
-    FormService sampleService;
+    FormService formService;
     
-    private final TeamDao teamRepository;
-
-    @Autowired
-    public IndexController(TeamDao teamRepository) {
-      this.teamRepository = teamRepository;
-    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView index() {
@@ -40,8 +34,7 @@ public class IndexController {
     	
     	
     	model.addObject("signupForm", new SignupForm());
-        model.addObject("teams", teamRepository.findAll());
-    	
+       
         return model;
     }
 

@@ -58,8 +58,7 @@ public class FormServiceTransactionTest {
         assertNotNull(registerForm.getId());
         assertTrue(registerForm.getId() > 0);
         
-        Iterable<User> users = userDao.findAll();
-        User user = users.iterator().next();
+        User user = userDao.findOne(registerForm.getId());
         assertEquals("First",user.getFirstName());
         assertEquals("Last",user.getLastName());
         assertEquals("user",user.getUsername());

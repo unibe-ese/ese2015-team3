@@ -21,7 +21,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.reset;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +39,7 @@ public class FormServiceTest {
     static class ContextConfiguration {
 
 	     @Bean
-	     public UserDao userDao() {
+	     public UserDao userDaoMock() {
 	    	 UserDao userDao = mock(UserDao.class);
 	    	 return userDao;
 	     }
@@ -52,6 +54,7 @@ public class FormServiceTest {
 	
 	@Autowired
     private FormService FormService;
+	@Qualifier("userDaoMock")
 	@Autowired
 	private UserDao userDao;
 
@@ -88,6 +91,11 @@ public class FormServiceTest {
 
         assertNotNull(registerForm.getId());
         assertTrue(registerForm.getId() > 0);
+    }
+    
+    @After
+    public void reset_mocks() {
+        reset(userDao);
     }
 
    

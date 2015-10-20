@@ -1,12 +1,20 @@
 package org.sample.controller;
+import java.util.ArrayList;
 
 import javax.validation.Valid;
+
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
+import org.sample.controller.pojos.SignupForm;
 import org.sample.controller.service.FormService;
+import org.sample.model.Team;
+import org.sample.model.User;
+import org.sample.model.dao.TeamDao;
+import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,7 +36,7 @@ public class RegistrationController {
     
 
     @RequestMapping(value = "/createStudent", method = RequestMethod.POST)
-    public ModelAndView createStudent(@Valid RegisterForm studentForm, BindingResult result, RedirectAttributes redirectAttributes) {
+    public ModelAndView createStudent(@ModelAttribute("studentForm") @Valid RegisterForm studentForm, BindingResult result, RedirectAttributes redirectAttributes) {
     	ModelAndView model;    	
     	if (!result.hasErrors()) {
             try {

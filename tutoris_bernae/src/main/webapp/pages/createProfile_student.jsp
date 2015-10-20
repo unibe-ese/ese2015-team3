@@ -21,7 +21,7 @@
         </div>
             
         <c:set var="usernameErrors"><form:errors path="username"/></c:set>
-        <div class="control-group<c:if test="${not empty userNameErrors}"> error</c:if>">
+        <div class="control-group<c:if test="${not empty usernameErrors}"> error</c:if>">
             <label class="control-label" for="field-username">Username</label>
             <div class="controls">
                 <form:input path="username" id="field-username" tabindex="1" maxlength="35" placeholder="Username"/>
@@ -48,17 +48,21 @@
         </div>
         
         <c:set var="passwordErrors"><form:errors path="password"/></c:set>
-        <div class="control-group<c:if test="${not empty passWordErrors}"> error</c:if>">
-            <label class="control-label" for="password-email">Password</label>
+        <div class="control-group<c:if test="${not empty passwordErrors}"> error</c:if>">
+            <label class="control-label" for="field-password">Password</label>
             <div class="controls">
-                <form:input type="password" path="password" id="field-password" tabindex="1" maxlength="35" placeholder="Password"/>
+                <form:input path="password" id="field-password" tabindex="1" maxlength="35" placeholder="Password"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
         
+        <div>
+            <input type="checkbox">Register as tutor
+        </div>
+            
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Register</button>
-            <button type="button" class="btn">Cancel</button>
+            <button type="reset" class="btn">Cancel</button>
         </div>
     </fieldset>
 </form:form>

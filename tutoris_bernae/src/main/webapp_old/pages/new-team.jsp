@@ -7,24 +7,25 @@
 <c:import url="template/header.jsp" />
 
 
-<h1>Create a new team!</h1>
+<h1>Sign Up Here!</h1>
 
 
-<form:form method="post" modelAttribute="teamForm" action="createTeam" id="teamForm" cssClass="form-horizontal"  autocomplete="off">
+<form:form method="post" modelAttribute="teamSignupForm" action="createTeam" id="teamSignupForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
-        <legend>Enter a name and date for your team</legend>
-        
+        <legend>Enter Your Information</legend>
+
         <c:set var="teamNameErrors"><form:errors path="teamName"/></c:set>
         <div class="control-group<c:if test="${not empty teamNameErrors}"> error</c:if>">
-            <label class="control-label" for="field-teamName">Team Name</label>
+            <label class="control-label" for="field-teamName">Team-Name</label>
+
             <div class="controls">
-                <form:input path="teamName" id="field-teamName" tabindex="1" maxlength="35" placeholder="Team Name"/>
+                <form:input path="teamName" id="field-teamName" tabindex="1" maxlength="45" placeholder="Team-Name"/>
                 <form:errors path="teamName" cssClass="help-inline" element="span"/>
             </div>
         </div>
-        
+      
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Sign up</button>
+            <button type="submit" class="btn btn-primary">Create Team</button>
             <button type="button" class="btn">Cancel</button>
         </div>
     </fieldset>

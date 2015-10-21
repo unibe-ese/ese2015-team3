@@ -26,9 +26,11 @@ public class User {
     private String email; //should be unique!
     @Column(unique = true)
     private String username;
-   
+
     @Column(nullable=false)
-	private String password;
+    private String role;
+    
+    private String password;
     
     private boolean isTutor;
     
@@ -116,5 +118,13 @@ public class User {
 
 	public void setTimetableActive(boolean isTimetableActive) {
 		this.isTimetableActive = isTimetableActive;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

@@ -11,7 +11,7 @@
 
 <html>
 	<head>
-		<title>No Sidebar - Verti by HTML5 UP</title>
+		<title>ESE 2015</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -39,33 +39,17 @@
 				
 					<!-- Logo -->
 						<div id="logo">
-							<h1><a href="index.html">Verti</a></h1>
-							<span>by HTML5 UP</span>
+							<h1><a href="/tutoris_baernae/">ESE 2015</a></h1>
+							<span>by Team 3</span>
 						</div>
 					
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
-								<li><a href="index.html">Welcome</a></li>
-								<li>
-									<a href="">Dropdown</a>
-									<ul>
-										<li><a href="#">Lorem ipsum dolor</a></li>
-										<li><a href="#">Magna phasellus</a></li>
-										<li>
-											<a href="">Phasellus consequat</a>
-											<ul>
-												<li><a href="#">Lorem ipsum dolor</a></li>
-												<li><a href="#">Phasellus consequat</a></li>
-												<li><a href="#">Magna phasellus</a></li>
-												<li><a href="#">Etiam dolore nisl</a></li>
-											</ul>
-										</li>
-										<li><a href="#">Veroeros feugiat</a></li>
-									</ul>
-								</li>
+								<li><a href="/tutoris_baernae/">Welcome</a></li>
+								<li><a href="#">About</a></li>
 								
-								<li><a href="left-sidebar.html">Left Sidebar</a></li>
+								<li><a href="#">Find Tutor</a></li>
 								<sec:authorize access="hasRole('ROLE_USER')">
 								<li>	<h1> <c:if test="${pageContext.request.userPrincipal.name != null}">
 								User : ${pageContext.request.userPrincipal.name}</h1></c:if> </li>

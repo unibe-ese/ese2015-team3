@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.sample.controller.exceptions.InvalidUserException;
-import org.sample.controller.exceptions.InvalidUserPasswordException;
-import org.sample.controller.pojos.LoginForm;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.SignupForm;
 import org.sample.controller.pojos.TeamForm;
@@ -17,14 +15,12 @@ import org.sample.model.dao.AddressDao;
 import org.sample.model.dao.TeamDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 
 @Service
-@Scope("session")
 public class FormService{
 
     @Autowired UserDao userDao;
@@ -52,17 +48,6 @@ public class FormService{
 
     }
     
-    @Transactional
-    public LoginForm saveFrom(LoginForm loginForm) throws InvalidUserException{
-        String password = loginForm.getPassword();
-    	String userMail = loginForm.getEmail();
-    	User user = userDao.findByEmailLike(userMail);
-    	if(user == null || !user.getPassword().equals(password)){
-    		throw new InvalidUserPasswordException("wrong email or password");
-    	}
-    	return loginForm;
-    }
-    
     private boolean usernameAvailable(String username){
     	if(userDao.findByUsernameLike(username)==null) return true;
     	return false;
@@ -72,5 +57,3 @@ public class FormService{
     	return false;
     }
 }
-    
-

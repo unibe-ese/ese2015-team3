@@ -2,8 +2,6 @@ package org.sample.controller.service;
 
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.sample.controller.exceptions.InvalidUserException;
-import org.sample.controller.exceptions.InvalidUserPasswordException;
-import org.sample.controller.pojos.LoginForm;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.SignupForm;
 import org.sample.model.User;
@@ -98,6 +96,8 @@ public class FormServiceTest {
     public void reset_mocks() {
         reset(userDao);
     }
+
+   
 
 
 }

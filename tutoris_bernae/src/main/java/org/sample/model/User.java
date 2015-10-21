@@ -6,11 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import org.springframework.context.annotation.Scope;
-
 
 @Entity
-@Scope("session")
 public class User {
 
     @Id

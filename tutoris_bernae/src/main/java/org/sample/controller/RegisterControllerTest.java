@@ -46,10 +46,8 @@ public class RegisterControllerTest {
 	     @Bean
 	     public FormService formServiceMock() {
 	    	 FormService formService = mock(FormService.class);
-	    	 
 	    	 return formService;
 	     }
-        // this bean will be injected into the OrderServiceTest class
         @Bean
         public RegisterController registerController() {
             return new RegisterController();

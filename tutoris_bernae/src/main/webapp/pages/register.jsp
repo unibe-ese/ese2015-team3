@@ -2,14 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
+<%@page session="true"%>
 
 <c:import url="template/header.jsp" />
 
-
+<c:import url="template/function.jsp" />
 <h1>Sign Up Here!</h1>
-
-
 <form:form method="post" modelAttribute="registerForm" action="submit" id="registerForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
         <legend>Enter Your Information</legend>
@@ -41,7 +39,7 @@
         </div>
          <c:set var="usernameErrors"><form:errors path="username"/></c:set>
         <div class="control-group<c:if test="${not empty usernameErrors}"> error</c:if>">
-            <label class="control-label" for="field-username">USERNAME</label>
+            <label class="control-label" for="field-username">Username</label>
             <div class="controls">
                 <form:input path="username" id="field-username" tabindex="3" maxlength="35" placeholder="Last Name"/>
                 <form:errors path="username" cssClass="help-inline" element="span"/>
@@ -49,9 +47,9 @@
         </div>
         <c:set var="passwordErrors"><form:errors path="password"/></c:set>
         <div class="control-group<c:if test="${not empty passwordErrors}"> error</c:if>">
-            <label class="control-label" for="field-password">password</label>
+            <label class="control-label" for="field-password">Password</label>
             <div class="controls">
-                <form:input path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Last Name"/>
+                <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Last Name"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -65,8 +63,6 @@
            
     </fieldset>
 </form:form>
-
-
 
 
 	<c:if test="${page_error != null }">

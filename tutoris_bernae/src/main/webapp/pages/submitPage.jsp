@@ -5,7 +5,7 @@
 
 
 <c:import url="template/header.jsp" />
-
+<c:import url="template/function.jsp" />
 <h1>Sign Up Complete!</h1>
 
 

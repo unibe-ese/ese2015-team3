@@ -43,11 +43,10 @@ public class FormServiceTest {
 	    	 UserDao userDao = mock(UserDao.class);
 	    	 return userDao;
 	     }
-        // this bean will be injected into the OrderServiceTest class
         @Bean
         public FormService formService() {
             FormService formService = new FormService();
-            // set properties, etc.
+            
             return formService;
         }
     }

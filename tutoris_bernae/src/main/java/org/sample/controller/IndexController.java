@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,25 +24,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class IndexController {
 
     @Autowired
-    FormService sampleService;
+    FormService formService;
     
-    private final TeamDao teamRepository;
-
-    @Autowired
-    public IndexController(TeamDao teamRepository) {
-      this.teamRepository = teamRepository;
-    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView index() {
-    	
-    	
+    public ModelAndView index(@RequestParam(value = "logout", required = false) String logout) {
     	ModelAndView model = new ModelAndView("index");
+    	 if (logout != null) {
+    			model.addObject("message", "You've been logged out successfully.");
+    		  }
+    	
+    
     	
     	
     	model.addObject("signupForm", new SignupForm());
-        model.addObject("teams", teamRepository.findAll());
-    	
+       
         return model;
     }
 

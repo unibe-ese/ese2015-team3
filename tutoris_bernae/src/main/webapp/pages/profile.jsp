@@ -6,27 +6,21 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <c:import url="template/header.jsp" />
-
+<c:import url="template/function.jsp" />
 
 <h1>View the userprofile from: ${user.firstName }</h1>
 
 <form:form method="post" modelAttribute="signupForm" action="create"
 	id="signupForm" cssClass="form-horizontal" autocomplete="off">
 	<fieldset>
-		<legend>View the userprofile from: ${user.firstName}</legend>
-
+		
+		<p>FirstName: ${user.firstName}</p>
 		<p>Lastname: ${user.lastName }</p>
-		<p>UserId: ${user.id }</p>
-		<p>Team: ${user.teamName}</p>
+		
 
 		<p>Email: ${user.email}</p>
 
 
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary">Sign up</button>
-			<button type="button" class="btn">Cancel</button>
-			<button type="submit" class="btn">Go to teams</button>
-		</div>
 	</fieldset>
 
 </form:form>

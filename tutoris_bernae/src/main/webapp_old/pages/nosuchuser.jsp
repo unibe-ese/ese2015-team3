@@ -6,8 +6,14 @@
 
 <c:import url="template/header.jsp" />
 
-<h1>Login Successful!</h1>
+
+<h1>USER</h1>
 
 
+   <table>
+    <div>
+        <div>This user doesn't exist</div>    
+    </div>
+</table>  
 
 <c:import url="template/footer.jsp" />

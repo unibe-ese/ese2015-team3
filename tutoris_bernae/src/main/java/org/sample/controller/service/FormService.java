@@ -42,6 +42,7 @@ public class FormService{
         String email = registerForm.getEmail();
         if(!emailAvailable(email)) throw new InvalidUserException("Your username must be unique");
         user.setEmail(registerForm.getEmail());
+        user.setRole("ROLE_USER");
         
         user = userDao.save(user);   // save object to DB
         

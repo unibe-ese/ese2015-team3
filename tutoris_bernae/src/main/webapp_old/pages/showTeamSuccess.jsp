@@ -5,6 +5,9 @@
 
 
 <c:import url="template/header.jsp" />
-<h1>Registration complete!</h1>
 
-<c:import url="template/footer.jsp"/>
+<h1>New Team Created Successfully</h1>
+
+
+
+<c:import url="template/footer.jsp" />

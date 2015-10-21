@@ -5,49 +5,63 @@
 
 
 <c:import url="template/header.jsp" />
+<c:import url="template/function.jsp" />
+	<div id="login-box">
 
-
-<h1>Login Here!</h1>
-
-
-<form:form method="post" modelAttribute="loginForm" action="login-create" id="loginForm" cssClass="form-horizontal"  autocomplete="off">
+	<form name='loginForm'
+		  action="<c:url value='/j_spring_security_check' />" method='POST' cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
-        <legend>Enter Your Login Information</legend>
 
-        <c:set var="emailErrors"><form:errors path="email"/></c:set>
-        <div class="control-group<c:if test="${not empty emailErrors}"> error</c:if>">
-            <label class="control-label" for="field-email">Email</label>
+     	<div id="login-box">
+
+		<h1>Login with Username and Password</h1>
+
+		<c:if test="${not empty error}">
+			<div class="error">${error}</div>
+		</c:if>
+		<c:if test="${not empty msg}">
+			<div class="msg">${msg}</div>
+		</c:if>
+
+		<form name='loginForm'
+		  action="<c:url value='/j_spring_security_check' />" method='POST'>
+
+		<table>
+
+			<div class="control-group">
+            <label class="control-label" for="field-lastName">Last Name</label>
             <div class="controls">
-                <form:input path="email" id="field-email" tabindex="1" maxlength="45" placeholder="Email"/>
-                <form:errors path="email" cssClass="help-inline" element="span"/>
+                <input path="username"type="text" name="username" id="field-username" tabindex="3" maxlength="35" placeholder="Last Name"/>
+                <errors path="userName" cssClass="help-inline" element="span"/>
+            </div>
+        </div>
+        			<div class="control-group">
+            <label class="control-label" for="field-lastName">Last Name</label>
+            <div class="controls">
+                <input path="password" type="password" name="password" id="field-password" tabindex="3" maxlength="35" placeholder="Last Name"/>
+                <errors path="userName" cssClass="help-inline" element="span"/>
             </div>
         </div>
 
-        <c:set var="passwordErrors"><form:errors path="password"/></c:set>
-        <div class="control-group<c:if test="${not empty emailErrors}"> error</c:if>">
-            <label class="control-label" for="field-password">Password</label>
-            <div class="controls">
-                <form:input path="password" id="field-password" tabindex="2" maxlength="45" placeholder="password"/>
-                <form:errors path="password" cssClass="help-inline" element="span"/>
-            </div>
-        </div>
-        
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Login</button>
+	        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Sign up</button>
             <button type="button" class="btn">Cancel</button>
            
         </div>
-    </fieldset>
-</form:form>
+		  </table>
 
+		  <input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
 
-	<c:if test="${page_error != null }">
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Error!</h4>
-                ${page_error}
+		</form>
+	</div>
+           
+           
         </div>
-    </c:if>
 
+    </fieldset>
+</form>
+	</div>
 
-<c:import url="template/footer.jsp" />
+</body>
+</html>

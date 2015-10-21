@@ -6,21 +6,8 @@
 
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
-		
-		<c:if test="${not empty message}">
-			<div class="message">${message}</div>
-		</c:if>
-		
-		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<h2>
-				Welcome ${pageContext.request.userPrincipal.name} !
-			</h2>
-		</c:if>
-		
-		<c:if test="${pageContext.request.userPrincipal.name == null}">
-			<h2>
-				Welcome! Please Register or login
-			</h2>
-		</c:if>
+<h1>Sign Up Complete!</h1>
+
+
 
 <c:import url="template/footer.jsp" />

@@ -29,17 +29,17 @@
 		<table>
 
 			<div class="control-group">
-            <label class="control-label" for="field-lastName">Last Name</label>
+            <label class="control-label" for="field-username">Username</label>
             <div class="controls">
-                <input path="username"type="text" name="username" id="field-username" tabindex="3" maxlength="35" placeholder="Last Name"/>
-                <errors path="userName" cssClass="help-inline" element="span"/>
+                <input path="username"type="text" name="username" id="field-username" tabindex="3" maxlength="35" placeholder="Username"/>
+                <errors path="username" cssClass="help-inline" element="span"/>
             </div>
         </div>
         			<div class="control-group">
-            <label class="control-label" for="field-lastName">Last Name</label>
+            <label class="control-label" for="field-password">Password</label>
             <div class="controls">
-                <input path="password" type="password" name="password" id="field-password" tabindex="3" maxlength="35" placeholder="Last Name"/>
-                <errors path="userName" cssClass="help-inline" element="span"/>
+                <input path="password" type="password" name="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password"/>
+                <errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
 

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.sample.controller.exceptions.InvalidUserException;
+import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.SignupForm;
 import org.sample.controller.pojos.TeamForm;
@@ -15,6 +16,10 @@ import org.sample.model.dao.AddressDao;
 import org.sample.model.dao.TeamDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -46,6 +51,20 @@ public class FormService{
 
         return registerForm;
 
+    }
+    
+    @Transactional
+    public EditForm saveFrom(EditForm editForm) throws InvalidUserException{
+   		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();	
+		User user = userDao.findByUsername(userDetail.getUsername());
+		user.setEmail(editForm.getEmail());
+		user.setFirstName(editForm.getFirstName());
+		user.setLastName(editForm.getLastName());
+		user.setPassword(editForm.getPassword());
+		user.setUsername(editForm.getUsername());
+		user = userDao.save(user);		// it automatically updates user (based on id)
+    	return editForm;
     }
     
     private boolean usernameAvailable(String username){

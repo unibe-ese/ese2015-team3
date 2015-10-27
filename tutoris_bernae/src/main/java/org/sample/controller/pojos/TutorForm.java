@@ -21,9 +21,7 @@ public class TutorForm {
 
 	private Long id;
 	
-	private Long userID;
-
-    private User student;
+	private Long userId;
     
     private BigDecimal fee;
 
@@ -39,14 +37,6 @@ public class TutorForm {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public User getStudent() {
-		return student;
-	}
-
-	public void setStudent(User student) {
-		this.student = student;
 	}
 
 	public BigDecimal getFee() {
@@ -81,11 +71,11 @@ public class TutorForm {
 		this.bio = bio;
 	}
 
-	public Long getUserID() {
-		return userID;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUserID(Long userID) {
-		this.userID = userID;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

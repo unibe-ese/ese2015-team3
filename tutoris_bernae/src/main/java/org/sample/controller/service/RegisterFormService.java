@@ -39,7 +39,7 @@ public class RegisterFormService{
         user.setUsername(registerForm.getUsername());
         user.setPassword(registerForm.getPassword());
         String email = registerForm.getEmail();
-        if(!emailAvailable(email)) throw new InvalidUserException("Your username must be unique");
+        if(!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
         user.setEmail(registerForm.getEmail());
         user.setRole("ROLE_USER");
         
@@ -51,19 +51,6 @@ public class RegisterFormService{
 
     }
     
-    @Transactional
-    public EditForm saveFrom(EditForm editForm) throws InvalidUserException{
-   		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();	
-		User user = userDao.findByUsername(userDetail.getUsername());
-		user.setEmail(editForm.getEmail());
-		user.setFirstName(editForm.getFirstName());
-		user.setLastName(editForm.getLastName());
-		user.setPassword(editForm.getPassword());
-		user.setUsername(editForm.getUsername());
-		user = userDao.save(user);		// it automatically updates user (based on id)
-    	return editForm;
-    }
     
     private boolean usernameAvailable(String username){
     	if(userDao.findByUsernameLike(username)==null) return true;

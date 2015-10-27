@@ -104,6 +104,7 @@ private User testUser = new User();
         tutorForm.setStudyCourseList(courses);
         tutorForm.setClassList(classes);
         tutorForm.setBio("I am awesome");
+        tutorForm.setUserId(1L);
 
         when(tutorDao.save(any(Tutor.class)))
                 .thenAnswer(new Answer<Tutor>() {
@@ -119,13 +120,19 @@ private User testUser = new User();
                         return tutor;
                     }
                 });
-        
+        when(userDao.findOne(any(Long.class))).thenAnswer(new Answer<User>() {
+            public User answer(InvocationOnMock invocation) throws Throwable {
+                Long id = (Long) invocation.getArguments()[0];
+                assertEquals(new Long(1), id);
+                return testUser;
+            }
+        });
         when(userDao.save(any(User.class)))
         .thenAnswer(new Answer<User>() {
             public User answer(InvocationOnMock invocation) throws Throwable {
                 User user = (User) invocation.getArguments()[0];
                 assertEquals(true, user.isTutor());
-                //How to check if the tutor is correct? doenst have him as an instance variable
+                //How to check if the tutor is correct? does not have him as an instance variable
 
                 return user;
             }
@@ -135,7 +142,7 @@ private User testUser = new User();
         assertNull(tutorForm.getId());
         
 
-        tutorFormService.saveFrom(tutorForm,testUser);
+        tutorFormService.saveFrom(tutorForm);
 
         assertNotNull(tutorForm.getId());
         assertTrue(tutorForm.getId() > 0);

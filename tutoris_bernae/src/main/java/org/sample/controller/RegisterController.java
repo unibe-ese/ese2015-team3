@@ -60,7 +60,7 @@ public class RegisterController {
     	{
     		model = new ModelAndView("tutorregistration");
         	TutorForm tutorForm = new TutorForm();
-        	session.setAttribute("userId", registerForm.getId());
+        	tutorForm.setUserId(registerForm.getId());
         	model.addObject("tutorForm", tutorForm);
     	}
     	return model;
@@ -77,10 +77,11 @@ public class RegisterController {
     
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST, params = { "save" })
     public ModelAndView create(@Valid TutorForm tutorForm, HttpSession session,
-    		@RequestParam Boolean save) {
-    	ModelAndView model = new ModelAndView(PAGE_SUBMIT);  
-    	User savedUser = userDao.findOne((Long) session.getAttribute("userId"));
-    	tutorFormService.saveFrom(tutorForm,savedUser);
+    		@RequestParam Boolean save,HttpServletRequest request) {
+    	ModelAndView model = new ModelAndView(PAGE_SUBMIT);
+    	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
+    	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
+    	tutorFormService.saveFrom(tutorForm);
     	return model;
     }
     

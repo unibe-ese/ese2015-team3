@@ -8,10 +8,11 @@
 
 <c:import url="template/function.jsp" />
 <h1>Edit profile!</h1>
-<form:form method="post" modelAttribute="editForm" action="submitEdit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
+<form:form method="post" modelAttribute="tutorForm" action="submitTutorEdit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
         <legend>You can alter any field</legend>
-	<form:input path="userId" type="hidden" value="${user.id}"/>
+		<form:input path="userId" type="hidden" value="${user.id}"/>
+			<form:input path="tutorId" type="hidden" value="${user.tutor.id}"/>
         <c:set var="emailErrors"><form:errors path="email"/></c:set>
         <div class="control-group<c:if test="${not empty emailErrors}"> error</c:if>">
             <label class="control-label" for="field-email">Email</label>
@@ -53,11 +54,30 @@
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
+        
+            <c:import url="template/StudyList.jsp" />
+            <c:import url="template/classList.jsp" />
+        <c:set var="feeErrors"><form:errors path="fee"/></c:set>
+        <div class="control-group<c:if test="${not empty feeErrors}"> error</c:if>">
+            <label class="control-label" for="field-fee">Fee</label>
+            <div class="controls">
+                <form:input path="fee" id="field-fee" tabindex="2" maxlength="35" placeholder="Fee"/>
+                <form:errors path="fee" cssClass="help-inline" element="span"/>
+            </div>
+        </div>
+        <c:set var="bioErrors"><form:errors path="bio"/></c:set>
+        <div class="control-group<c:if test="${not empty bioErrors}"> error</c:if>">
+            <label class="control-label" for="field-bio">Bio</label>
+            <div class="controls">
+                <form:input path="bio" id="field-bio" tabindex="3" maxlength="350" placeholder="Bio"/>
+                <form:errors path="bio" cssClass="help-inline" element="span"/>
+            </div>
+        </div>
            <br>
            <br>
        		        
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Submit changes</button>
+            <button type="submit" name = "save" value = "true" class="btn btn-primary">Submit changes</button>
             <button type="button" class="btn">Cancel</button>
          </div>
            

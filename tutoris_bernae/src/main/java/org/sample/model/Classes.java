@@ -20,8 +20,7 @@ public class Classes {
     private Long id;
 	
 	//Currently not in use (do we even need to know that?)
-	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne
     private StudyCourse studyCourse;
     
 	

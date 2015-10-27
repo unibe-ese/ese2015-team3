@@ -1,5 +1,8 @@
 package org.sample.controller;
 
+import java.security.Principal;
+
+import org.sample.model.User;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -13,20 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class ProfileControlle {
+public class ProfileController {
 
 @Autowired
 private UserDao userDao;
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public ModelAndView showProfile() {
+	public ModelAndView showProfile(Principal pricipal) {
 		 ModelAndView model = new ModelAndView("profile");
-		 
-		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		  if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();	
-			model.addObject("user", userDao.findByUsername(userDetail.getUsername()));
-		  }
-		  
+		 User user = userDao.findByUsername(pricipal.getName());
+		 model.addObject("user", user);
+		 if(user.isTutor())
+			 model.addObject("tutor", user.getTutor());
 	 
 
 	  return model;

@@ -24,9 +24,9 @@ public class TutorFormService {
 
     
     @Transactional
-	public void saveFrom(TutorForm tutorForm, User user) {
+	public void saveFrom(TutorForm tutorForm) {
 		Tutor tutor = new Tutor();
-		
+		User user = userDao.findOne(tutorForm.getUserId());
 		tutor.setClasses(new HashSet<Classes>(tutorForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(tutorForm.getStudyCourseList()));
 		tutor.setBio(tutorForm.getBio());

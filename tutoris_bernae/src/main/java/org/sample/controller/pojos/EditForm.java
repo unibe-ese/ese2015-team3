@@ -3,8 +3,11 @@ package org.sample.controller.pojos;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.sample.model.User;
+
 public class EditForm {
 
+	private Long userId;
     private String firstName;
     private String lastName;
     private String username;
@@ -55,5 +58,27 @@ public class EditForm {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public EditForm()
+	{
+		
+	}
+	public EditForm(User user)
+	{
+		assert(user!=null);
+		this.userId = user.getId();
+		this.username = user.getUsername();
+		this.email = user.getEmail();
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.password = user.getPassword();
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

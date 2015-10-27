@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -32,10 +33,10 @@ public class Tutor implements Serializable {
     @Type(type="text")
     private String bio;
     
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<StudyCourse> courses; //Studiengang
 
-	@OneToMany(cascade = {CascadeType.ALL})
+	@OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<Classes> classes;
 
     

@@ -44,9 +44,9 @@ public class RegisterControllerTest {
 	    	 return userDao;
 	     }
 	     @Bean
-	     public RegisterFormService formServiceMock() {
-	    	 RegisterFormService formService = mock(RegisterFormService.class);
-	    	 return formService;
+	     public RegisterFormService registerFormServiceMock() {
+	    	 RegisterFormService registerFormServiceMock = mock(RegisterFormService.class);
+	    	 return registerFormServiceMock;
 	     }
         @Bean
         public RegisterController registerController() {
@@ -58,9 +58,9 @@ public class RegisterControllerTest {
 	@Qualifier("userDaoMock")
 	@Autowired
 	private UserDao userDao;
-	@Qualifier("formServiceMock")
+	@Qualifier("registerFormServiceMock")
 	@Autowired
-	private RegisterFormService formService;
+	private RegisterFormService registerFormService;
 	@Autowired
 	private RegisterController registerController;
 
@@ -74,7 +74,7 @@ public class RegisterControllerTest {
 	@Test
 	public void submit() throws Exception
 	{
-		when(formService.saveFrom(any(RegisterForm.class))).thenReturn(null);
+		when(registerFormService.saveFrom(any(RegisterForm.class))).thenReturn(null);
 		mockMvc = MockMvcBuilders.standaloneSetup(registerController).build();
 		mockMvc.perform(post("/submit").param("email", "mail@mail.de")
 									.param("firstName", "first")
@@ -89,7 +89,7 @@ public class RegisterControllerTest {
 	@Test
 	public void invalidUser() throws Exception
 	{
-		when(formService.saveFrom(any(RegisterForm.class))).thenThrow(new InvalidUserException("invalidUserTest"));
+		when(registerFormService.saveFrom(any(RegisterForm.class))).thenThrow(new InvalidUserException("invalidUserTest"));
 		mockMvc = MockMvcBuilders.standaloneSetup(registerController).build();
 		mockMvc.perform(post("/submit").param("email", "mail@mail.de")
 									.param("firstName", "first")
@@ -103,6 +103,6 @@ public class RegisterControllerTest {
 	
 	@After 
 	public void reset_mocks() {
-	    reset(formService);
+	    reset(registerFormService);
 	}
 }

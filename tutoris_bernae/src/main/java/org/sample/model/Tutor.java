@@ -1,14 +1,18 @@
 package org.sample.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Type;
 
 
 @Entity
@@ -23,10 +27,15 @@ public class Tutor implements Serializable {
     @OneToOne
     private User student;
     
-    @ManyToMany
-    private Set<StudyCourse> courses; //Studiengang
+    private BigDecimal fee;
     
-    @OneToMany
+    @Type(type="text")
+    private String bio;
+    
+    @ManyToMany(cascade = {CascadeType.ALL})
+    private Set<StudyCourse> courses; //Studiengang
+
+	@OneToMany(cascade = {CascadeType.ALL})
     private Set<Classes> classes;
 
     
@@ -60,5 +69,22 @@ public class Tutor implements Serializable {
 
 	public void setClasses(Set<Classes> classes) {
 		this.classes = classes;
+	}
+
+	public BigDecimal getFee() {
+		return fee;
+	}
+
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
+	}
+	
+    
+    public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
 	}
 }

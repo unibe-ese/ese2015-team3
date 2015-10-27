@@ -7,8 +7,6 @@ import java.util.Calendar;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.RegisterForm;
-import org.sample.controller.pojos.SignupForm;
-import org.sample.controller.pojos.TeamForm;
 import org.sample.model.Address;
 import org.sample.model.Team;
 import org.sample.model.User;
@@ -26,7 +24,7 @@ import org.springframework.util.StringUtils;
 
 
 @Service
-public class FormService{
+public class RegisterFormService{
 
     @Autowired UserDao userDao;
     

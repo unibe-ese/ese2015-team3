@@ -71,7 +71,7 @@ public class EditController {
     	return model;
     }
     @RequestMapping(value = "/submitTutorEdit", method = RequestMethod.POST)
-    public ModelAndView editTutotProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
+    public ModelAndView editTutorProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes, HttpServletRequest request) {
     	ModelAndView model = new ModelAndView("editTutor");
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
@@ -81,7 +81,7 @@ public class EditController {
     }
 
     @RequestMapping(value = "/submitTutorEdit", method = RequestMethod.POST, params = { "save" })
-    public ModelAndView editTutotProfile(@Valid TutorEditForm tutorForm, BindingResult result, 
+    public ModelAndView editTutorProfile(@Valid TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes,@RequestParam Boolean save , HttpServletRequest request) {
     	ModelAndView model;
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));

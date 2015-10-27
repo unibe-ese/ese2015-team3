@@ -39,13 +39,13 @@ public class EditFormService{
     public EditForm saveFrom(EditForm editForm) throws InvalidUserException{
 		User user = userDao.findOne(editForm.getUserId());
 		String email = editForm.getEmail();
-		if(email!=user.getEmail()&&!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
+		if(!email.equals(user.getEmail())&&!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
 		user.setEmail(email);
 		user.setFirstName(editForm.getFirstName());
 		user.setLastName(editForm.getLastName());
 		user.setPassword(editForm.getPassword());
 		String username = editForm.getUsername();
-		if(username!=user.getUsername()&&!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
+		if(!username.equals(user.getUsername())&&!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
 		user.setUsername(username);
 		user = userDao.save(user);		// it automatically updates user (based on id)
     	return editForm;
@@ -55,13 +55,13 @@ public class EditFormService{
     public TutorEditForm saveFrom(TutorEditForm editForm) throws InvalidUserException{
 		User user = userDao.findOne(editForm.getUserId());
 		String email = editForm.getEmail();
-		if(email!=user.getEmail()&&!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
+		if(!email.equals(user.getEmail())&&!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
 		user.setEmail(email);
 		user.setFirstName(editForm.getFirstName());
 		user.setLastName(editForm.getLastName());
 		user.setPassword(editForm.getPassword());
 		String username = editForm.getUsername();
-		if(username!=user.getUsername()&&!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
+		if(!username.equals(user.getUsername())&&!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
 		user.setUsername(username);
 		user = userDao.save(user);		// it automatically updates user (based on id)
 		Tutor tutor = tutorDao.findOne(editForm.getTutorId());

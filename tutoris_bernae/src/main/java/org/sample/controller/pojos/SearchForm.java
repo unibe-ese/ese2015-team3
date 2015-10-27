@@ -1,28 +1,40 @@
 package org.sample.controller.pojos;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.sample.model.Classes;
+import org.sample.model.StudyCourse;
 
 public class SearchForm {
     
     private long id;
-    private String courseCriteria;
-    private String classCriteria;
+    private StudyCourse studyCourse;
+    private Classes classes;
+    private BigDecimal fee;
     
-    public String getCourseCriteria() {
-        return courseCriteria;
+    public StudyCourse getStudyCourse() {
+        return studyCourse;
     }
     
-    public void setCourseCriteria(String courseCriteria) {
-        this.courseCriteria = courseCriteria;
+    public void setStudyCourse(StudyCourse studyCourse) {
+        this.studyCourse = studyCourse;
     }
     
-    public String getClassCriteria() {
-        return classCriteria;
+    public Classes getClasses() {
+        return classes;
     }
     
-    public void setClassCriteria(String classCriteria) {
-        this.classCriteria = classCriteria;
+    public void setClasses(Classes classes) {
+        this.classes = classes;
+    }
+    
+    public BigDecimal getFee() {
+        return fee;
+    }
+    
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
     }
     
     public long getId() {

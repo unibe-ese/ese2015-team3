@@ -49,7 +49,7 @@
 								<li><a href="/tutoris_baernae/">Welcome</a></li>
 								<li><a href="#">About</a></li>
 								
-								<li><a href="#">Find Tutor</a></li>
+								<li><a href="/tutoris_baernae/findTutor">Find Tutor</a></li>
 								<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TUTOR')">
 								<li>	<h1> <c:if test="${pageContext.request.userPrincipal.name != null}">
 								User : ${pageContext.request.userPrincipal.name}</h1></c:if> </li>

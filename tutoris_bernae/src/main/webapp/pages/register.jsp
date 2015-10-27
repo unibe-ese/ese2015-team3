@@ -58,6 +58,7 @@
        		        
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Sign up</button>
+             <button type="submit" name = "registerastutor" value = "true" class="btn btn-primary">Sign up as Tutor</button>
             <button type="button" class="btn">Cancel</button>
          </div>
            

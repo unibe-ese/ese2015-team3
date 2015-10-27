@@ -3,6 +3,7 @@ package org.sample.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,13 +22,14 @@ public class StudyCourse implements Serializable {
 
     private String name;
     private String faculty; //maybe?
-    
-    @ManyToMany
+    /* Not working; Cannot save tutor form with that (detached entity..)
+    @ManyToMany(cascade = {CascadeType.ALL})
     private Set<Tutor> tutors;
-    
-    @OneToMany
+   
+    /*
+    @OneToMany(cascade = {CascadeType.ALL})
     private Set<Classes> classes;
-
+*/
     
 	public Long getId() {
 		return id;
@@ -52,7 +54,7 @@ public class StudyCourse implements Serializable {
 	public void setFaculty(String faculty) {
 		this.faculty = faculty;
 	}
-
+/*
 	public Set<Tutor> getTutors() {
 		return tutors;
 	}
@@ -60,12 +62,12 @@ public class StudyCourse implements Serializable {
 	public void setTutors(Set<Tutor> tutors) {
 		this.tutors = tutors;
 	}
-
+/*
 	public Set<Classes> getClasses() {
 		return classes;
 	}
 
 	public void setClasses(Set<Classes> classes) {
 		this.classes = classes;
-	}
+	}*/
 }

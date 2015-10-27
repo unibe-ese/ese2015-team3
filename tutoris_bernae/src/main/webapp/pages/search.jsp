@@ -1,0 +1,41 @@
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@page session="true"%>
+
+<c:import url="template/header.jsp" />
+
+<c:import url="template/function.jsp" />
+
+<h1>Search Tutor</h1>
+
+<form:form method="POST" modelAttribute="searchForm" action="submit" id="searchForm" cssClass="form-horizontal" autocomplete="off">
+    <fieldset>
+        <legend>Enter search criterias</legend>
+        
+        <c:set var="studyCourseErrors"><form:errors path="studyCourse"/></c:set>
+        <div class="control-group<c:if test="${not empty studyCourseErrors}"> error</c:if>">
+            <label class="control-label" for="field-studyCourse">Study Course</label>
+            
+            <div class="controls">
+                <form:input path="studyCourse" id="field-studyCourse" tabindex="1" maxlength="35" placeholder="Course"/>
+                <form:errors path="studyCourse" cssClass="help-inline" element="span"/>
+            </div>
+        </div>
+        
+        <c:set var="classesErrors"><form:errors path="classes"/></c:set>
+        <div class="control-group<c:if test="${not empty classesErrors}">error</c:if>">
+            <label class="control-label" for="field-classes">Classes</label>
+            
+            <div class="controls">
+                <form:input path="classes" id="field-classes" tabindex="2" maxlength="35" placeholder="Class"/>
+                <form:errors path="classes" cssClass="help-inline" element="span"/>
+            </div>
+        </div>
+            
+        
+    </fieldset>
+</form:form>
+
+<c:import url="template/footer.jsp" />

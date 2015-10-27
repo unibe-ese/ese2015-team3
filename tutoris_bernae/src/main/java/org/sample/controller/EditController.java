@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
-import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.service.FormService;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +28,16 @@ public class EditController {
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile() {
-		 ModelAndView model = new ModelAndView("edit");
-		 model.addObject("editForm", new EditForm());
-		 
-		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		  if (!(auth instanceof AnonymousAuthenticationToken)) {
+		ModelAndView model = new ModelAndView("edit");
+		model.addObject("editForm", new EditForm());
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();	
 			model.addObject("user", userDao.findByUsername(userDetail.getUsername()));
-		  }
+		}
 
-	  return model;
+		return model;
 	}
 	
     @RequestMapping(value = "/submitEdit", method = RequestMethod.POST)

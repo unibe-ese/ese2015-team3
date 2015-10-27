@@ -50,7 +50,7 @@
 								<li><a href="#">About</a></li>
 								
 								<li><a href="#">Find Tutor</a></li>
-								<sec:authorize access="hasRole('ROLE_USER')">
+								<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TUTOR')">
 								<li>	<h1> <c:if test="${pageContext.request.userPrincipal.name != null}">
 								User : ${pageContext.request.userPrincipal.name}</h1></c:if> </li>
 								<li class="current">		
@@ -66,7 +66,7 @@
 					href="/tutoris_baernae/profile">Profile</a>
 			</h1></li>
 		</c:if></sec:authorize>
-								<sec:authorize access="!hasRole('ROLE_USER')">
+								<sec:authorize access="!hasAnyRole('ROLE_USER','ROLE_TUTOR')">
 								<li class="current">		
 								
 							<h1>

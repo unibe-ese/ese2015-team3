@@ -7,7 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
-import org.sample.controller.service.FormService;
+import org.sample.controller.pojos.TutorForm;
+import org.sample.controller.service.RegisterFormService;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,11 +29,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import static org.hamcrest.Matchers.*;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -46,7 +52,7 @@ public class RegisterControllerIntergrationTest {
 	@Autowired
 	private RegisterController registerController;
 	@Autowired
-	private FormService formService;
+	private RegisterFormService formService;
 	@Before
 	public void setUp()
 	{
@@ -57,7 +63,7 @@ public class RegisterControllerIntergrationTest {
 	public void registerPage() throws Exception
 	{
 		mockMvc.perform(get("/register")).andExpect(status().isOk())
-									.andExpect(model().attribute("regiterForm", any(RegisterForm.class)))
+									.andExpect(model().attribute("registerForm", is(RegisterForm.class)))
 									.andExpect(model().hasNoErrors());
 	}
 	@Test
@@ -72,6 +78,36 @@ public class RegisterControllerIntergrationTest {
 									.andExpect(model().hasNoErrors())
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_SUBMIT)));		
 	}
+	
+	@Test
+	public void submitAsTutor() throws Exception
+	{
+		mockMvc.perform(post("/submit").param("email", "mail@mail.de")
+									.param("firstName", "first")
+									.param("lastName", "last")
+									.param("username", "user")
+									.param("password", "password")
+									.param("registerastutor","true"))
+									.andExpect(status().isOk())
+									.andExpect(model().hasNoErrors())
+									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
+									.andExpect(forwardedUrl(completeUrl("tutorregistration")));		
+	}
+	/*
+	@Test
+	public void submitAsTutor() throws Exception
+	{
+		mockMvc.perform(post("/submit").param("email", "mail@mail.de")
+									.param("firstName", "first")
+									.param("lastName", "last")
+									.param("username", "user")
+									.param("password", "password")
+									.param("registerastutor","true"))
+									.andExpect(status().isOk())
+									.andExpect(model().hasNoErrors())
+									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
+									.andExpect(forwardedUrl(completeUrl("tutorregistration")));		
+	}*/
 	
 	@Test
 	public void invalidUserPageError() throws Exception

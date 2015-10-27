@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import static org.mockito.Mockito.reset;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
-import org.sample.controller.service.FormService;
+import org.sample.controller.service.RegisterFormService;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,8 +44,8 @@ public class RegisterControllerTest {
 	    	 return userDao;
 	     }
 	     @Bean
-	     public FormService formServiceMock() {
-	    	 FormService formService = mock(FormService.class);
+	     public RegisterFormService formServiceMock() {
+	    	 RegisterFormService formService = mock(RegisterFormService.class);
 	    	 return formService;
 	     }
         @Bean
@@ -60,7 +60,7 @@ public class RegisterControllerTest {
 	private UserDao userDao;
 	@Qualifier("formServiceMock")
 	@Autowired
-	private FormService formService;
+	private RegisterFormService formService;
 	@Autowired
 	private RegisterController registerController;
 

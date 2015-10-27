@@ -16,6 +16,7 @@
                         <tr class="studyCourse">    
                             <td><form:input path="classList[${i.index}].name" id="name${i.index}" /></td>
                             <td><form:input path="classList[${i.index}].grade" id="grade${i.index}" /></td>
+                            <td><button type="submit" name="removeClass" value="${i.index}">remove it</button></td>
                               </tr>
                     </c:forEach>
                     

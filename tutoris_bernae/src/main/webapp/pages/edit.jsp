@@ -7,17 +7,17 @@
 <c:import url="template/header.jsp" />
 
 <c:import url="template/function.jsp" />
-<h1>Sign Up Here!</h1>
-<form:form method="post" modelAttribute="registerForm" action="submit" id="registerForm" cssClass="form-horizontal"  autocomplete="off">
+<h1>Edit profile!</h1>
+<form:form method="post" modelAttribute="editForm" action="submitEdit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
-        <legend>Enter Your Information</legend>
-
+        <legend>You can alter any field</legend>
+	<form:input path="userId" type="hidden" value="${user.id}"/>
         <c:set var="emailErrors"><form:errors path="email"/></c:set>
         <div class="control-group<c:if test="${not empty emailErrors}"> error</c:if>">
             <label class="control-label" for="field-email">Email</label>
 
             <div class="controls">
-                <form:input path="email" id="field-email" tabindex="1" maxlength="45" placeholder="Email"/>
+                <form:input path="email" id="field-email" tabindex="1" maxlength="45" value="${user.email}"/>
                 <form:errors path="email" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="control-group<c:if test="${not empty firstNameErrors}"> error</c:if>">
             <label class="control-label" for="field-firstName">First Name</label>
             <div class="controls">
-                <form:input path="firstName" id="field-firstName" tabindex="2" maxlength="35" placeholder="First Name"/>
+                <form:input path="firstName" id="field-firstName" tabindex="2" maxlength="35" value="${user.firstName}"/>
                 <form:errors path="firstName" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="control-group<c:if test="${not empty lastNameErrors}"> error</c:if>">
             <label class="control-label" for="field-lastName">Last Name</label>
             <div class="controls">
-                <form:input path="lastName" id="field-lastName" tabindex="3" maxlength="35" placeholder="Last Name"/>
+                <form:input path="lastName" id="field-lastName" tabindex="3" maxlength="35" value="${user.lastName}"/>
                 <form:errors path="lastName" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -41,7 +41,7 @@
         <div class="control-group<c:if test="${not empty usernameErrors}"> error</c:if>">
             <label class="control-label" for="field-username">Username</label>
             <div class="controls">
-                <form:input path="username" id="field-username" tabindex="3" maxlength="35" placeholder="Username"/>
+                <form:input path="username" id="field-username" tabindex="3" maxlength="35" value="${user.username}"/>
                 <form:errors path="username" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -57,8 +57,7 @@
            <br>
        		        
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Sign up</button>
-             <button type="submit" name = "registerastutor" value = "true" class="btn btn-primary">Sign up as Tutor</button>
+            <button type="submit" class="btn btn-primary">Submit changes</button>
             <button type="button" class="btn">Cancel</button>
          </div>
            

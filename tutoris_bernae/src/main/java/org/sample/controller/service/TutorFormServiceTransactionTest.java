@@ -86,11 +86,13 @@ public class TutorFormServiceTransactionTest {
         tutorForm.setStudyCourseList(courses);
         tutorForm.setClassList(classes);
         tutorForm.setBio("I am awesome");
+        testUser = userDao.save(testUser);
+        tutorForm.setUserId(testUser.getId());
 
         assertNull(tutorForm.getId());
         
         userDao.save(testUser);
-        tutorFormService.saveFrom(tutorForm,testUser);
+        tutorFormService.saveFrom(tutorForm);
 
         assertNotNull(tutorForm.getId());
         assertTrue(tutorForm.getId() > 0);

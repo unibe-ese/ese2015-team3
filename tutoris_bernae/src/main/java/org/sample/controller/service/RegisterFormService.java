@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.sample.controller.exceptions.InvalidUserException;
+import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.model.Address;
 import org.sample.model.Team;
@@ -13,6 +14,10 @@ import org.sample.model.dao.AddressDao;
 import org.sample.model.dao.TeamDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -34,7 +39,7 @@ public class RegisterFormService{
         user.setUsername(registerForm.getUsername());
         user.setPassword(registerForm.getPassword());
         String email = registerForm.getEmail();
-        if(!emailAvailable(email)) throw new InvalidUserException("Your username must be unique");
+        if(!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
         user.setEmail(registerForm.getEmail());
         user.setRole("ROLE_USER");
         
@@ -45,6 +50,7 @@ public class RegisterFormService{
         return registerForm;
 
     }
+    
     
     private boolean usernameAvailable(String username){
     	if(userDao.findByUsernameLike(username)==null) return true;

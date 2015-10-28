@@ -15,30 +15,30 @@
     <fieldset>
         <legend>Enter search criterias</legend>
 
-        <c:set var="studyCourseErrors"><form:errors path="studyCourse"/></c:set>
+        <c:set var="studyCourseIdErrors"><form:errors path="studyCourseId"/></c:set>
         
-        <div class="control-group<c:if test="${not empty studyCourseErrors}">error</c:if>">
-            <label class="control-label" for="field-studyCourse">Study Course</label>
+        <div class="control-group<c:if test="${not empty studyCourseIdErrors}">error</c:if>">
+            <label class="control-label" for="field-studyCourseId">Study Course</label>
             
             <div class="controls">
-            <form:select path="studyCourse" required="false">
+            <form:select path="studyCourseId" required="false">
                 <form:option value="0">-- no course selected --</form:option>
-                <form:options items="${studyCourse}" itemValue="id"/>
+                <form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
             </form:select>
-            <form:errors path="studyCourse" cssClass="help-inline" element="span"/>
+            <form:errors path="studyCourseId" cssClass="help-inline" element="span"/>
             </div>
         </div>
             
-        <c:set var="classesErrors"><form:errors path="classes"/></c:set>
-        <div class="control-group<c:if test="${not empty classesErrors}">error</c:if>">
-            <label class="control-label" for="field-classes">Study Course</label>
+        <c:set var="classesIdErrors"><form:errors path="classesId"/></c:set>
+        <div class="control-group<c:if test="${not empty classesIdErrors}">error</c:if>">
+            <label class="control-label" for="field-classesId">Study Course</label>
             
             <div class="controls">
-            <form:select path="classes" required="false">
+            <form:select path="classesId" required="false">
                 <form:option value="0">-- no class selected --</form:option>
-                <form:options items="${classes}" itemLabel="name" itemValue="id"/>
+                <form:options items="${classesList}" itemLabel="name" itemValue="id"/>
             </form:select>
-            <form:errors path="classes" cssClass="help-inline" element="span"/>
+            <form:errors path="classesId" cssClass="help-inline" element="span"/>
             </div>
         </div>    
         

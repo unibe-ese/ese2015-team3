@@ -9,25 +9,9 @@ import org.sample.model.StudyCourse;
 public class SearchForm {
     
     private long id;
-    private StudyCourse studyCourse;
-    private Classes classes;
+    private Long studyCourseId;
+    private Long classesId;
     private BigDecimal fee;
-    
-    public StudyCourse getStudyCourse() {
-        return studyCourse;
-    }
-    
-    public void setStudyCourse(StudyCourse studyCourse) {
-        this.studyCourse = studyCourse;
-    }
-    
-    public Classes getClasses() {
-        return classes;
-    }
-    
-    public void setClasses(Classes classes) {
-        this.classes = classes;
-    }
     
     public BigDecimal getFee() {
         return fee;
@@ -44,5 +28,21 @@ public class SearchForm {
     public void setId(Long id) {
         this.id = id;
     }
+
+	public Long getStudyCourseId() {
+		return studyCourseId;
+	}
+
+	public void setStudyCourseId(Long studyCourseId) {
+		this.studyCourseId = studyCourseId;
+	}
+
+	public Long getClassesId() {
+		return classesId;
+	}
+
+	public void setClassesId(Long classesId) {
+		this.classesId = classesId;
+	}
     
 }

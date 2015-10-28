@@ -42,15 +42,15 @@ public class SearchController {
     @Autowired
     private TutorDao tutorDao;
     
-//    @Autowired
-//    private StudyCourseDao studyCourseDao;
+    @Autowired
+    private StudyCourseDao studyCourseDao;
     
     @RequestMapping(value="/findTutor", method=RequestMethod.GET)
     public ModelAndView findTutor(HttpSession session,HttpServletRequest request){
         ModelAndView model = new ModelAndView(PAGE_SEARCH);
         model.addObject("searchForm", new SearchForm());
-        model.addObject("studyCourse", searchService.getAllCourses());
-        model.addObject("classes", searchService.getAllClasses());
+        model.addObject("studyCourseList", searchService.getAllCourses());
+        model.addObject("classesList", searchService.getAllClasses());
         return model;
     }
     

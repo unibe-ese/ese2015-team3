@@ -41,7 +41,6 @@ public class IndexController {
     
 	@Autowired TutorDao tutorDao;
 
-    
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView home(@RequestParam(value = "logout", required = false) String logout) {
@@ -49,8 +48,6 @@ public class IndexController {
     	 if (logout != null) {
     			model.addObject("message", "You've been logged out successfully.");
     		  }
-
-    
         return model;
     }
     

@@ -11,6 +11,7 @@ import org.sample.controller.pojos.SearchForm;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,29 +23,47 @@ public class SearchService {
     @Autowired
     TutorDao tutorDao;
     
-//    @Autowired
-//    StudyCourseDao studyCourseDao;
+    @Autowired
+    StudyCourseDao studyCourseDao;
+    
+    @Autowired
+    ClassesDao classesDao;
     
     @Transactional
-    public Iterable<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
-        StudyCourse courseCriteria = searchForm.getStudyCourse();
-        Classes classCriteria = searchForm.getClasses();
+    public List<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
+        StudyCourse courseCriteria = studyCourseDao.findOne(searchForm.getStudyCourseId());
+        Classes classCriteria = classesDao.findOne(searchForm.getClassesId());
         BigDecimal fee = searchForm.getFee();
-        
-        List<Tutor> tutorsMatchingCourse = (List<Tutor>) tutorDao.findByCoursesLike(courseCriteria);
-        List<Tutor> tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesNameLike(classCriteria);
-        List<Tutor> tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
-        List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
-        if(tutorsMatchingClass == null) searchResults.add(tutorsMatchingCourse);
-        else searchResults.add(tutorsMatchingClass);
-        searchResults.add(tutorsMatchingFee);
-        
-        if (tutorsMatchingCourse == null && tutorsMatchingClass == null && tutorsMatchingFee == null)
-            return null;
-        return findCommonElements(searchResults);
+        System.out.println(fee);
+        System.out.println(classCriteria.getName());
+        System.out.println(courseCriteria.getName());
+        List<Tutor> tutorsMatchingCourse = new ArrayList<Tutor>();
+        List<Tutor> tutorsMatchingClass = new ArrayList<Tutor>();
+        List<Tutor> tutorsMatchingFee = new ArrayList<Tutor>();
+        if(courseCriteria!=null)
+        	 tutorsMatchingCourse = (List<Tutor>) tutorDao.findByCoursesLike(courseCriteria);
+        if(classCriteria!=null)
+        	tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesLike(classCriteria);
+        if(fee!=null)
+        	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
+        //List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
+        List<Tutor> searchResults = new ArrayList<Tutor>();
+        System.out.println("Size: (Fee)"+tutorsMatchingFee.size());
+        System.out.println("Size: (Class)"+tutorsMatchingClass.size());
+        System.out.println("Size: (Course) "+tutorsMatchingCourse.size());
+        //searchResults.add(tutorsMatchingCourse);
+        //searchResults.add(tutorsMatchingClass);
+        //searchResults.add(tutorsMatchingFee);
+        searchResults.addAll(tutorsMatchingCourse);
+        searchResults.addAll(tutorsMatchingClass);
+        searchResults.addAll(tutorsMatchingFee);
+        //System.out.println("Size: "+findCommonElements(searchResults).size());
+        System.out.println("Size: "+searchResults.size());
+        //return findCommonElements(searchResults);
+        return searchResults;
     }
     
-    private <T> List<T> findCommonElements(Collection<? extends Collection<T>> collections){
+    private <T> List<T> deleteCommonElements(Collection<? extends Collection<T>> collections){
         
         List<T> common = new ArrayList<T>();
         if (!collections.isEmpty()){
@@ -58,19 +77,19 @@ public class SearchService {
     }
     
     public Iterable<StudyCourse> getAllCourses() {
-        Iterable<Tutor> tutors = tutorDao.findAll();
+        /*Iterable<Tutor> tutors = tutorDao.findAll();
         Set<StudyCourse> allCourses = new HashSet<StudyCourse>();
         for (Tutor tutor : tutors) {
             Set<StudyCourse> courses = tutor.getCourses();
             allCourses.addAll(courses);
         }
-        return allCourses;
+        return allCourses;*/
         
-//        return studyCourseDao.findAll();
+        return studyCourseDao.findAll();
     }
     
     public Iterable<Classes> getAllClasses() {
         //TODO: get list of all classes for selected course
-        return null;
+        return classesDao.findAll();
     }
 }

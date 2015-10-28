@@ -16,6 +16,8 @@ import org.sample.model.Team;
 import org.sample.model.Tutor;
 import org.sample.model.User;
 import org.sample.model.dao.AddressDao;
+import org.sample.model.dao.ClassesDao;
+import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TeamDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
@@ -34,6 +36,11 @@ public class EditFormService{
 
     @Autowired UserDao userDao;
     @Autowired TutorDao tutorDao;
+    @Autowired
+    StudyCourseDao studyCourseDao;
+    
+    @Autowired
+    ClassesDao classesDao;
   
     @Transactional
     public EditForm saveFrom(EditForm editForm) throws InvalidUserException{

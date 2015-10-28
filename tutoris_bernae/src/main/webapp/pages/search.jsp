@@ -22,8 +22,8 @@
             
             <div class="controls">
             <form:select path="studyCourse" required="false">
-                <form:option value="0">-- no course selected --</form:option>
-                <form:options items="${studyCourse}" itemValue="id"/>
+                <form:option value="NONE">-- no course selected --</form:option>
+                <form:options items="${studyCourse}"/>
             </form:select>
             <form:errors path="studyCourse" cssClass="help-inline" element="span"/>
             </div>
@@ -36,7 +36,7 @@
             <div class="controls">
             <form:select path="classes" required="false">
                 <form:option value="0">-- no class selected --</form:option>
-                <form:options items="${classes}" itemLabel="name" itemValue="id"/>
+                <form:options items="${classes}"/>
             </form:select>
             <form:errors path="classes" cssClass="help-inline" element="span"/>
             </div>

@@ -9,23 +9,23 @@ import org.sample.model.StudyCourse;
 public class SearchForm {
     
     private long id;
-    private StudyCourse studyCourse;
-    private Classes classes;
+    private String studyCourse;
+    private String classes;
     private BigDecimal fee;
-    
-    public StudyCourse getStudyCourse() {
+        
+    public String getStudyCourse() {
         return studyCourse;
     }
     
-    public void setStudyCourse(StudyCourse studyCourse) {
+    public void setStudyCourse(String studyCourse) {
         this.studyCourse = studyCourse;
     }
     
-    public Classes getClasses() {
+    public String getClasses() {
         return classes;
     }
     
-    public void setClasses(Classes classes) {
+    public void setClasses(String classes) {
         this.classes = classes;
     }
     

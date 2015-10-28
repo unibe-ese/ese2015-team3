@@ -7,11 +7,8 @@ import org.sample.model.Tutor;
 import org.springframework.data.repository.CrudRepository;
 
 public interface TutorDao extends CrudRepository<Tutor,Long> {
-	public Iterable<Tutor> findByCoursesLike(StudyCourse string);
-        public Iterable<Tutor> findByClassesNameLike(Classes string);
+        public Iterable<Tutor> findByClassesNameLike(String string);
         public Iterable<Tutor> findByFeeLike(BigDecimal string);
       	public Iterable<Tutor> findByCoursesNameLike(String string);
 
-//        public Iterable<StudyCourse> findAllCourses();
-//        public Iterable<Classes> findAllClasses();
 }

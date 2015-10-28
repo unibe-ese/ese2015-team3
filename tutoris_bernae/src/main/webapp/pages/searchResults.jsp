@@ -9,8 +9,8 @@
 <c:import url="template/function.jsp" />
 
 <ul>
-    <c:forEach items="$tutors" var="tutors">
-        <li><a href="#"><c:out value="${tutors}"></c:out></a></li>
+    <c:forEach items="${tutors}" var="tutors">
+        <li><a href="#"><c:out value="${tutors.student.username}"></c:out></a></li>
     </c:forEach>
     
 </ul>

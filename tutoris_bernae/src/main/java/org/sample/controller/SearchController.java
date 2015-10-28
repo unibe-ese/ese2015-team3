@@ -42,17 +42,22 @@ public class SearchController {
     @Autowired
     private TutorDao tutorDao;
     
-//    @Autowired
-//    private StudyCourseDao studyCourseDao;
-    
     @RequestMapping(value="/findTutor", method=RequestMethod.GET)
     public ModelAndView findTutor(HttpSession session,HttpServletRequest request){
         ModelAndView model = new ModelAndView(PAGE_SEARCH);
         model.addObject("searchForm", new SearchForm());
-        model.addObject("studyCourse", searchService.getAllCourses());
+        model.addObject("studyCourse", searchService.getAllCoursesNames());
         model.addObject("classes", searchService.getAllClasses());
         return model;
     }
+//    
+//    @RequestMapping(value="/findTutor", method=RequestMethod.POST, params={"submitAction=studyCourseSelected"})
+//    public ModelAndView populateClasses(HttpServletRequest request, @ModelAttribute(value = "searchForm") SearchForm searchForm){
+//        ModelAndView model = new ModelAndView(PAGE_SEARCH);
+//        model.addObject("searchForm", searchForm);
+//        model.addObject("classes", searchService.getAllClasses(searchForm.getStudyCourse()));
+//        return model;
+//    }
     
     @RequestMapping(value="/submitSearch", method=RequestMethod.POST)
     public ModelAndView searchResults(HttpSession session,HttpServletRequest request, @Valid SearchForm searchForm, BindingResult result) {
@@ -60,6 +65,7 @@ public class SearchController {
         
         if(!result.hasErrors()){
             model = new ModelAndView(PAGE_RESULTS);
+            
             model.addObject("tutors",searchService.findTutorsBySearchCriterias(searchForm));
             
         }

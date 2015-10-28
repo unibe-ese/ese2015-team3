@@ -21,26 +21,40 @@ import org.springframework.transaction.annotation.Transactional;
 public class SearchService {
     @Autowired
     TutorDao tutorDao;
-    
-//    @Autowired
-//    StudyCourseDao studyCourseDao;
-    
+ 
     @Transactional
     public Iterable<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
-        StudyCourse courseCriteria = searchForm.getStudyCourse();
-        Classes classCriteria = searchForm.getClasses();
+        String courseCriteria = searchForm.getStudyCourse();
+        String classCriteria = searchForm.getClasses();
         BigDecimal fee = searchForm.getFee();
-        
-        List<Tutor> tutorsMatchingCourse = (List<Tutor>) tutorDao.findByCoursesLike(courseCriteria);
-        List<Tutor> tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesNameLike(classCriteria);
-        List<Tutor> tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
+        List<Tutor> tutorsMatchingCourse = null;
+        List<Tutor> tutorsMatchingClass = null;
+        List<Tutor> tutorsMatchingFee = null;
+
+        if (courseCriteria != null) {
+            tutorsMatchingCourse = (List<Tutor>) tutorDao.findByCoursesNameLike(courseCriteria);
+        }
+
+        if (classCriteria != null) {
+            tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesNameLike(classCriteria);
+        }
+
+        if (fee != null) {
+            tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
+        }
         List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
-        if(tutorsMatchingClass == null) searchResults.add(tutorsMatchingCourse);
-        else searchResults.add(tutorsMatchingClass);
-        searchResults.add(tutorsMatchingFee);
-        
-        if (tutorsMatchingCourse == null && tutorsMatchingClass == null && tutorsMatchingFee == null)
+        if (tutorsMatchingClass.isEmpty() && !tutorsMatchingCourse.isEmpty()) {
+            searchResults.add(tutorsMatchingCourse);
+        } else if (!tutorsMatchingClass.isEmpty()) {
+            searchResults.add(tutorsMatchingClass);
+        }
+        if (tutorsMatchingFee != null) {
+            searchResults.add(tutorsMatchingFee);
+        }
+
+        if (searchResults.isEmpty()) {
             return null;
+        }
         return findCommonElements(searchResults);
     }
     
@@ -57,20 +71,31 @@ public class SearchService {
         return common;
     }
     
-    public Iterable<StudyCourse> getAllCourses() {
+    public Iterable<String> getAllCoursesNames() {
         Iterable<Tutor> tutors = tutorDao.findAll();
-        Set<StudyCourse> allCourses = new HashSet<StudyCourse>();
+        Set<String> allNames = new HashSet<String>();
         for (Tutor tutor : tutors) {
             Set<StudyCourse> courses = tutor.getCourses();
-            allCourses.addAll(courses);
+            for (StudyCourse course : courses) {
+                allNames.add(course.getName());
+            }
         }
-        return allCourses;
+        
+        return allNames;
         
 //        return studyCourseDao.findAll();
     }
     
-    public Iterable<Classes> getAllClasses() {
-        //TODO: get list of all classes for selected course
-        return null;
+    public Iterable<String> getAllClasses() {
+        Iterable<Tutor> tutors = tutorDao.findAll();
+        Set<String> allNames = new HashSet<String>();
+        for (Tutor tutor : tutors) {
+            Set<Classes> classes = tutor.getClasses();
+            for (Classes classe : classes) {
+                allNames.add(classe.getName());
+            }
+        }
+        
+        return allNames;
     }
 }

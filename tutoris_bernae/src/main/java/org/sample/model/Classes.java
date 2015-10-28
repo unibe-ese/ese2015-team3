@@ -23,7 +23,7 @@ public class Classes {
     @ManyToOne
     private StudyCourse studyCourse;
     
-	
+
     private String name;
     private Integer grade;
     

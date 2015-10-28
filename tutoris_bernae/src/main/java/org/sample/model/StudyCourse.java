@@ -22,9 +22,9 @@ public class StudyCourse implements Serializable {
 
     private String name;
     private String faculty; //maybe?
-    /* Not working; Cannot save tutor form with that (detached entity..)
+    // Not working; Cannot save tutor form with that (detached entity..)
     @ManyToMany(cascade = {CascadeType.ALL})
-    private Set<Tutor> tutors;
+    private Set<Tutor> tutor;
    
     /*
     @OneToMany(cascade = {CascadeType.ALL})

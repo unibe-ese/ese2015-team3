@@ -63,6 +63,7 @@ public class EditController {
             } catch (InvalidUserException e) {
             	
             	model = new ModelAndView("edit");
+            	model.addObject("editForm", editForm);
             	model.addObject("page_error", e.getMessage());
             }
         } else {
@@ -91,7 +92,8 @@ public class EditController {
             	editFormService.saveFrom(tutorForm);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {
-            	model = new ModelAndView("edit");
+            	model = new ModelAndView("editTutor");
+            	model.addObject("tutorForm", tutorForm);
             	model.addObject("page_error", e.getMessage());
             }
         } else {

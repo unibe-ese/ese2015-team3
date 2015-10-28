@@ -68,6 +68,7 @@ public class EditController {
             }
         } else {
         	model = new ModelAndView("edit");
+        	model.addObject("editForm", editForm);
         }   	
     	return model;
     }
@@ -97,10 +98,9 @@ public class EditController {
             	model.addObject("page_error", e.getMessage());
             }
         } else {
-        	model = new ModelAndView("edit");
+          	model = new ModelAndView("editTutor");
+        	model.addObject("tutorForm", tutorForm);
         }   	
     	return model;
     }
-
-	
 }

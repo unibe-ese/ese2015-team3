@@ -45,17 +45,12 @@ public class SearchService {
         	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
         //List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
         List<Tutor> searchResults = new ArrayList<Tutor>();
-        System.out.println("Size: (Fee)"+tutorsMatchingFee.size());
-        System.out.println("Size: (Class)"+tutorsMatchingClass.size());
-        System.out.println("Size: (Course) "+tutorsMatchingCourse.size());
         //searchResults.add(tutorsMatchingCourse);
         //searchResults.add(tutorsMatchingClass);
         //searchResults.add(tutorsMatchingFee);
         searchResults.addAll(tutorsMatchingCourse);
         searchResults.addAll(tutorsMatchingClass);
         searchResults.addAll(tutorsMatchingFee);
-        //System.out.println("Size: "+findCommonElements(searchResults).size());
-        System.out.println("Size: "+searchResults.size());
         //return findCommonElements(searchResults);
         return searchResults;
     }

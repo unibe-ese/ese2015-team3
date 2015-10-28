@@ -11,7 +11,7 @@
 <form:form method="post" modelAttribute="editForm" action="submitEdit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
         <legend>You can alter any field</legend>
-	<form:input path="userId" type="hidden" value="${user.id}"/>
+		<form:input path="userId" type="hidden" value="${user.id}"/>
         <c:set var="emailErrors"><form:errors path="email"/></c:set>
         <div class="control-group<c:if test="${not empty emailErrors}"> error</c:if>">
             <label class="control-label" for="field-email">Email</label>

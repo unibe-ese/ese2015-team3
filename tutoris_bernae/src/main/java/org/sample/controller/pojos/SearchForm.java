@@ -9,9 +9,11 @@ import org.sample.model.StudyCourse;
 public class SearchForm {
     
     private long id;
+
     private Long studyCourseId;
     private Long classesId;
     private BigDecimal fee;
+
     
     public BigDecimal getFee() {
         return fee;

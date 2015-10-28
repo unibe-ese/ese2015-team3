@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SearchService {
     @Autowired
     TutorDao tutorDao;
-    
+
     @Autowired
     StudyCourseDao studyCourseDao;
     
@@ -43,45 +43,40 @@ public class SearchService {
         	tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesLike(classCriteria);
         if(fee!=null)
         	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
-        //List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
-        List<Tutor> searchResults = new ArrayList<Tutor>();
-        //searchResults.add(tutorsMatchingCourse);
-        //searchResults.add(tutorsMatchingClass);
-        //searchResults.add(tutorsMatchingFee);
-        searchResults.addAll(tutorsMatchingCourse);
-        searchResults.addAll(tutorsMatchingClass);
-        searchResults.addAll(tutorsMatchingFee);
-        //return findCommonElements(searchResults);
-        return searchResults;
+        List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
+        System.out.println("Size: "+tutorsMatchingCourse.size()+tutorsMatchingClass.size()+tutorsMatchingFee.size());
+        if(!tutorsMatchingCourse.isEmpty()) searchResults.add(tutorsMatchingCourse);
+        if(!tutorsMatchingClass.isEmpty())searchResults.add(tutorsMatchingClass);
+        if(!tutorsMatchingFee.isEmpty())searchResults.add(tutorsMatchingFee);
+        
+        return findCommonElements(searchResults);
     }
     
-    private <T> List<T> deleteCommonElements(Collection<? extends Collection<T>> collections){
+    private <T> List<T> findCommonElements(Collection<? extends Collection<T>> collections){
         
         List<T> common = new ArrayList<T>();
+
         if (!collections.isEmpty()){
             Iterator<? extends Collection<T>> iterator = collections.iterator();
+            
             common.addAll(iterator.next());
+            System.out.println("size:"+common.size());
             while (iterator.hasNext()) {
                 common.retainAll(iterator.next());
+                System.out.println("size:"+common.size());
             }
         } 
         return common;
     }
     
-    public Iterable<StudyCourse> getAllCourses() {
-        /*Iterable<Tutor> tutors = tutorDao.findAll();
-        Set<StudyCourse> allCourses = new HashSet<StudyCourse>();
-        for (Tutor tutor : tutors) {
-            Set<StudyCourse> courses = tutor.getCourses();
-            allCourses.addAll(courses);
-        }
-        return allCourses;*/
-        
+
+    public Iterable<StudyCourse> getAllCourses() {   
         return studyCourseDao.findAll();
     }
     
+
     public Iterable<Classes> getAllClasses() {
-        //TODO: get list of all classes for selected course
         return classesDao.findAll();
+
     }
 }

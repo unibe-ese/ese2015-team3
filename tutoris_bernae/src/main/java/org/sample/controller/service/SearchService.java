@@ -34,9 +34,6 @@ public class SearchService {
         StudyCourse courseCriteria = studyCourseDao.findOne(searchForm.getStudyCourseId());
         Classes classCriteria = classesDao.findOne(searchForm.getClassesId());
         BigDecimal fee = searchForm.getFee();
-        System.out.println(fee);
-        System.out.println(classCriteria.getName());
-        System.out.println(courseCriteria.getName());
         List<Tutor> tutorsMatchingCourse = new ArrayList<Tutor>();
         List<Tutor> tutorsMatchingClass = new ArrayList<Tutor>();
         List<Tutor> tutorsMatchingFee = new ArrayList<Tutor>();

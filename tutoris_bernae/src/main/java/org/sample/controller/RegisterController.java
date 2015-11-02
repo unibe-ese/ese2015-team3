@@ -9,8 +9,10 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
+import org.sample.controller.service.SearchService;
 import org.sample.controller.service.TutorFormService;
 import org.sample.model.User;
+import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ public class RegisterController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
 	
+    @Autowired
+    private StudyCourseDao studyCourseDao;
 	@Autowired
 	private RegisterFormService registerFormService;
 	@Autowired
@@ -62,6 +66,8 @@ public class RegisterController {
         	TutorForm tutorForm = new TutorForm();
         	tutorForm.setUserId(registerForm.getId());
         	model.addObject("tutorForm", tutorForm);
+            model.addObject("studyCourseList", studyCourseDao.findAll());
+//            model.addObject("classesList", searchService.getAllClasses());
     	}
     	return model;
     }

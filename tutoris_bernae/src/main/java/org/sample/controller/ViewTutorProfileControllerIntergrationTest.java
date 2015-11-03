@@ -1,5 +1,6 @@
 package org.sample.controller;
 
+
 import static org.mockito.Mockito.mock;
 
 import org.hamcrest.Matchers;
@@ -27,6 +28,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -34,10 +36,11 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -62,12 +65,12 @@ import static org.hamcrest.Matchers.*;
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml","file:src/main/webapp/WEB-INF/config/springSecurity.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
-public class EditControllerIntergrationTest {
+public class ViewTutorProfileControllerIntergrationTest {
+	@Autowired 
+	private FilterChainProxy springSecurityFilterChain;
 	@Autowired
 	private WebApplicationContext context;
 	MockMvc mockMvc;
-	@Autowired
-	private EditController editController;
 	@Autowired
 	private TutorDao tutorDao;
 	@Autowired
@@ -79,6 +82,7 @@ public class EditControllerIntergrationTest {
 	@Before
 	public void setUp()
 	{
+		//mockMvc =  MockMvcBuilders.webAppContextSetup(this.context).addFilters(springSecurityFilterChain).build(); does not work at the moment
 		mockMvc =  MockMvcBuilders.webAppContextSetup(this.context).build();
 		newUser = new User();
 		newUser.setUsername("test");
@@ -86,8 +90,6 @@ public class EditControllerIntergrationTest {
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
-		newTutor.setClasses(new HashSet<Classes>());
-		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
 		newTutorUser.setUsername("tutortest");
@@ -101,72 +103,47 @@ public class EditControllerIntergrationTest {
 	}
 	
 	@Test
-	public void editUserProfilePage() throws Exception
+	public void viewProfilePage() throws Exception
 	{
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 		Authentication authentication = 
 		        new UsernamePasswordAuthenticationToken("test","123", authorities);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(get("/edit").principal(authentication))
-										.andExpect(status().isOk())
-										.andExpect(model().attribute("editForm", is(EditForm.class)))
-										.andExpect(forwardedUrl(completeUrl("edit")))
-										.andExpect(model().attribute("editForm", hasProperty("username", Matchers.is("test"))));
-		// TODO Find out how to check that fields are correctly prefilled
+
+		mockMvc.perform(get("/view?tutorId="+newTutor.getId()).principal(authentication))
+				.andExpect(status().isOk())
+				.andExpect(model().hasNoErrors())
+				.andExpect(forwardedUrl(completeUrl("viewTutorProfile")))
+				.andExpect(model().attribute("tutor", newTutor));
 	}
 	
 	@Test
-	public void editTutorProfilePage() throws Exception
+	public void noTutorFound() throws Exception
 	{
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_TUTOR");
 		Authentication authentication = 
 		        new UsernamePasswordAuthenticationToken("tutortest","123", authorities);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(get("/edit").principal(authentication))
-										.andExpect(status().isOk())
-										.andExpect(model().attribute("tutorForm", is(TutorEditForm.class)))
-										.andExpect(forwardedUrl(completeUrl("editTutor")));
-		// TODO Find out how to check that fields are correctly prefilled
+		mockMvc.perform(get("/view?tutorId=0").principal(authentication)) //Will not be found because ids start at 1
+				.andExpect(status().isOk())
+				.andExpect(model().hasNoErrors())
+				.andExpect(forwardedUrl(completeUrl("notutorfound")));
 	}
 	
 	@Test
-	public void editUserDone() throws Exception
+	public void noTutorId() throws Exception
 	{
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_TUTOR");
 		Authentication authentication = 
-		        new UsernamePasswordAuthenticationToken("tutortest","123", authorities);
+		        new UsernamePasswordAuthenticationToken("test","123", authorities);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(post("/submitEdit").principal(authentication)
-										.param("userId", newUser.getId().toString())
-										.param("firstName","test")
-										.param("lastName","test")
-										.param("username","test")
-										.param("password","123")
-										.param("email","test@mail.de"))
-										.andExpect(status().isOk())
-										.andExpect(forwardedUrl(completeUrl("editDone")));
-		assertEquals("test@mail.de", newUser.getEmail());
+
+		mockMvc.perform(get("/view").principal(authentication))
+									.andExpect(status().isOk())
+									.andExpect(model().hasNoErrors())
+									.andExpect(forwardedUrl(completeUrl("notutorfound")));
 	}
-	// TODO Find out how to add a form to a mockmvc request or how to add course and classlist as parameters
-	/*
-	@Test
-	public void editTutorDone() throws Exception
-	{
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_TUTOR");
-		Authentication authentication = 
-		        new UsernamePasswordAuthenticationToken("tutortest","123", authorities);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(post("/submitTutorEdit").principal(authentication)
-										.param("userId", newUser.getId().toString())
-										.param("firstName","test")
-										.param("lastName","test")
-										.param("username","test")
-										.param("password","123")
-										.param("email","test@mail.de"))
-										.andExpect(status().isOk())
-										.andExpect(forwardedUrl(completeUrl("editDone")));
-	}
-	*/
+	
 	private String completeUrl(String page) {
 		return "/pages/"+page+".jsp";
 	}

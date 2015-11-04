@@ -42,9 +42,11 @@ public class SearchController {
     @Autowired
     private TutorDao tutorDao;
     
+
     @Autowired
     private StudyCourseDao studyCourseDao;
     
+
     @RequestMapping(value="/findTutor", method=RequestMethod.GET)
     public ModelAndView findTutor(HttpSession session,HttpServletRequest request){
         ModelAndView model = new ModelAndView(PAGE_SEARCH);

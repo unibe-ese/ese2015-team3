@@ -44,37 +44,42 @@ public class SearchService {
         	tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesLike(classCriteria);
         if(fee!=null)
         	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
-        List<Tutor> searchResults = new ArrayList<Tutor>();
-        System.out.println("Size: (Fee)"+tutorsMatchingFee.size());
-        System.out.println("Size: (Class)"+tutorsMatchingClass.size());
-        System.out.println("Size: (Course) "+tutorsMatchingCourse.size());
-        searchResults.addAll(tutorsMatchingCourse);
-        searchResults.addAll(tutorsMatchingClass);
-        searchResults.addAll(tutorsMatchingFee);
-        System.out.println("Size: "+searchResults.size());
-        return searchResults;
+
+        List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
+        System.out.println("Size: "+tutorsMatchingCourse.size()+tutorsMatchingClass.size()+tutorsMatchingFee.size());
+        if(!tutorsMatchingCourse.isEmpty()) searchResults.add(tutorsMatchingCourse);
+        if(!tutorsMatchingClass.isEmpty())searchResults.add(tutorsMatchingClass);
+        if(!tutorsMatchingFee.isEmpty())searchResults.add(tutorsMatchingFee);
+        
+        return findCommonElements(searchResults);
     }
     
-    private <T> List<T> deleteCommonElements(Collection<? extends Collection<T>> collections){
+    private <T> List<T> findCommonElements(Collection<? extends Collection<T>> collections){
         
         List<T> common = new ArrayList<T>();
+
         if (!collections.isEmpty()){
             Iterator<? extends Collection<T>> iterator = collections.iterator();
+            
             common.addAll(iterator.next());
+            System.out.println("size:"+common.size());
             while (iterator.hasNext()) {
                 common.retainAll(iterator.next());
+                System.out.println("size:"+common.size());
             }
         } 
         return common;
     }
     
 
-    public Iterable<StudyCourse> getAllCourses() {
-            
+
+    public Iterable<StudyCourse> getAllCourses() {   
         return studyCourseDao.findAll();
     }
     
+
     public Iterable<Classes> getAllClasses() {
         return classesDao.findAll();
+
     }
 }

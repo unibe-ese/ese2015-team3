@@ -13,6 +13,7 @@ public class SearchForm {
     private Long studyCourseId;
     private Long classesId;
     private BigDecimal fee;
+
     
     public BigDecimal getFee() {
         return fee;

@@ -21,7 +21,8 @@
 		<script src="/tutoris_baernae/js/skel.min.js"></script>
 		<script src="/tutoris_baernae/js/skel-layers.min.js"></script>
 		<script src="/tutoris_baernae/js/init.js"></script>
-		
+		<script src="/tutoris_baernae/js/sorttable.js"></script>
+                
 		<noscript>
 			<link rel="stylesheet" href="/tutoris_baernae/css/skel.css" />
 			<link rel="stylesheet" href="/tutoris_baernae/css/style.css" />

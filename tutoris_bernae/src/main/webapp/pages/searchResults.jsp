@@ -8,7 +8,7 @@
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
 
-<table>
+<table class="sortable">
     <thead>
         <tr>
             <td>Username</td>

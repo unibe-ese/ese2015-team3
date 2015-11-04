@@ -1,12 +1,22 @@
-<c:set var="studyCourseIdErrors"><form:errors path="studyCourseId"/></c:set>
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div class="control-group<c:if test="${not empty studyCourseIdErrors}">error</c:if>">
-	<label class="control-label" for="field-studyCourseId">Study Course</label>	
-	<div class="controls">
-		<form:select path="studyCourseId" required="false">
-			<form:option value="0">-- no course selected --</form:option>
-			<form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
-		</form:select>
-		<form:errors path="studyCourseId" cssClass="help-inline" element="span"/>
-	</div>
-</div>
+<label class="control-label" for="field-studyCourse">Study Course</label>	
+	
+<c:set var="studyCourseErrors"><form:errors path="studyCourse"/></c:set>
+<c:choose>
+	<c:when test="${not empty studyCourseErrors}">error while rendering study courses</c:when>
+	<c:otherwise>
+		<div class="control-group">
+			<div class="controls">
+				<form:select path="studyCourse" required="false">
+					<form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
+				</form:select>
+				<form:errors path="studyCourse" cssClass="help-inline" element="span"/>
+			</div>
+		</div>
+	</c:otherwise>
+</c:choose>
+
+	<%@ include file="autocomplete.jsp" %>
+

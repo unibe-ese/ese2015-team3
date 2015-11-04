@@ -12,7 +12,8 @@
     <fieldset>
         <legend>Enter Your Information</legend>
 	<form:input path="userId" type="hidden" value="${tutorForm.userId}"/>
-	<c:import url="template/courses_dropdown.jsp" />
+
+		<%@ include file="template/courses_dropdown.jsp" %>
 	
              <c:import url="template/StudyList.jsp" />
             <c:import url="template/classList.jsp" />

@@ -36,7 +36,7 @@ public class Tutor implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<StudyCourse> courses; //Studiengang
 
-	@OneToMany(orphanRemoval=true, fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+	@ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<Classes> classes;
 
     

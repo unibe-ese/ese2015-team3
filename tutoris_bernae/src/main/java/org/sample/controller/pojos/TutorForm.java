@@ -25,8 +25,10 @@ public class TutorForm {
     
     private BigDecimal fee;
 
+    private Long studyCourse;
     private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
+    private Long classes;
     private List<Classes> classList = new LinkedList<Classes>();
     
     private String bio;
@@ -77,5 +79,21 @@ public class TutorForm {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Long getStudyCourse() {
+		return studyCourse;
+	}
+
+	public void setStudyCourse(Long studyCourse) {
+		this.studyCourse = studyCourse;
+	}
+
+	public Long getClasses() {
+		return classes;
+	}
+
+	public void setClasses(Long classes) {
+		this.classes = classes;
 	}
 }

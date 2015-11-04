@@ -82,12 +82,24 @@ public class SearchService {
         return classesDao.findAll();
     }
     
-    public Classes getClasse(SearchForm searchForm) {
+    public String getClasseName(SearchForm searchForm) {
         if (searchForm.getClassesId() != null){
             Classes classe = classesDao.findOne(searchForm.getClassesId());
-            return classe;
+            if (classe != null) {
+                return classe.getName();
+            }
         }
-        else
-            return null;
+
+        return "";
+    }
+    
+    public Integer getClasseGrade(SearchForm searchForm) {
+        if (searchForm.getClassesId() != null) {
+            Classes classe = classesDao.findOne(searchForm.getClassesId());
+            if (classe != null) {
+                return classe.getGrade();
+            }
+        }
+        return null;
     }
 }

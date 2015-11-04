@@ -64,12 +64,8 @@ public class SearchController {
         
         if(!result.hasErrors()) {
             model = new ModelAndView(PAGE_RESULTS);
-            model.addObject("searchForm", searchForm);
-            Classes classe = searchService.getClasse(searchForm);
-            if (classe != null) {
-                model.addObject("classe", classe.getName());
-                model.addObject("grade", classe.getGrade());
-            }
+            model.addObject("classe", searchService.getClasseName(searchForm));
+            model.addObject("grade", searchService.getClasseGrade(searchForm));
             model.addObject("tutors",searchService.findTutorsBySearchCriterias(searchForm));
             
         }

@@ -74,7 +74,6 @@ public class RegisterControllerIntergrationTest {
 									.param("lastName", "last")
 									.param("username", "user")
 									.param("password", "password"))
-									
 									.andExpect(status().isOk())
 									.andExpect(model().hasNoErrors())
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_SUBMIT)));		

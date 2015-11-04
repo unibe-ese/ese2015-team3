@@ -2,6 +2,8 @@ package org.sample.controller;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpSession;
+
 import org.sample.model.User;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +23,14 @@ public class ProfileController {
 @Autowired
 private UserDao userDao;
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public ModelAndView showProfile(Principal pricipal) {
+	public ModelAndView showProfile() {
 		 ModelAndView model = new ModelAndView("profile");
-		 User user = userDao.findByUsername(pricipal.getName());
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	     String name = authentication.getName();
+		 User user = userDao.findByUsername(name);
 		 model.addObject("user", user);
 		 if(user.isTutor())
-			 model.addObject("tutor", user.getTutor());
-	 
-
-	  return model;
-
+			 model.addObject("tutor", user.getTutor());	 
+		 return model;
 	}
-	
-
 }

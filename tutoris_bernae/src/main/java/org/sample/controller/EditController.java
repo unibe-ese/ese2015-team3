@@ -37,9 +37,10 @@ public class EditController {
 	private EditFormService editFormService;
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView viewEditProfile(Principal pricipal) {
-		
-		User user = userDao.findByUsername(pricipal.getName());
+	public ModelAndView viewEditProfile() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String name = authentication.getName();
+		User user = userDao.findByUsername(name);
 		if(user.isTutor()) {
 			ModelAndView model = new ModelAndView("editTutor");
 			model.addObject("tutorForm", new TutorEditForm(user, user.getTutor()));

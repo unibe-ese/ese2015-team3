@@ -80,6 +80,14 @@ public class SearchService {
 
     public Iterable<Classes> getAllClasses() {
         return classesDao.findAll();
-
+    }
+    
+    public Classes getClasse(SearchForm searchForm) {
+        if (searchForm.getClassesId() != null){
+            Classes classe = classesDao.findOne(searchForm.getClassesId());
+            return classe;
+        }
+        else
+            return null;
     }
 }

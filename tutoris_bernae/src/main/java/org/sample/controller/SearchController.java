@@ -15,6 +15,7 @@ import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.controller.service.SearchService;
 import org.sample.controller.service.TutorFormService;
+import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -61,9 +62,14 @@ public class SearchController {
     public ModelAndView searchResults(HttpSession session,HttpServletRequest request, @Valid SearchForm searchForm, BindingResult result) {
         ModelAndView model;
         
-        if(!result.hasErrors()){
+        if(!result.hasErrors()) {
             model = new ModelAndView(PAGE_RESULTS);
-            
+            model.addObject("searchForm", searchForm);
+            Classes classe = searchService.getClasse(searchForm);
+            if (classe != null) {
+                model.addObject("classe", classe.getName());
+                model.addObject("grade", classe.getGrade());
+            }
             model.addObject("tutors",searchService.findTutorsBySearchCriterias(searchForm));
             
         }

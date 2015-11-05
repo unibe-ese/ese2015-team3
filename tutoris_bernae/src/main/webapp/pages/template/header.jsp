@@ -1,7 +1,6 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
 <!DOCTYPE HTML>
 <!--
 	Verti by HTML5 UP
@@ -22,7 +21,7 @@
 		<script src="/tutoris_baernae/js/skel-layers.min.js"></script>
 		<script src="/tutoris_baernae/js/init.js"></script>
 		<script src="/tutoris_baernae/js/sorttable.js"></script>
-                
+                <script src="/tutoris_baernae/js/highlight.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="/tutoris_baernae/css/skel.css" />
 			<link rel="stylesheet" href="/tutoris_baernae/css/style.css" />
@@ -47,7 +46,7 @@
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
-								<li><a href="/tutoris_baernae/">Welcome</a></li>
+								<li class><a href="/tutoris_baernae/">Welcome</a></li>
 								<li><a href="#">About</a></li>
 								
 								<li><a href="/tutoris_baernae/findTutor">Find Tutor</a></li>
@@ -83,7 +82,7 @@
 		</sec:authorize>
 							</ul>
 						</nav>
-					
+                                                <script language="javascript">setPage()</script>
 				</header>
 			</div>
 		

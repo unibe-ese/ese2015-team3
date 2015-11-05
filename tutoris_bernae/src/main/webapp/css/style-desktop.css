@@ -138,7 +138,7 @@
 	
 	#footer-wrapper
 	{
-		padding: 6em 0 8em 0;
+		padding: 3em 0 4em 0;
 	}
 
 /*********************************************************************************/
@@ -191,9 +191,11 @@
 				#nav ul li a,
 				#nav ul li span
 				{
-					font-weight: 800;
+/*					font-weight: 800;*/
+                                        font-size: 1em;
+                                        text-transform: uppercase;
 					letter-spacing: 0.025em;
-					color: #696969;
+					color: #333;
 					text-decoration: none;
 					border-radius: 6px;
 					padding: 0.5em 1em 0.5em 1em;
@@ -216,7 +218,8 @@
 				#nav ul li:hover a,
 				#nav ul li:hover span
 				{
-					background: #fff;
+                                        color: #333;
+					background: #c3c3c3;
 				}
 
 			#nav ul li.active
@@ -227,6 +230,7 @@
 				#nav ul li.active span
 				{
 					background: #fff;
+                                        font-weight: bold;
 				}
 
 			#nav ul li.current
@@ -235,7 +239,7 @@
 
 				#nav ul li.current a
 				{
-					background: #444;
+					background: #505050;
 					color: #fff;
 				}
 				
@@ -361,6 +365,6 @@
 	
 	#copyright
 	{
-		padding: 4em 0 0 0;
+		padding: 2em 0 0 0;
 		text-align: center;
 	}

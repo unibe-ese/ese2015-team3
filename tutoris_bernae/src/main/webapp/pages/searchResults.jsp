@@ -8,6 +8,9 @@
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
 
+
+<h1>Search Results</h1>
+
 <table class="sortable">
     <thead>
         <tr>
@@ -23,8 +26,9 @@
             <td><a href="/tutoris_baernae/view=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
             <td><c:out value="${classe}"/></td>
             <td><c:out value="${grade}"/></td>
-            <td>***</td>
+            <td>${tutors.id}</td>
         </tr>
+        
         </c:forEach>
     </tbody>
 </table>

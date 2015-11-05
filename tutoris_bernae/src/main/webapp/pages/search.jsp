@@ -11,7 +11,7 @@
 
 <h1>Search Tutor</h1>
 
-<form:form method="POST" modelAttribute="searchForm" action="submitSearch" id="searchForm" cssClass="form-horizontal" autocomplete="off">
+<form:form method="POST" modelAttribute="searchForm" action="submitSearch" id="searchForm" cssClass="search" autocomplete="off">
     <fieldset>
         <legend>Enter search criterias</legend>
 
@@ -37,7 +37,6 @@
             <div class="controls">
             <form:select path="classesId" required="false">
                 <form:option value="0">-- no class selected --</form:option>
-
                 <form:options items="${classesList}" itemLabel="name" itemValue="id"/>
             </form:select>
             <form:errors path="classesId" cssClass="help-inline" element="span"/>

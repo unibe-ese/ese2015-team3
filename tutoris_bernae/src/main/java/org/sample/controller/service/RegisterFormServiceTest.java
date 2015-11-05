@@ -75,7 +75,6 @@ public class RegisterFormServiceTest {
                         assertEquals(user.getUsername(), "user");
                         assertEquals(user.getEmail(), "test@test.com");
                         assertEquals(user.getPassword(), "123456");
-
                         user.setId(1L);
                         return user;
                     }

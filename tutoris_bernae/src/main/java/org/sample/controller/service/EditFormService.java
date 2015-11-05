@@ -82,6 +82,7 @@ public class EditFormService{
     	if(userDao.findByUsernameLike(username)==null) return true;
     	return false;
     }
+    
     private boolean emailAvailable(String email){
     	if(userDao.findByEmailLike(email)==null) return true;
     	return false;

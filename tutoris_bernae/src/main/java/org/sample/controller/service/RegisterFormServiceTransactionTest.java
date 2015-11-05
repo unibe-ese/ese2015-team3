@@ -71,7 +71,7 @@ public class RegisterFormServiceTransactionTest {
     public void AssertEmailUniqueness() {
 
         registerFormService.saveFrom(registerForm);
-        //We will check username uniqueness in another test
+        //We will check username uniqueness in another test, so we have to choose another username to assure only emails are the same
         registerForm.setUsername("usr");
         
         registerFormService.saveFrom(registerForm);

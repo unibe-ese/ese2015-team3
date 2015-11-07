@@ -27,6 +27,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Allows editing profiles for normal users and tutor. The 
+ * edit page automatically knows if the user is a tutor or not and returns fitting editing site.
+ * The submit-sites depend on whetever a tutor or a normal user changed his profile informations.
+ * @author pf15ese
+ */
 @Controller
 public class EditController {
 
@@ -36,6 +42,13 @@ public class EditController {
 	@Autowired
 	private EditFormService editFormService;
 	
+	/**
+	 * Creates a page with an editing form for a normal user or a tutor,
+	 * depending on the logged in profile
+	 * @return ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", a new TutorEditForm if the calling user
+	 * is a tutor, or ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm if the calling user
+	 * is a normal user
+	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,8 +66,17 @@ public class EditController {
 		}
 	}
 	
+    /**
+     * Saves the edited Profile informations for a user, and shows a success page ("editDone"). If the 
+     * entered information weren't complete or wrong the user is directed back to the edit page.
+     * @param editForm a valid EditForm
+     * @param result
+     * @param redirectAttributes
+     * @return if the the form was successfully filled a new ModelAndView with ViewName "editDone" or else
+     * again a new ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm
+     */
     @RequestMapping(value = "/submitEdit", method = RequestMethod.POST)
-    public ModelAndView editUserProfile(@Valid EditForm editForm, BindingResult result, RedirectAttributes redirectAttributes) {
+    public ModelAndView editUserProfile(@Valid EditForm editForm, BindingResult result) {
     	ModelAndView model;    	
     	if (!result.hasErrors()) {
             try {
@@ -73,6 +95,17 @@ public class EditController {
         }   	
     	return model;
     }
+    
+    /**
+     * A helping method for adding or deleting elements on the course and class list
+     * @param tutorForm a TutorForm which must not be valid yet
+     * @param result
+     * @param redirectAttributes
+     * @param request
+     * @return ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", the given TutorEditForm
+     * with updated lists
+     * 
+     */
     @RequestMapping(value = "/submitTutorEdit", method = RequestMethod.POST)
     public ModelAndView editTutorProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -83,6 +116,18 @@ public class EditController {
     	return model;
     }
 
+    /**
+     * Saves the edited Profile informations for a tutor, and shows a success page ("editDone"). If the 
+     * entered information weren't complete or wrong the tutor is directed back to the editTutor page.
+     * @param tutorForm
+     * @param result
+     * @param redirectAttributes
+     * @param save a Boolean request parameter so that the controller knows the profile needs to be saved,
+     * and not only that the lists needs updating
+     * @param request
+     * @return if the the form was successfully filled a new ModelAndView with ViewName "editDone" or else
+     * again a new ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", a new TutorEditForm
+     */
     @RequestMapping(value = "/submitTutorEdit", method = RequestMethod.POST, params = { "save" })
     public ModelAndView editTutorProfile(@Valid TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes,@RequestParam Boolean save , HttpServletRequest request) {

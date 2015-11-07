@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +35,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -46,7 +48,6 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
@@ -56,18 +57,7 @@ import static org.mockito.Mockito.when;
 
 import static org.hamcrest.Matchers.*;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml","file:src/main/webapp/WEB-INF/config/springSecurity.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class EditControllerIntergrationTest {
-	@Autowired
-	private WebApplicationContext context;
-	MockMvc mockMvc;
-	@Autowired
-	private EditController editController;
+public class EditControllerIntergrationTest extends ControllerIntegrationTest{
 	@Autowired
 	private TutorDao tutorDao;
 	@Autowired
@@ -76,10 +66,11 @@ public class EditControllerIntergrationTest {
 	private User newUser;
 	private User newTutorUser;
 	private Tutor newTutor;
+	
+	MockHttpSession session;
 	@Before
 	public void setUp()
 	{
-		mockMvc =  MockMvcBuilders.webAppContextSetup(this.context).build();
 		newUser = new User();
 		newUser.setUsername("test");
 		newUser.setPassword("123");
@@ -100,43 +91,42 @@ public class EditControllerIntergrationTest {
 		newTutorUser = userDao.save(newTutorUser);
 	}
 	
+	/**
+	 * Tests if we get the correct edit page as a normal user
+	 * @throws Exception
+	 */
 	@Test
 	public void editUserProfilePage() throws Exception
 	{
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
-		Authentication authentication = 
-		        new UsernamePasswordAuthenticationToken("test","123", authorities);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(get("/edit").principal(authentication))
+		session = createSessionWithUser("test", "123", "ROLE_USER");
+		mockMvc.perform(get("/edit").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("editForm", is(EditForm.class)))
 										.andExpect(forwardedUrl(completeUrl("edit")))
 										.andExpect(model().attribute("editForm", hasProperty("username", Matchers.is("test"))));
-		// TODO Find out how to check that fields are correctly prefilled
+		// Find out how to check that fields are correctly prefilled 
+		// Found out, but will take some time to add all "hasProperty"
 	}
 	
+	/**
+	 * Tests if we get the correct edit page as a tutor
+	 * @throws Exception
+	 */
 	@Test
 	public void editTutorProfilePage() throws Exception
 	{
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_TUTOR");
-		Authentication authentication = 
-		        new UsernamePasswordAuthenticationToken("tutortest","123", authorities);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(get("/edit").principal(authentication))
+		session = createSessionWithUser("tutortest", "123", "ROLE_TUTOR");
+		mockMvc.perform(get("/edit").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("tutorForm", is(TutorEditForm.class)))
 										.andExpect(forwardedUrl(completeUrl("editTutor")));
-		// TODO Find out how to check that fields are correctly prefilled
 	}
 	
 	@Test
 	public void editUserDone() throws Exception
 	{
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_TUTOR");
-		Authentication authentication = 
-		        new UsernamePasswordAuthenticationToken("tutortest","123", authorities);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(post("/submitEdit").principal(authentication)
+		session = createSessionWithUser("test", "123", "ROLE_USER");
+		ResultActions action = mockMvc.perform(post("/submitEdit").session(session)
 										.param("userId", newUser.getId().toString())
 										.param("firstName","test")
 										.param("lastName","test")
@@ -146,8 +136,10 @@ public class EditControllerIntergrationTest {
 										.andExpect(status().isOk())
 										.andExpect(forwardedUrl(completeUrl("editDone")));
 		assertEquals("test@mail.de", newUser.getEmail());
+		System.out.println(action.toString());
 	}
 	// TODO Find out how to add a form to a mockmvc request or how to add course and classlist as parameters
+	// so that this test can be completed
 	/*
 	@Test
 	public void editTutorDone() throws Exception
@@ -167,8 +159,5 @@ public class EditControllerIntergrationTest {
 										.andExpect(forwardedUrl(completeUrl("editDone")));
 	}
 	*/
-	private String completeUrl(String page) {
-		return "/pages/"+page+".jsp";
-	}
 
 }

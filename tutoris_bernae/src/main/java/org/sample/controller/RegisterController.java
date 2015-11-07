@@ -1,5 +1,8 @@
 package org.sample.controller;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -53,6 +56,17 @@ public class RegisterController {
             try {
             	registerForm = registerFormService.saveFrom(registerForm);
             	model = new ModelAndView(PAGE_SUBMIT);
+            	
+            	if(registerastutor!=null)
+            	{
+            		System.out.println(registerForm.getId());
+            		model = new ModelAndView("tutorregistration");
+                	TutorForm tutorForm = new TutorForm();
+                	tutorForm.setUserId(registerForm.getId());
+                	model.addObject("tutorForm", tutorForm);
+                    model.addObject("studyCourseList", studyCourseDao.findAll());
+//                  model.addObject("classesList", searchService.getAllClasses());
+            	}
             } catch (InvalidUserException e) {
             	model = new ModelAndView(PAGE_REGISTER);
             	model.addObject("page_error", e.getMessage());
@@ -60,15 +74,7 @@ public class RegisterController {
         } else {
         	model = new ModelAndView(PAGE_REGISTER);
         }   
-    	if(registerastutor!=null)
-    	{
-    		model = new ModelAndView("tutorregistration");
-        	TutorForm tutorForm = new TutorForm();
-        	tutorForm.setUserId(registerForm.getId());
-        	model.addObject("tutorForm", tutorForm);
-            model.addObject("studyCourseList", studyCourseDao.findAll());
-//            model.addObject("classesList", searchService.getAllClasses());
-    	}
+
     	return model;
     }
         

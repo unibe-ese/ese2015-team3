@@ -26,7 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml","file:src/main/webapp/WEB-INF/config/springSecurity.xml"})
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml","file:src/main/webapp/WEB-INF/config/springSecurityTest.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class ControllerIntegrationTest {
@@ -84,6 +84,7 @@ public class ControllerIntegrationTest {
 	@Before
 	public void setUpMockMvc() throws Exception
 	{
+		//With security filter chain there are still errors when testing post methods...
 		mockMvc =  MockMvcBuilders.webAppContextSetup(this.context).addFilters(springSecurityFilterChain).build();
 	}
 

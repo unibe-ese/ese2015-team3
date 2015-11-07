@@ -24,9 +24,10 @@
 			username-parameter="username"
 			password-parameter="password" />
 		<logout logout-success-url="/?logout"  />
-		<!-- enable csrf protection -->
-		<csrf/>
+		
 	</http>
+	
+
 	
 	<!-- Select users and user_roles from database -->
 	<authentication-manager>
@@ -40,4 +41,3 @@
 	</authentication-manager>
 
 </beans:beans>
-	

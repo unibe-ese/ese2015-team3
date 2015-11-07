@@ -18,6 +18,8 @@ import org.sample.model.User;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,6 +49,14 @@ public class RegisterController {
         return model;
     }
 
+    @RequestMapping(value = "/upgrade", method = RequestMethod.GET)
+    public ModelAndView upgradePage() {  	
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String name = authentication.getName();
+		User user = userDao.findByUsername(name);
+        return createTutorFormPage(user.getId());
+    }
+    
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public ModelAndView create(HttpSession session,HttpServletRequest request,@Valid RegisterForm registerForm, BindingResult result, 
     						@RequestParam(value = "registerastutor", required = false) String registerastutor) {
@@ -55,18 +65,12 @@ public class RegisterController {
     	if (!result.hasErrors()) {
             try {
             	registerForm = registerFormService.saveFrom(registerForm);
-            	model = new ModelAndView(PAGE_SUBMIT);
             	
             	if(registerastutor!=null)
             	{
-            		System.out.println(registerForm.getId());
-            		model = new ModelAndView("tutorregistration");
-                	TutorForm tutorForm = new TutorForm();
-                	tutorForm.setUserId(registerForm.getId());
-                	model.addObject("tutorForm", tutorForm);
-                    model.addObject("studyCourseList", studyCourseDao.findAll());
-//                  model.addObject("classesList", searchService.getAllClasses());
+                	return createTutorFormPage(registerForm.getId());
             	}
+            	return model = new ModelAndView(PAGE_SUBMIT);
             } catch (InvalidUserException e) {
             	model = new ModelAndView(PAGE_REGISTER);
             	model.addObject("page_error", e.getMessage());
@@ -76,6 +80,17 @@ public class RegisterController {
         }   
 
     	return model;
+    }
+    
+    public ModelAndView createTutorFormPage(Long id)
+    {
+    	ModelAndView model = new ModelAndView(PAGE_SUBMIT);
+    	model = new ModelAndView("tutorregistration");
+    	TutorForm tutorForm = new TutorForm();
+    	tutorForm.setUserId(id);
+    	model.addObject("tutorForm", tutorForm);
+        model.addObject("studyCourseList", studyCourseDao.findAll());
+        return model;
     }
         
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST)

@@ -11,7 +11,7 @@
 <form:form method="post" modelAttribute="tutorForm" action="submitastutor" id="tutorForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
         <legend>Enter Your Information</legend>
-	<form:input path="userId" value="${tutorForm.userId}"/>
+	<form:input path="userId" type="hidden" value="${tutorForm.userId}"/>
 
 		<%@ include file="template/courses_dropdown.jsp" %>
 	

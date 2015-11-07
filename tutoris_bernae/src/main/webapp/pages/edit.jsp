@@ -63,6 +63,7 @@
            
     </fieldset>
 </form:form>
+<a href="/tutoris_baernae/upgrade">Upgrade to Tutor</a>
 
 
 	<c:if test="${page_error != null }">

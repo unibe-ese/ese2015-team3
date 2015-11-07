@@ -51,8 +51,8 @@ public class SearchService {
         	 tutorsMatchingCourse = (List<Tutor>) tutorDao.findByCoursesLike(courseCriteria);
         if(classCriteria!=null)
         	tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesLike(classCriteria);
-        if(fee!=null)
-        	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeLike(fee);
+        if(fee!= null)
+        	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeBetween(new BigDecimal(0),fee);
 
         List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
         System.out.println("Size: "+tutorsMatchingCourse.size()+tutorsMatchingClass.size()+tutorsMatchingFee.size());

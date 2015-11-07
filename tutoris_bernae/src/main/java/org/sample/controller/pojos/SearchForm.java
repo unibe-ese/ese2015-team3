@@ -47,5 +47,5 @@ public class SearchForm {
 	public void setClassesId(Long classesId) {
 		this.classesId = classesId;
 	}
-    
+        
 }

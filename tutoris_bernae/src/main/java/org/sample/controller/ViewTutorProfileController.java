@@ -24,7 +24,7 @@ public class ViewTutorProfileController {
 		
 		Tutor tutor = tutorDao.findOne(tutorId);
 		if(tutor != null) {
-			model = new ModelAndView("viewProfile");
+			model = new ModelAndView("viewTutorProfile");
 			model.addObject("tutor", tutor);
 			return model;
 		}

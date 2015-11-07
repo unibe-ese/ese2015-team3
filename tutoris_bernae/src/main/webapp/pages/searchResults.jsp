@@ -15,6 +15,7 @@
     <thead>
         <tr>
             <td>Username</td>
+            <td>Fee</td>
             <td>Class</td>
             <td>Grade</td>
             <td>Rating</td>
@@ -24,9 +25,10 @@
         <c:forEach items="${tutors}" var="tutors">
         <tr>
             <td><a href="/tutoris_baernae/view=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
+            <td>${tutors.fee}</td>
             <td><c:out value="${classe}"/></td>
             <td><c:out value="${grade}"/></td>
-            <td>${tutors.id}</td>
+            <td>***</td>
         </tr>
         
         </c:forEach>

@@ -9,11 +9,13 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
+import org.sample.model.User;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -40,23 +42,28 @@ import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class RegisterControllerIntergrationTest {
-	@Autowired
-	private WebApplicationContext context;
-	MockMvc mockMvc;
+
+public class RegisterControllerIntergrationTest extends ControllerIntegrationTest{
 	@Autowired
 	private RegisterController registerController;
 	@Autowired
 	private RegisterFormService formService;
-	@Before
-	public void setUp()
+	@Autowired
+	private UserDao userDao;
+
+	@Test
+	public void upgradePage() throws Exception
 	{
-		mockMvc =  MockMvcBuilders.webAppContextSetup(this.context).build();
+		User newUser = new User();
+		newUser.setUsername("test");
+		newUser.setPassword("123");
+		newUser.setEmail("mail@mail.mail");
+		newUser = userDao.save(newUser);
+		MockHttpSession session = createSessionWithUser("test", "123", "ROLE_USER");
+		mockMvc.perform(get("/upgrade").session(session)).andExpect(status().isOk())
+									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
+									.andExpect(forwardedUrl(completeUrl("tutorregistration")))
+									.andExpect(model().hasNoErrors());
 	}
 	
 	@Test
@@ -140,10 +147,6 @@ public class RegisterControllerIntergrationTest {
 									.andExpect(status().isOk())
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
 									.andExpect(model().attributeHasFieldErrors("registerForm", "email"));
-	}
-
-	private String completeUrl(String page) {
-		return "/pages/"+page+".jsp";
 	}
 	
 }

@@ -1,11 +1,11 @@
 package org.sample.controller.pojos;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import org.sample.model.Classes;
-import org.sample.model.StudyCourse;
 
+/**
+ *  Search Form stores filter criterias as class variables.
+ *  Available filters are: study course, class and fee.
+ */
 public class SearchForm {
     
     private long id;
@@ -14,6 +14,7 @@ public class SearchForm {
     private Long classesId;
     private BigDecimal fee;
 
+    /*Getter & Setters for class variables*/
     
     public BigDecimal getFee() {
         return fee;
@@ -46,5 +47,5 @@ public class SearchForm {
 	public void setClassesId(Long classesId) {
 		this.classesId = classesId;
 	}
-    
+        
 }

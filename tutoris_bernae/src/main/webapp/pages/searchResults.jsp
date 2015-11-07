@@ -8,12 +8,32 @@
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
 
-<ul>
-    <c:forEach items="${tutors}" var="tutors">
-        <li><a href="#"><c:out value="${tutors.student.username}"></c:out></a></li>
-    </c:forEach>
-    
-</ul>
+
+<h1>Search Results</h1>
+
+<table class="sortable">
+    <thead>
+        <tr>
+            <td>Username</td>
+            <td>Fee</td>
+            <td>Class</td>
+            <td>Grade</td>
+            <td>Rating</td>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach items="${tutors}" var="tutors">
+        <tr>
+            <td><a href="/tutoris_baernae/view=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
+            <td>${tutors.fee}</td>
+            <td><c:out value="${classe}"/></td>
+            <td><c:out value="${grade}"/></td>
+            <td>***</td>
+        </tr>
+        
+        </c:forEach>
+    </tbody>
+</table>
 
 <c:if test="${page_error != null}">
     <div class="alert alert-error">

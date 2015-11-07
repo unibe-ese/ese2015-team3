@@ -5,6 +5,7 @@ import org.sample.model.Tutor;
 import org.sample.model.dao.TutorDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,8 +17,8 @@ public class ViewTutorProfileController {
 	@Autowired
 	private TutorDao tutorDao;
 
-	@RequestMapping(value = "/view", method = RequestMethod.GET)
-	public ModelAndView viewEditProfile(@RequestParam(required = false) Long tutorId) {
+	@RequestMapping(value = "/view={tutorId}", method = RequestMethod.GET)
+	public ModelAndView viewEditProfile(@PathVariable("tutorId") Long tutorId) {
 		ModelAndView model;
 		if(tutorId==null) return new ModelAndView("notutorfound");
 		

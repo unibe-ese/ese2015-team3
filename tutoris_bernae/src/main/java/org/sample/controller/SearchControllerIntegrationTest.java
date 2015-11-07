@@ -40,6 +40,8 @@ import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.SearchService;
+import org.sample.model.Classes;
+import org.sample.model.StudyCourse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -67,13 +69,14 @@ public class SearchControllerIntegrationTest {
     public void searchPage() throws Exception {
         mockMvc.perform(get("/findTutor")).andExpect(status().isOk())
                 .andExpect(model().attribute("searchForm", is(SearchForm.class)))
+                .andExpect(model().attributeExists("studyCourseList"))
+                .andExpect(model().attributeExists("classesList"))
                 .andExpect(model().hasNoErrors());
     }
 
     @Test
     public void submitSearch() throws Exception {
-        mockMvc.perform(post("/submitSearch").param("studyCourse", "Computer Science")
-                .param("classes", "P1").param("fee", "20.00"))
+        mockMvc.perform(post("/submitSearch").param("fee", "40.00"))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_SEARCH)));
     }

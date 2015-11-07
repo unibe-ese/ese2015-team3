@@ -12,6 +12,9 @@
     <fieldset>
         <legend>Enter Your Information</legend>
 	<form:input path="userId" type="hidden" value="${tutorForm.userId}"/>
+
+		<%@ include file="template/courses_dropdown.jsp" %>
+	
              <c:import url="template/StudyList.jsp" />
             <c:import url="template/classList.jsp" />
         <c:set var="feeErrors"><form:errors path="fee"/></c:set>

@@ -6,7 +6,7 @@
 
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
-		
+<div class="welcome">
 		<c:if test="${not empty message}">
 			<div class="message">${message}</div>
 		</c:if>
@@ -22,5 +22,5 @@
 				Welcome! Please Register or login
 			</h2>
 		</c:if>
-
+</div>
 <c:import url="template/footer.jsp" />

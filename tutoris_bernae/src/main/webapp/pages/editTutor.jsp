@@ -17,7 +17,7 @@
         <div class="control-group<c:if test="${not empty emailErrors}"> error</c:if>">
             <label class="control-label" for="field-email">Email</label>
 
-            <div class="controls">
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input path="email" id="field-email" tabindex="1" maxlength="45" value="${user.email}"/>
                 <form:errors path="email" cssClass="help-inline" element="span"/>
             </div>
@@ -25,7 +25,7 @@
         <c:set var="firstNameErrors"><form:errors path="firstName"/></c:set>
         <div class="control-group<c:if test="${not empty firstNameErrors}"> error</c:if>">
             <label class="control-label" for="field-firstName">First Name</label>
-            <div class="controls">
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input path="firstName" id="field-firstName" tabindex="2" maxlength="35" value="${user.firstName}"/>
                 <form:errors path="firstName" cssClass="help-inline" element="span"/>
             </div>
@@ -33,7 +33,7 @@
         <c:set var="lastNameErrors"><form:errors path="lastName"/></c:set>
         <div class="control-group<c:if test="${not empty lastNameErrors}"> error</c:if>">
             <label class="control-label" for="field-lastName">Last Name</label>
-            <div class="controls">
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input path="lastName" id="field-lastName" tabindex="3" maxlength="35" value="${user.lastName}"/>
                 <form:errors path="lastName" cssClass="help-inline" element="span"/>
             </div>
@@ -41,7 +41,7 @@
          <c:set var="usernameErrors"><form:errors path="username"/></c:set>
         <div class="control-group<c:if test="${not empty usernameErrors}"> error</c:if>">
             <label class="control-label" for="field-username">Username</label>
-            <div class="controls">
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input path="username" id="field-username" tabindex="3" maxlength="35" value="${user.username}"/>
                 <form:errors path="username" cssClass="help-inline" element="span"/>
             </div>
@@ -49,7 +49,7 @@
         <c:set var="passwordErrors"><form:errors path="password"/></c:set>
         <div class="control-group<c:if test="${not empty passwordErrors}"> error</c:if>">
             <label class="control-label" for="field-password">Password</label>
-            <div class="controls">
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
@@ -60,7 +60,7 @@
         <c:set var="feeErrors"><form:errors path="fee"/></c:set>
         <div class="control-group<c:if test="${not empty feeErrors}"> error</c:if>">
             <label class="control-label" for="field-fee">Fee</label>
-            <div class="controls">
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input path="fee" id="field-fee" tabindex="2" maxlength="35" placeholder="Fee"/>
                 <form:errors path="fee" cssClass="help-inline" element="span"/>
             </div>
@@ -68,7 +68,7 @@
         <c:set var="bioErrors"><form:errors path="bio"/></c:set>
         <div class="control-group<c:if test="${not empty bioErrors}"> error</c:if>">
             <label class="control-label" for="field-bio">Bio</label>
-            <div class="controls">
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input path="bio" id="field-bio" tabindex="3" maxlength="350" placeholder="Bio"/>
                 <form:errors path="bio" cssClass="help-inline" element="span"/>
             </div>

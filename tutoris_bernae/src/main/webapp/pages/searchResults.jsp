@@ -24,7 +24,7 @@
     <tbody>
         <c:forEach items="${tutors}" var="tutors">
         <tr>
-            <td><a href="/tutoris_baernae/view=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
+            <td><a href="/tutoris_baernae/view?tutorId=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
             <td>${tutors.fee}</td>
             <td><c:out value="${classe}"/></td>
             <td><c:out value="${grade}"/></td>

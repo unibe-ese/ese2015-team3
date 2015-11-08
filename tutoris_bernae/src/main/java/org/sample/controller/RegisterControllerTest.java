@@ -10,6 +10,7 @@ import static org.mockito.Mockito.reset;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.service.RegisterFormService;
+import org.sample.model.User;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -67,8 +68,6 @@ public class RegisterControllerTest {
 	@Before
 	public void setUp()
 	{
-
-		
 	}
 	
 	@Test

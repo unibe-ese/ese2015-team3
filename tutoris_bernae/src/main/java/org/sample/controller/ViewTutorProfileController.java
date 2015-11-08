@@ -17,8 +17,8 @@ public class ViewTutorProfileController {
 	@Autowired
 	private TutorDao tutorDao;
 
-	@RequestMapping(value = "/view={tutorId}", method = RequestMethod.GET)
-	public ModelAndView viewEditProfile(@PathVariable("tutorId") Long tutorId) {
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public ModelAndView viewEditProfile(@RequestParam(value = "tutorId", required = false) Long tutorId) {
 		ModelAndView model;
 		if(tutorId==null) return new ModelAndView("notutorfound");
 		

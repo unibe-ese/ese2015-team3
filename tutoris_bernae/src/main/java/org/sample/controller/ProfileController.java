@@ -22,6 +22,11 @@ public class ProfileController {
 
 @Autowired
 private UserDao userDao;
+	
+	/**
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public ModelAndView showProfile() {
 		 ModelAndView model = new ModelAndView("profile");

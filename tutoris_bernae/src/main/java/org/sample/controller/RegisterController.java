@@ -33,48 +33,46 @@ public class RegisterController {
 	@Autowired
 	private RegisterFormService registerFormService;
 	@Autowired
-	private TutorFormService tutorFormService;
-	@Autowired
-	private UserDao userDao;
-	
+    private TutorFormService tutorFormService;
+    @Autowired
+    private UserDao userDao;
+
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public ModelAndView registerBasePage() {  	
-    	ModelAndView model = new ModelAndView(PAGE_REGISTER);
-    	model.addObject("registerForm", new RegisterForm());
+    public ModelAndView registerBasePage() {
+        ModelAndView model = new ModelAndView(PAGE_REGISTER);
+        model.addObject("registerForm", new RegisterForm());
         return model;
     }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
-    public ModelAndView create(HttpSession session,HttpServletRequest request,@Valid RegisterForm registerForm, BindingResult result, 
-    						@RequestParam(value = "registerastutor", required = false) String registerastutor) {
-    	ModelAndView model;  
-    	
-    	if (!result.hasErrors()) {
+    public ModelAndView create(HttpSession session, HttpServletRequest request, @Valid RegisterForm registerForm, BindingResult result,
+            @RequestParam(value = "registerastutor", required = false) String registerastutor) {
+        ModelAndView model;
+
+        if (!result.hasErrors()) {
             try {
-            	registerForm = registerFormService.saveFrom(registerForm);
-            	model = new ModelAndView(PAGE_SUBMIT);
+                registerForm = registerFormService.saveFrom(registerForm);
+                model = new ModelAndView(PAGE_SUBMIT);
+                if (registerastutor != null) {
+                    TutorForm tutorForm = new TutorForm();
+                    tutorForm.setUserId(registerForm.getId());
+                    return create(session, request, tutorForm);
+                }
             } catch (InvalidUserException e) {
-            	model = new ModelAndView(PAGE_REGISTER);
-            	model.addObject("page_error", e.getMessage());
+                model = new ModelAndView(PAGE_REGISTER);
+                model.addObject("page_error", e.getMessage());
             }
         } else {
-        	model = new ModelAndView(PAGE_REGISTER);
+            model = new ModelAndView(PAGE_REGISTER);
         }   
-    	if(registerastutor!=null)
-    	{
-    		model = new ModelAndView("tutorregistration");
-        	TutorForm tutorForm = new TutorForm();
-        	tutorForm.setUserId(registerForm.getId());
-        	model.addObject("tutorForm", tutorForm);
-            model.addObject("studyCourseList", studyCourseDao.findAll());
-//            model.addObject("classesList", searchService.getAllClasses());
-    	}
+    	
     	return model;
     }
         
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST)
-    public ModelAndView create(HttpSession session,HttpServletRequest request,@ModelAttribute TutorForm tutorForm) {
+    public ModelAndView create(HttpSession session,HttpServletRequest request,@ModelAttribute(value="tutorForm") TutorForm tutorForm) {
     	ModelAndView model = new ModelAndView("tutorregistration");
+        model.addObject("studyCourseList", studyCourseDao.findAll());
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	model.addObject("tutorForm", tutorForm);
@@ -82,13 +80,13 @@ public class RegisterController {
     }
     
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST, params = { "save" })
-    public ModelAndView create(@Valid TutorForm tutorForm, HttpSession session,
-    		@RequestParam Boolean save,HttpServletRequest request) {
-    	ModelAndView model = new ModelAndView(PAGE_SUBMIT);
-    	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
-    	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
-    	tutorFormService.saveFrom(tutorForm);
-    	return model;
+    public ModelAndView create(@Valid TutorForm tutorForm, BindingResult result) {
+        ModelAndView model;
+        if (!result.hasErrors()){
+            model = new ModelAndView(PAGE_SUBMIT);
+            tutorFormService.saveFrom(tutorForm);
+        }
+        else model = new ModelAndView("tutorregistration");
+        return model;
     }
-    
 }

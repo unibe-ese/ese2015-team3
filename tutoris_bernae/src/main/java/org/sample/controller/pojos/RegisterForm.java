@@ -1,22 +1,25 @@
 package org.sample.controller.pojos;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class RegisterForm {
 
 
     private Long id;
+    @NotEmpty
     private String firstName;
+    @NotEmpty
     private String lastName;
+    @NotEmpty
     private String username;
-    @NotNull
-    @Pattern(regexp = ".*", 
-    message = "Must be valid password")
+    
+    // password must have 1 uppercase, 1 digit, 1 special character. 8-14 letters
+    @Pattern(regexp = "(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,15}$")
     private String password;
-	@NotNull
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", 
-    message = "Must be valid email address")
+    
+    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
     private String email;
 
     public String getFirstName() {

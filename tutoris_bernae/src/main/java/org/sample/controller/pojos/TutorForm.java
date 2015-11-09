@@ -17,6 +17,10 @@ import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.User;
 
+/**
+ * A register form for tutors, stores all needed
+ * information to upgrade a user to a tutor.
+ */
 public class TutorForm {
 
 	private Long id;

@@ -29,6 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 
+/**
+ * Updates users (which are probably also tutors) with the information given
+ * by either an editForm (for normal users) or a TutorEditForm (for user with tutor profile)
+ * @author pf15ese
+ */
 @Service
 public class EditFormService{
 
@@ -40,6 +45,12 @@ public class EditFormService{
     @Autowired
     ClassesDao classesDao;
   
+    /**
+     * Saves the user with his changed details given by the EditForm to the database
+     * @param editForm a EditForm, not null
+     * @return the given EditForm
+     * @throws InvalidUserException if the new email or the new username is already in use by another user
+     */
     @Transactional
     public EditForm saveFrom(EditForm editForm) throws InvalidUserException{
 		User user = userDao.findOne(editForm.getUserId());
@@ -56,6 +67,12 @@ public class EditFormService{
     	return editForm;
     }
     
+    /**
+     * Saves the tutor with his changed user and tutor details given by the TutorEditForm to the database
+     * @param tutorEditForm a TutorEditForm, not null
+     * @return the given tutorEditForm
+     * @throws InvalidUserException if the new email or the new username is already in use by another user
+     */
     @Transactional
     public TutorEditForm saveFrom(TutorEditForm editForm) throws InvalidUserException{
 		User user = userDao.findOne(editForm.getUserId());

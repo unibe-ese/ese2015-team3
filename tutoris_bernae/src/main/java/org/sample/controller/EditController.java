@@ -126,7 +126,7 @@ public class EditController {
      * and not only that the lists needs updating
      * @param request
      * @return if the the form was successfully filled a new ModelAndView with ViewName "editDone" or else
-     * again a new ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", a new TutorEditForm
+     * again a new ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", the given TutorEditForm
      */
     @RequestMapping(value = "/submitTutorEdit", method = RequestMethod.POST, params = { "save" })
     public ModelAndView editTutorProfile(@Valid TutorEditForm tutorForm, BindingResult result, 

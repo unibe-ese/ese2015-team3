@@ -11,7 +11,10 @@ import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
-
+/**
+ * An edit form for tutors, stores all changeable
+ * values of a user and a tutor profile
+ */
 public class TutorEditForm {
 
 	private Long id;

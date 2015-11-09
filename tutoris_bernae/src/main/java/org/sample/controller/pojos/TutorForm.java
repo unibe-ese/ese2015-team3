@@ -3,6 +3,7 @@ package org.sample.controller.pojos;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -16,6 +17,7 @@ public class TutorForm {
 
     private Long userId;
 
+    @DecimalMin(value="0")
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 

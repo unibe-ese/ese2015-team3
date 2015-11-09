@@ -3,9 +3,12 @@ package org.sample.controller.pojos;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
@@ -18,24 +21,28 @@ import org.sample.model.User;
 public class TutorEditForm {
 
 	private Long id;
+    @NotEmpty
     private String firstName;
+    @NotEmpty
     private String lastName;
+    @NotEmpty
     private String username;
-    @NotNull
-    @Pattern(regexp = ".*", 
-    message = "Must be valid password")
+    @Pattern(regexp = "(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,15}$")
     private String password;
-	@NotNull
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", 
-    message = "Must be valid email address")
+
+    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
     private String email;
-	
+
+    @NotNull
+    @DecimalMin(value="1")
+    @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 
     private List<StudyCourse> studyCourseList; //Studiengang
 
     private List<Classes> classList;
     
+    @NotEmpty
     private String bio;
 	private Long userId;
 	private Long tutorId;

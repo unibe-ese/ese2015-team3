@@ -3,19 +3,13 @@ package org.sample.controller.pojos;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
-import org.sample.model.User;
 
 /**
  * A register form for tutors, stores all needed
@@ -23,10 +17,13 @@ import org.sample.model.User;
  */
 public class TutorForm {
 
-	private Long id;
-	
-	private Long userId;
-    
+    private Long id;
+
+    private Long userId;
+
+    @NotNull
+    @DecimalMin(value="1")
+    @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 
     private Long studyCourse;
@@ -35,6 +32,7 @@ public class TutorForm {
     private Long classes;
     private List<Classes> classList = new LinkedList<Classes>();
     
+    @NotEmpty
     private String bio;
 
 	public Long getId() {

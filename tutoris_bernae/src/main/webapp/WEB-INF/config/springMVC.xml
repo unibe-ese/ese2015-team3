@@ -23,10 +23,16 @@
         <property name="prefix" value="/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-     
+    
+    <!-- Register the messages.properties -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+ 
+        <property name="basename" value="/WEB-INF/messages" />
+ 
+    </bean>	 
     
     <!-- resources  -->
     <mvc:resources mapping="/resources/**" location="/" />
-		
 	
 </beans>

@@ -17,7 +17,8 @@ public class TutorForm {
 
     private Long userId;
 
-    @DecimalMin(value="0")
+    @NotNull
+    @DecimalMin(value="1")
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 

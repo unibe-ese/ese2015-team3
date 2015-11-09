@@ -30,7 +30,8 @@ public class TutorEditForm {
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
     private String email;
 
-    @DecimalMin(value="0")
+    @NotNull
+    @DecimalMin(value="1")
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 

@@ -84,7 +84,7 @@ public class RegisterController {
     
     public ModelAndView createTutorFormPage(Long id)
     {
-    	ModelAndView model = new ModelAndView(PAGE_SUBMIT);
+    	ModelAndView model;
     	model = new ModelAndView("tutorregistration");
     	TutorForm tutorForm = new TutorForm();
     	tutorForm.setUserId(id);

@@ -3,6 +3,10 @@ package org.sample.controller.pojos;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+/**
+ * A register form for users, stores all needed
+ * information to create a new user
+ */
 public class RegisterForm {
 
 

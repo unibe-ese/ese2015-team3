@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * Updates users (which are probably also tutors) with the information given
+ * Updates users which are probably also tutors with the information given
  * by either an editForm (for normal users) or a TutorEditForm (for user with tutor profile)
  * @author pf15ese
  */

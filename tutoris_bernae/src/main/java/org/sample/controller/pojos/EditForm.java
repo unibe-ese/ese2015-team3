@@ -5,6 +5,10 @@ import javax.validation.constraints.Pattern;
 
 import org.sample.model.User;
 
+/**
+ * A simple edit form, stores all changeable
+ * values of a user profile
+ */
 public class EditForm {
 
 	private Long userId;

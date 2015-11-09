@@ -17,7 +17,6 @@ import org.sample.model.User;
  */
 public class TutorEditForm {
 
-	private Long id;
     private String firstName;
     private String lastName;
     private String username;
@@ -96,14 +95,6 @@ public class TutorEditForm {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public BigDecimal getFee() {

@@ -31,15 +31,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Controls the creation of the homepage
+ *
+ */
 @Controller
 public class IndexController {
 
-    @Autowired
-    RegisterFormService registerFormService;
-    
-	@Autowired TutorDao tutorDao;
-
-
+    /**
+     * Creates the homepage. Users also get here after logging out.
+     * @param logout a non required String RequestParam
+     * @return a ModelAndView with ViewName "index", if the user got here by logging out the object "msg"
+     * a logout message is added
+     */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView home(@RequestParam(value = "logout", required = false) String logout) {
     	ModelAndView model = new ModelAndView("index");

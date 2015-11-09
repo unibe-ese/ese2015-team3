@@ -11,6 +11,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 
+/**
+ * A register form for tutors, stores all needed
+ * information to upgrade a user to a tutor.
+ */
 public class TutorForm {
 
     private Long id;

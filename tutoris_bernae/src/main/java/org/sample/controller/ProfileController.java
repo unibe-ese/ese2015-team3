@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Shows the profile of the logged in user or tutor
+ * @author pf15ese
+ */
 @Controller
 public class ProfileController {
 
@@ -24,8 +28,11 @@ public class ProfileController {
 private UserDao userDao;
 	
 	/**
-	 * 
-	 * @return
+	 * Creates a page with all user informations of the current logged in user. If the user is also a tutor
+	 * all tutor informations are added to the page as well
+	 * @return ModelAndView with ViewName "profile" and ModelAttribute "user", the logged in user
+	 * and if the user was a tutor there exist the ModelAttribute "tutor" the logged in users tutor
+	 * informations
 	 */
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public ModelAndView showProfile() {

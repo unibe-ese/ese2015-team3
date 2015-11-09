@@ -20,9 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutorFormService {
 	@Autowired TutorDao tutorDao;
 	@Autowired UserDao userDao;
-	
-
     
+    /**
+     * Creates a tutor out of a TutorForm and save him to the database, and also
+     * updates the user belonging to that tutor.
+     * @param tutorForm a TutorForm, not null
+     */
     @Transactional
 	public void saveFrom(TutorForm tutorForm) {
 		Tutor tutor = new Tutor();

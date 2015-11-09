@@ -2,6 +2,7 @@ package org.sample.controller.pojos;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import org.sample.model.User;
 
@@ -11,17 +12,16 @@ import org.sample.model.User;
  */
 public class EditForm {
 
-	private Long userId;
+    private Long userId;
+    @NotEmpty
     private String firstName;
+    @NotEmpty
     private String lastName;
+    @NotEmpty
     private String username;
-    @NotNull
-    @Pattern(regexp = ".*", 
-    message = "Must be valid password")
+    @Pattern(regexp = "(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,15}$")
     private String password;
-	@NotNull
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", 
-    message = "Must be valid email address")
+    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
     private String email;
 
     public String getFirstName() {

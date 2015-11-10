@@ -48,7 +48,7 @@
             <label class="control-label" for="field-fee">Fee</label>
             
             <div class="controls" style="width:30%;min-width:150px;max-width:450px">
-                <form:input path="fee" id="field-fee" tabindex="3" maxlength="35" placeholder="Fee"/>
+                <form:input path="fee" id="field-fee" tabindex="3" maxlength="35" placeholder="Fee" style="color:black"/>
                 <form:errors path="fee" cssClass="help-inline" element="span"/>
             </div>
         </div>

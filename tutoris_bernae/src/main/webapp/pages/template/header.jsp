@@ -34,7 +34,7 @@
 
 
 		<!-- Header -->
-			<div id="header-wrapper">
+			<div id="header-wrapper" style="background-image:url(img/bg.jpg)">
 				<header id="header" class="container">
 				
 					<!-- Logo -->
@@ -93,3 +93,4 @@
 
 						<!-- Content -->
 							<article>
+							    							

@@ -20,7 +20,7 @@
         <div class="control-group<c:if test="${not empty studyCourseIdErrors}">error</c:if>">
             <label class="control-label" for="field-studyCourseId">Study Course</label>
             
-            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
+            <div class="controls" style="width:40%;min-width:250px;max-width:450px">
 
             <form:select path="studyCourseId" required="false">
                 <form:option value="0">-- no course selected --</form:option>
@@ -34,7 +34,7 @@
         <div class="control-group<c:if test="${not empty classesIdErrors}">error</c:if>">
             <label class="control-label" for="field-classesId">Study Course</label>
             
-            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
+            <div class="controls" style="width:40%;min-width:250px;max-width:450px">
             <form:select path="classesId" required="false">
                 <form:option value="0">-- no class selected --</form:option>
                 <form:options items="${classesList}" itemLabel="name" itemValue="id"/>

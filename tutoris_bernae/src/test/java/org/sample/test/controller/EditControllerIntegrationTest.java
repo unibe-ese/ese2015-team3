@@ -76,7 +76,7 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 		newUser.setUsername("test");
 		newUser.setFirstName("first");
 		newUser.setLastName("last");
-		newUser.setPassword("1232w%dres");
+		newUser.setPassword("1232w%Dres");
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
@@ -101,7 +101,7 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void editUserProfilePage() throws Exception
 	{
-		session = createSessionWithUser("test", "1232w%dres", "ROLE_USER");
+		session = createSessionWithUser("test", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(get("/edit").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("editForm", is(EditForm.class)))
@@ -111,7 +111,7 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attribute("editForm", hasProperty("firstName", Matchers.is("first"))))
 										.andExpect(model().attribute("editForm", hasProperty("lastName", Matchers.is("last"))))
 										.andExpect(model().attribute("editForm", hasProperty("email", Matchers.is("mail@mail.mail"))))
-										.andExpect(model().attribute("editForm", hasProperty("password", Matchers.is("1232w%dres"))));
+										.andExpect(model().attribute("editForm", hasProperty("password", Matchers.is("1232w%Dres"))));
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void editUserDone() throws Exception
 	{
-		session = createSessionWithUser("test", "1232w%dres", "ROLE_USER");
+		session = createSessionWithUser("test", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(post("/editSubmit").session(session)
 										.param("userId", newUser.getId().toString())
 										.param("firstName","test")

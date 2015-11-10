@@ -60,7 +60,7 @@ public class SearchService {
         if(!tutorsMatchingCourse.isEmpty()) searchResults.add(tutorsMatchingCourse);
         if(!tutorsMatchingClass.isEmpty())searchResults.add(tutorsMatchingClass);
         if(!tutorsMatchingFee.isEmpty())searchResults.add(tutorsMatchingFee);
-        
+        System.out.println("Size of result: "+searchResults.size());
         return findCommonElements(searchResults);
     }
     
@@ -69,18 +69,19 @@ public class SearchService {
      * 
      * @return list containing common elements
      */
-    private <T> List<T> findCommonElements(Collection<? extends Collection<T>> collections){
+    private List<Tutor> findCommonElements(List<List<Tutor>> collections){
         
-        List<T> common = new ArrayList<T>();
+        List<Tutor> common = new ArrayList<Tutor>();
 
         if (!collections.isEmpty()){
-            Iterator<? extends Collection<T>> iterator = collections.iterator();
+            Iterator<List<Tutor>> iterator = collections.iterator();
             
             common.addAll(iterator.next());
-            System.out.println("size:"+common.size());
             while (iterator.hasNext()) {
-                common.retainAll(iterator.next());
-                System.out.println("size:"+common.size());
+            	List<Tutor> newcommon = new ArrayList<Tutor>();
+            	for(Tutor t : iterator.next()){
+                if(common.contains(t)) newcommon.add(t); 
+            	}
             }
         } 
         return common;

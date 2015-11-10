@@ -75,7 +75,7 @@ public class EditController {
      * @return if the the form was successfully filled a new ModelAndView with ViewName "editDone" or else
      * again a new ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm
      */
-    @RequestMapping(value = "/submitEdit", method = RequestMethod.POST)
+    @RequestMapping(value = "/editSubmit", method = RequestMethod.POST)
     public ModelAndView editUserProfile(@Valid EditForm editForm, BindingResult result) {
     	ModelAndView model;    	
     	if (!result.hasErrors()) {
@@ -106,7 +106,7 @@ public class EditController {
      * with updated lists
      * 
      */
-    @RequestMapping(value = "/submitTutorEdit", method = RequestMethod.POST)
+    @RequestMapping(value = "/editTutorsubmit", method = RequestMethod.POST)
     public ModelAndView editTutorProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes, HttpServletRequest request) {
     	ModelAndView model = new ModelAndView("editTutor");
@@ -128,7 +128,7 @@ public class EditController {
      * @return if the the form was successfully filled a new ModelAndView with ViewName "editDone" or else
      * again a new ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", the given TutorEditForm
      */
-    @RequestMapping(value = "/submitTutorEdit", method = RequestMethod.POST, params = { "save" })
+    @RequestMapping(value = "/editTutorsubmit", method = RequestMethod.POST, params = { "save" })
     public ModelAndView editTutorProfile(@Valid TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes,@RequestParam Boolean save , HttpServletRequest request) {
     	ModelAndView model;

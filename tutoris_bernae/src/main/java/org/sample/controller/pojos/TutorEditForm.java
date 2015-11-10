@@ -41,7 +41,9 @@ public class TutorEditForm {
     
     @NotEmpty
     private String bio;
+    @NotNull
 	private Long userId;
+    @NotNull
 	private Long tutorId;
 	public TutorEditForm() {}
 

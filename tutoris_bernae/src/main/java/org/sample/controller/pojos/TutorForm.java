@@ -19,6 +19,7 @@ public class TutorForm {
 
     private Long id;
 
+    @NotNull
     private Long userId;
 
     @NotNull

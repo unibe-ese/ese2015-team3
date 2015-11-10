@@ -1,4 +1,5 @@
-package org.sample.controller;
+//needs to be out of the test folder. otherwise mvn package try to run this class...
+package org.sample.test.utils;
 
 
 import java.util.List;

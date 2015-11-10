@@ -35,11 +35,12 @@ public class SearchService {
      * Find tutors matching provided criteria.
      * For multiple criteria only tutors matching all of them are returned.
      * 
-     * @param searchForm stores the search criteria 
+     * @param searchForm stores the search criteria, not null 
      * @return a list of tutors matching the criteria
      */
     @Transactional
     public List<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
+    	assert(searchForm!=null);
         StudyCourse courseCriteria = studyCourseDao.findOne(searchForm.getStudyCourseId());
         Classes classCriteria = classesDao.findOne(searchForm.getClassesId());
         BigDecimal fee = searchForm.getFee();

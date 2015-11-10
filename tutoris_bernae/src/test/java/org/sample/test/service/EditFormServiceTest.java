@@ -1,4 +1,4 @@
-package org.sample.controller.service;
+package org.sample.test.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -17,6 +17,7 @@ import org.mockito.stubbing.Answer;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
+import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;

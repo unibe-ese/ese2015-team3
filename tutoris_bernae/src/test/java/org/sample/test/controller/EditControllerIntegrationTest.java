@@ -1,4 +1,4 @@
-package org.sample.controller;
+package org.sample.test.controller;
 
 import static org.mockito.Mockito.mock;
 
@@ -18,6 +18,7 @@ import org.sample.model.Tutor;
 import org.sample.model.User;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -57,7 +58,7 @@ import static org.mockito.Mockito.when;
 
 import static org.hamcrest.Matchers.*;
 
-public class EditControllerIntergrationTest extends ControllerIntegrationTest{
+public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	@Autowired
 	private TutorDao tutorDao;
 	@Autowired
@@ -73,7 +74,7 @@ public class EditControllerIntergrationTest extends ControllerIntegrationTest{
 	{
 		newUser = new User();
 		newUser.setUsername("test");
-		newUser.setPassword("123");
+		newUser.setPassword("1232w%dres");
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
@@ -82,7 +83,7 @@ public class EditControllerIntergrationTest extends ControllerIntegrationTest{
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
 		newTutorUser.setUsername("tutortest");
-		newTutorUser.setPassword("123");
+		newTutorUser.setPassword("1232w%dfa");
 		newTutorUser.setEmail("tutormail@mail.mail");
 		newTutorUser.setTutor(true);
 		newTutorUser.setTutor(newTutor);
@@ -126,17 +127,45 @@ public class EditControllerIntergrationTest extends ControllerIntegrationTest{
 	public void editUserDone() throws Exception
 	{
 		session = createSessionWithUser("test", "123", "ROLE_USER");
-		ResultActions action = mockMvc.perform(post("/submitEdit").session(session)
+		mockMvc.perform(post("/editSubmit").session(session)
 										.param("userId", newUser.getId().toString())
 										.param("firstName","test")
 										.param("lastName","test")
 										.param("username","test")
-										.param("password","123")
+										.param("password","123A#qqq")
 										.param("email","test@mail.de"))
 										.andExpect(status().isOk())
 										.andExpect(forwardedUrl(completeUrl("editDone")));
 		assertEquals("test@mail.de", newUser.getEmail());
-		System.out.println(action.toString());
+
+	}
+	
+	@Test
+	public void editUserEditFormErrors() throws Exception
+	{
+		session = createSessionWithUser("test", "123", "ROLE_USER");
+		mockMvc.perform(post("/editSubmit").session(session)
+										.param("userId", newUser.getId().toString())
+										.param("firstName","")
+										.param("lastName","")
+										.param("username","")
+										.param("password","")
+										.param("email",""))
+										.andExpect(status().isOk())
+										.andExpect(forwardedUrl(completeUrl("edit")))
+										.andExpect(model().attributeHasFieldErrors("editForm", "email"))
+										.andExpect(model().attributeHasFieldErrors("editForm", "firstName"))
+										.andExpect(model().attributeHasFieldErrors("editForm", "lastName"))
+										.andExpect(model().attributeHasFieldErrors("editForm", "username"))
+										.andExpect(model().attributeHasFieldErrors("editForm", "password"));
+
+
+	}
+	
+	@Test
+	public void needsLogin() throws Exception
+	{
+		mockMvc.perform(get("/edit")).andExpect(status().isMovedTemporarily()); //moved Temporarily because your moved to the login page
 	}
 	// TODO Find out how to add a form to a mockmvc request or how to add course and classlist as parameters
 	// so that this test can be completed

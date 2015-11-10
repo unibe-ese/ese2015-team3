@@ -1,10 +1,11 @@
-package org.sample.controller;
+package org.sample.test.controller;
 
 import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sample.controller.SearchController;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;

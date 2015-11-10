@@ -1,4 +1,4 @@
-package org.sample.controller;
+package org.sample.test.controller;
 
 import static org.mockito.Mockito.mock;
 
@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.reset;
+
+import org.sample.controller.ViewTutorProfileController;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.service.RegisterFormService;

@@ -1,16 +1,18 @@
-package org.sample.controller;
+package org.sample.test.controller;
 
 import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sample.controller.RegisterController;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.model.User;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -43,11 +45,11 @@ import static org.hamcrest.Matchers.*;
 
 
 
-public class RegisterControllerIntergrationTest extends ControllerIntegrationTest{
+public class RegisterControllerIntegrationTest extends ControllerIntegrationTest{
 	@Autowired
 	private RegisterController registerController;
 	@Autowired
-	private RegisterFormService formService;
+	private RegisterFormService registerFormService;
 	@Autowired
 	private UserDao userDao;
 
@@ -80,27 +82,29 @@ public class RegisterControllerIntergrationTest extends ControllerIntegrationTes
 									.param("firstName", "first")
 									.param("lastName", "last")
 									.param("username", "user")
-									.param("password", "password"))
+									.param("password", "1Password*"))
 									.andExpect(status().isOk())
 									.andExpect(model().hasNoErrors())
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_SUBMIT)));		
 	}
 	
 	@Test
-	public void submitAsTutor() throws Exception
+	public void submitAndContinueRegisteringAsTutor() throws Exception
 	{
 		mockMvc.perform(post("/submit").param("email", "mail@mail.de")
 									.param("firstName", "first")
 									.param("lastName", "last")
 									.param("username", "user")
-									.param("password", "password")
+									.param("password", "1Password*")
 									.param("registerastutor","true"))
 									.andExpect(status().isOk())
 									.andExpect(model().hasNoErrors())
 									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
 									.andExpect(forwardedUrl(completeUrl("tutorregistration")));		
 	}
-	/*
+	//TODO write test for submitting as tutor with tutorform
+	//Problem: adding courseList and classesList with mockmvc
+	/* 
 	@Test
 	public void submitAsTutor() throws Exception
 	{
@@ -116,6 +120,8 @@ public class RegisterControllerIntergrationTest extends ControllerIntegrationTes
 									.andExpect(forwardedUrl(completeUrl("tutorregistration")));		
 	}*/
 	
+	//Checks if we get an invalidUserException and out of that a page error if we use a username and password
+	//that is already in use
 	@Test
 	public void invalidUserPageError() throws Exception
 	{
@@ -125,28 +131,32 @@ public class RegisterControllerIntergrationTest extends ControllerIntegrationTes
         registerForm.setUsername("user");
         registerForm.setEmail("test@test.com");
         registerForm.setPassword("123456");
-		formService.saveFrom(registerForm);
+		registerFormService.saveFrom(registerForm);
 		mockMvc.perform(post("/submit").param("email", "test@test.com")
 									.param("firstName", "first")
 									.param("lastName", "last")
 									.param("username", "user")
-									.param("password", "password"))
+									.param("password", "1Password*"))
 									.andExpect(status().isOk())
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
 									.andExpect(model().attributeExists("page_error"));
 	}
 	
 	@Test
-	public void wrongFieldEmail() throws Exception
+	public void wrongFieldsRegisterForm() throws Exception
 	{
-		mockMvc.perform(post("/submit").param("email", "mail")
-									.param("firstName", "first")
-									.param("lastName", "last")
-									.param("username", "user")
-									.param("password", "password"))
-									.andExpect(status().isOk())
-									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
-									.andExpect(model().attributeHasFieldErrors("registerForm", "email"));
+		mockMvc.perform(post("/submit").param("email", "")
+				.param("firstName", "")
+				.param("lastName", "")
+				.param("username", "")
+				.param("password", ""))
+				.andExpect(status().isOk())
+				.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
+				.andExpect(model().attributeHasFieldErrors("registerForm", "email"))
+				.andExpect(model().attributeHasFieldErrors("registerForm", "firstName"))
+				.andExpect(model().attributeHasFieldErrors("registerForm", "lastName"))
+				.andExpect(model().attributeHasFieldErrors("registerForm", "username"))
+				.andExpect(model().attributeHasFieldErrors("registerForm", "password"));
 	}
 	
 }

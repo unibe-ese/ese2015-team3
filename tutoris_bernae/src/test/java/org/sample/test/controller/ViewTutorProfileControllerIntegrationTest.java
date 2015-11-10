@@ -1,4 +1,4 @@
-package org.sample.controller;
+package org.sample.test.controller;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,12 +11,13 @@ import org.sample.model.Tutor;
 import org.sample.model.User;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 
-public class ViewTutorProfileControllerIntergrationTest extends ControllerIntegrationTest {
+public class ViewTutorProfileControllerIntegrationTest extends ControllerIntegrationTest {
 	@Autowired
 	private TutorDao tutorDao;
 	@Autowired

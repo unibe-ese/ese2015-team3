@@ -39,11 +39,8 @@ public class EditFormService{
 
     @Autowired UserDao userDao;
     @Autowired TutorDao tutorDao;
-    @Autowired
-    StudyCourseDao studyCourseDao;
-    
-    @Autowired
-    ClassesDao classesDao;
+    @Autowired StudyCourseDao studyCourseDao;
+    @Autowired ClassesDao classesDao;
   
     /**
      * Saves the user with his changed details given by the EditForm to the database
@@ -53,6 +50,8 @@ public class EditFormService{
      */
     @Transactional
     public EditForm saveFrom(EditForm editForm) throws InvalidUserException{
+    	assert(editForm!=null);
+    	assert(editForm.getUserId()!=null);
 		User user = userDao.findOne(editForm.getUserId());
 		String email = editForm.getEmail();
 		if(!email.equals(user.getEmail())&&!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
@@ -75,6 +74,9 @@ public class EditFormService{
      */
     @Transactional
     public TutorEditForm saveFrom(TutorEditForm editForm) throws InvalidUserException{
+    	assert(editForm!=null);
+    	assert(editForm.getUserId()!=null);
+    	assert(editForm.getTutorId()!=null);
 		User user = userDao.findOne(editForm.getUserId());
 		String email = editForm.getEmail();
 		if(!email.equals(user.getEmail())&&!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");

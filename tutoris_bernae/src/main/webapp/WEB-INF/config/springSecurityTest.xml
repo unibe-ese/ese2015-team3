@@ -24,7 +24,8 @@
 			username-parameter="username"
 			password-parameter="password" />
 		<logout logout-success-url="/?logout"  />
-		
+		<!-- we do not enable csrf protection because don't work with it or get really complicated -->
+		<!-- but we don't really need to test it because the framework is responsible for it, and thus we can assume it works  -->
 	</http>
 	
 

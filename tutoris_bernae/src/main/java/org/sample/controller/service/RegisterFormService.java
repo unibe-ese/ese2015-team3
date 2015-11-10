@@ -38,7 +38,7 @@ public class RegisterFormService{
      */
     @Transactional
     public RegisterForm saveFrom(RegisterForm registerForm) throws InvalidUserException{
-
+    	assert(registerForm!=null);
         User user = new User();
         user.setFirstName(registerForm.getFirstName());
         user.setLastName(registerForm.getLastName());

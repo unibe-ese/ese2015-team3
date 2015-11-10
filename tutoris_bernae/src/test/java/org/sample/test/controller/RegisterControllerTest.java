@@ -1,3 +1,4 @@
+package org.sample.test.controller;
 //Not working, but there also exist an integration test which works
 /*
 package org.sample.controller;

@@ -13,6 +13,6 @@ public interface TutorDao extends CrudRepository<Tutor,Long> {
 
 	public Iterable<Tutor> findByClassesLike(Classes classCriteria);
         
-        public Iterable<Tutor> findByFeeBetween(BigDecimal min,BigDecimal fee);
+    public Iterable<Tutor> findByFeeBetween(BigDecimal min,BigDecimal fee);
         
 }

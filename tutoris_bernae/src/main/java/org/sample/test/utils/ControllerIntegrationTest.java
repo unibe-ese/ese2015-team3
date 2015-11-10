@@ -1,7 +1,5 @@
 //needs to be out of the test folder. otherwise mvn package try to run this class...
 package org.sample.test.utils;
-
-
 import java.util.List;
 
 import org.junit.Before;
@@ -24,10 +22,22 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-
+/**
+ * A generic IntegrationTest (that means with database access and security) which can be extended
+ * to test specific controllers. When testing secure urls don't forget to use
+ * "createSessionWithUser()" and add this session to your mockMvc-request. Also offers
+ * completeUrl() to simplifie the testing of urls
+ * @author pf15ese
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml","file:src/main/webapp/WEB-INF/config/springSecurityTest.xml"})
+//With security filter chain there are still errors when testing post methods when csrf is on
+//so at the moment it is disabled per xml setting in springSecuritytest.xml
+//But that should be no problem because the framework takes care of csrf and
+//we can assume it works
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml",
+								   "file:src/main/webapp/WEB-INF/config/springDataTest.xml",
+								   "file:src/main/webapp/WEB-INF/config/springSecurityTest.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class ControllerIntegrationTest {
@@ -85,7 +95,7 @@ public class ControllerIntegrationTest {
 	@Before
 	public void setUpMockMvc() throws Exception
 	{
-		//With security filter chain there are still errors when testing post methods...
+	
 		mockMvc =  MockMvcBuilders.webAppContextSetup(this.context).addFilters(springSecurityFilterChain).build();
 	}
 

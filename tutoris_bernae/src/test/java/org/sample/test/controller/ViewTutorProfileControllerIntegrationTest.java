@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import org.junit.Before;
 import org.junit.Test;
 import org.sample.model.Tutor;
@@ -58,7 +59,8 @@ public class ViewTutorProfileControllerIntegrationTest extends ControllerIntegra
 				.andExpect(status().isOk())
 				.andExpect(model().hasNoErrors())
 				.andExpect(forwardedUrl(completeUrl("viewTutorProfile")))
-				.andExpect(model().attribute("tutor", newTutor));
+				.andExpect(view().name("viewTutorProfile"))
+				.andExpect(model().attribute("tutor", newTutor)); //we should get excatly the newTutor, because we searched his id
 	}
 	
 	@Test
@@ -68,6 +70,7 @@ public class ViewTutorProfileControllerIntegrationTest extends ControllerIntegra
 				.andExpect(status().isOk())
 				.andExpect(model().hasNoErrors())
 				.andExpect(forwardedUrl(completeUrl("notutorfound")));
+		
 	}
 	
 	@Test
@@ -83,7 +86,7 @@ public class ViewTutorProfileControllerIntegrationTest extends ControllerIntegra
 	public void loginNeeded() throws Exception
 	{
 		mockMvc.perform(get("/view?tutorId=0"))
-				.andExpect(status().isMovedTemporarily());
+				.andExpect(status().isMovedTemporarily()); //MovedTemporarily because we are moved to the login page
 	}
 
 }

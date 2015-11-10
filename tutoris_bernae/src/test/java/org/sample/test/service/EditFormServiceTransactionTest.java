@@ -113,7 +113,7 @@ public class EditFormServiceTransactionTest {
         assertEquals(false,user.isTimetableActive());
     }
     
-    // TODO: test classes and courses list as well
+    // TODO: test changed classes and courses list as well
     @Test
     public void TutorEditFormCorrectDataSavedInDatabase() {
         editFormService.saveFrom(tutorEditForm);

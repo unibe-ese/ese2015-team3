@@ -2,6 +2,7 @@ package org.sample.test.controller;
 
 import static org.mockito.Mockito.mock;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +11,9 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +33,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -43,27 +52,38 @@ import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.SearchService;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
+import org.sample.model.Tutor;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml", "file:src/main/webapp/WEB-INF/config/springData.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class SearchControllerIntegrationTest {
+public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
 
-    @Autowired
-    private WebApplicationContext context;
-
-    MockMvc mockMvc;
 
     @Autowired
     private SearchController searchController;
     @Autowired
     private SearchService searchService;
+    @Autowired
+    private TutorDao tutorDao;
 
+    private Tutor tutor1;
+    private Tutor tutor2;
+    private Tutor tutor3;
     @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    public void setUpExampleTutors() {
+    	tutor1 = new Tutor();
+		tutor1.setClasses(new HashSet<Classes>());
+		tutor1.setCourses(new HashSet<StudyCourse>());
+		tutor1.setFee(new BigDecimal(20.00));
+		tutor1 = tutorDao.save(tutor1);
+    	tutor2 = new Tutor();
+		tutor2.setClasses(new HashSet<Classes>());
+		tutor2.setCourses(new HashSet<StudyCourse>());
+		tutor2.setFee(new BigDecimal(40.00));
+		tutor2 = tutorDao.save(tutor2);
+    	tutor3 = new Tutor();
+		tutor3.setClasses(new HashSet<Classes>());
+		tutor3.setCourses(new HashSet<StudyCourse>());
+		tutor3.setFee(new BigDecimal(50.00));
+		tutor3 = tutorDao.save(tutor3);
     }
 
     @Test
@@ -77,12 +97,30 @@ public class SearchControllerIntegrationTest {
 
     @Test
     public void submitSearch() throws Exception {
-        mockMvc.perform(post("/submitSearch").param("fee", "40.00").param("studyCourseId", "0").param("classesId", "0"))
+        mockMvc.perform(post("/submitSearch").param("fee", "80.00").param("studyCourseId", "0").param("classesId", "0"))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("tutors"))
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
     }
-
-    private String completeUrl(String page) {
-        return "/pages/" + page + ".jsp";
+    
+    @Test
+    public void noSearchResults() throws Exception {
+        mockMvc.perform(post("/submitSearch").param("fee", "1.00").param("studyCourseId", "0").param("classesId", "0"))
+                .andExpect(status().isOk()).andExpect(model().hasNoErrors())
+                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_NORESULTS)));
     }
+    
+    @Test
+    public void searchByFee() throws Exception {
+    	List<Tutor> expectedTutors = new LinkedList<Tutor>();
+    	//We expect tutor1 and 2 because their fee is between 0 and 40 (20 for tutor 1, 40 for tutor 2)
+    	expectedTutors.add(tutor1);
+    	expectedTutors.add(tutor2);
+        mockMvc.perform(post("/submitSearch").param("fee", "40.00").param("studyCourseId", "0").param("classesId", "0"))
+                .andExpect(status().isOk()).andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
+                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
+    }
+    
+    //TODO add test for searching by course, by class and with multiple criterias
 }

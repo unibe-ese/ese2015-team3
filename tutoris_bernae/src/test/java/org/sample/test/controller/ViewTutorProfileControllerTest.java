@@ -109,7 +109,7 @@ public class ViewTutorProfileControllerTest {
 									.andExpect(status().isOk())
 									.andExpect(model().hasNoErrors())
 									.andExpect(forwardedUrl("viewTutorProfile"))
-									.andExpect(model().attribute("tutor", is(Tutor.class)));
+									.andExpect(model().attribute("tutor", exampleTutor));
 	}
 	
 	@After 

@@ -56,9 +56,7 @@ public class RegisterFormService{
         registerForm.setId(user.getId());
 
         return registerForm;
-
     }
-    
     
     private boolean usernameAvailable(String username){
     	if(userDao.findByUsernameLike(username)==null) return true;

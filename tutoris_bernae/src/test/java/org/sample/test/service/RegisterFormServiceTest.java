@@ -37,11 +37,11 @@ public class RegisterFormServiceTest {
 	@Configuration
     static class ContextConfiguration {
 
-	     @Bean
-	     public UserDao userDaoMock() {
-	    	 UserDao userDao = mock(UserDao.class);
-	    	 return userDao;
-	     }
+	    @Bean
+	    public UserDao userDaoMock() {
+	    	UserDao userDao = mock(UserDao.class);
+	    	return userDao;
+	    }
         @Bean
         public RegisterFormService registerFormService() {
             RegisterFormService registerFormService = new RegisterFormService();

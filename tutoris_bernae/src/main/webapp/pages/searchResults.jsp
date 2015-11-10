@@ -35,7 +35,7 @@
     </tbody>
 </table>
 
-<button type="button" class="btn" onclick="history.back()">Search again</button>
+<button type="button" class="btn" onclick="location.href='/tutoris_baernae/findTutor'">Search again</button>
 
 <c:if test="${page_error != null}">
     <div class="alert alert-error">

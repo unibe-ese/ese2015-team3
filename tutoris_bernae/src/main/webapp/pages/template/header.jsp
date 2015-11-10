@@ -22,6 +22,7 @@
 		<script src="/tutoris_baernae/js/init.js"></script>
 		<script src="/tutoris_baernae/js/sorttable.js"></script>
                 <script src="/tutoris_baernae/js/highlight.js"></script>
+                <script src="/tutoris_baernae/js/tooltip.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="/tutoris_baernae/css/skel.css" />
 			<link rel="stylesheet" href="/tutoris_baernae/css/style.css" />

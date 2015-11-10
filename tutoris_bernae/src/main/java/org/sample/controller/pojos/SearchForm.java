@@ -1,9 +1,10 @@
 package org.sample.controller.pojos;
 
 import java.math.BigDecimal;
+import javax.validation.constraints.Digits;
 
 /**
- *  Search Form stores filter criterias as class variables.
+ *  Search Form stores filter criteria.
  *  Available filters are: study course, class and fee.
  */
 public class SearchForm {
@@ -12,6 +13,8 @@ public class SearchForm {
 
     private Long studyCourseId;
     private Long classesId;
+    
+    @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 
     /*Getter & Setters for class variables*/

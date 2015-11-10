@@ -47,9 +47,9 @@
         </div>
         <c:set var="passwordErrors"><form:errors path="password"/></c:set>
         <div class="control-group<c:if test="${not empty passwordErrors}"> error</c:if>">
-            <label class="control-label" for="field-password">Password</label>
+            <label class="control-label" for="field-password">Password <span class="hint">?</span></label>
             <div class="controls" style="width:30%;min-width:150px;max-width:450px">
-                <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password" style="color:black"/>
+            <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password" style="color:black"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -59,7 +59,7 @@
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Sign up</button>
              <button type="submit" name = "registerastutor" value = "true" class="btn btn-primary">Sign up as Tutor</button>
-            <button type="button" class="btn">Cancel</button>
+             <button type="reset" class="btn">Cancel</button>
          </div>
            
     </fieldset>

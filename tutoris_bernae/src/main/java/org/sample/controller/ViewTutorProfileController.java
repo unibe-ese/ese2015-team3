@@ -11,12 +11,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Controls the creation of the profile page for viewing other tutors, without their user details.
+ * @author pf15ese
+ *
+ */
 @Controller
 public class ViewTutorProfileController {
 
 	@Autowired
 	private TutorDao tutorDao;
 
+	/**
+	 * Creates the profile page for the tutor given by the tutorId, completely without the tutors user
+	 * details
+	 * @param tutorId the id of the tutor i want to see, not required
+	 * @return a ModelAndView with ViewNam "viewTutorProfile" and the object "tutor", the tutor given by the id, 
+	 * or if no tutor with this id exist or no id was given a ModelAndView with ViewName "notutorfound"
+	 */
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile(@RequestParam(value = "tutorId", required = false) Long tutorId) {
 		ModelAndView model;

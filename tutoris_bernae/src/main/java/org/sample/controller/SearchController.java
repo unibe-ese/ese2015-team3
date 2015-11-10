@@ -1,11 +1,13 @@
 package org.sample.controller;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.SearchService;
+import org.sample.model.Tutor;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SearchController {
     public static final String PAGE_SEARCH = "search";
     public static final String PAGE_RESULTS = "searchResults";
+    public static final String PAGE_NORESULTS = "noSearchResults";
     
     @Autowired
     private SearchService searchService;
@@ -34,12 +37,16 @@ public class SearchController {
     private StudyCourseDao studyCourseDao;
     
     /**
-     * View search page.
-     * Model with attributes searchForm, a list of all studycourses and all classes.
-     * @return 
+     * Creates the search page with a search form.
+     * Model has attributes "searchForm":       a new SearchForm
+     *                      "studyCourseList":  a list of all studycourses
+     *                      "classesList":      a list of all classes 
+     *
+     * @return ModelAndView with View "search" and attributes "searchForm",
+     * "studyCourseList" and "classesList"
      */
-    @RequestMapping(value="/findTutor", method=RequestMethod.GET)
-    public ModelAndView findTutor(){
+    @RequestMapping(value = "/findTutor", method = RequestMethod.GET)
+    public ModelAndView findTutor() {
         ModelAndView model = new ModelAndView(PAGE_SEARCH);
         model.addObject("searchForm", new SearchForm());
 
@@ -49,21 +56,30 @@ public class SearchController {
     }
     
     /**
-     * View search results.
-     * Search results are displayed in a table with username, class, grade (and rating)
-     * @param searchForm: stores entered search criterias
+     * Searches for tutors matching criteria entered in SearchForm and displays the results.
+     * If SearchForm is invalid, the search page with error messages is shown.
+     * Search results are displayed in a table with username,feem, class and grade.
+     * If no tutors are found, display message with possibility to another search.
+     * 
+     * @param searchForm: a valid SearchForm
      * @param result
-     * @return 
+     * @return ModelAndView model with View "searchResults" and attributes "classe", 
+     * "grade" and "tutors"
      */
-    @RequestMapping(value="/submitSearch", method=RequestMethod.POST)
+    @RequestMapping(value = "/submitSearch", method = RequestMethod.POST)
     public ModelAndView searchResults(@Valid SearchForm searchForm, BindingResult result) {
         ModelAndView model;
         
         if(!result.hasErrors()) {
+            List<Tutor> tutors = searchService.findTutorsBySearchCriterias(searchForm);
+            if (tutors.isEmpty()){
+                model = new ModelAndView(PAGE_NORESULTS);
+            }
+            else{
             model = new ModelAndView(PAGE_RESULTS);
             model.addObject("classe", searchService.getClasseName(searchForm));
             model.addObject("grade", searchService.getClasseGrade(searchForm));
-            model.addObject("tutors",searchService.findTutorsBySearchCriterias(searchForm));
+            model.addObject("tutors",tutors);}
             
         }
         else model = new ModelAndView(PAGE_SEARCH);

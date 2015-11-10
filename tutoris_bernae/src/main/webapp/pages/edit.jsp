@@ -47,7 +47,7 @@
         </div>
         <c:set var="passwordErrors"><form:errors path="password"/></c:set>
         <div class="control-group<c:if test="${not empty passwordErrors}"> error</c:if>">
-            <label class="control-label" for="field-password">Password</label>
+            <label class="control-label" for="field-password">Password <span class="hint" content="Password between 8-14 characters. At least 1 uppercase letter, 1 digit, 1 special character.">?</span></label>
             <div class="controls" style="width:30%;min-width:150px;max-width:450px">
                 <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password" style="color:black"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
@@ -58,7 +58,7 @@
        		        
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Submit changes</button>
-            <button type="button" class="btn">Cancel</button>
+            <button type="reset" class="btn">Cancel</button>
          </div>
            
     </fieldset>

@@ -76,9 +76,9 @@ public class SearchControllerIntegrationTest {
 
     @Test
     public void submitSearch() throws Exception {
-        mockMvc.perform(post("/submitSearch").param("fee", "40.00"))
+        mockMvc.perform(post("/submitSearch").param("fee", "40.00").param("studyCourseId", "0").param("classesId", "0"))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
-                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_SEARCH)));
+                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
     }
 
     private String completeUrl(String page) {

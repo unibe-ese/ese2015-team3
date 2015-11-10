@@ -42,7 +42,7 @@
         <div class="control-group<c:if test="${not empty usernameErrors}"> error</c:if>">
             <label class="control-label" for="field-username">Username</label>
             <div class="controls" style="width:30%;min-width:150px;max-width:450px">
-                <form:input path="username" id="field-username" tabindex="3" maxlength="35" value="${user.username}"/>
+                <form:input path="username" id="field-username" tabindex=“4” maxlength="35" value="${user.username}"/>
                 <form:errors path="username" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -50,7 +50,9 @@
         <div class="control-group<c:if test="${not empty passwordErrors}"> error</c:if>">
             <label class="control-label" for="field-password">Password</label>
             <div class="controls" style="width:30%;min-width:150px;max-width:450px">
-                <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password"/>
+            <label class="control-label" for="field-password">Password <span class="hint" content="Password between 8-14 characters. At least 1 uppercase letter, 1 digit, 1 special character.">?</span></label>
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
+                <form:input type="password" path="password" id="field-password" tabindex=“5” maxlength="35" placeholder="Password"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -61,7 +63,7 @@
         <div class="control-group<c:if test="${not empty feeErrors}"> error</c:if>">
             <label class="control-label" for="field-fee">Fee</label>
             <div class="controls" style="width:30%;min-width:150px;max-width:450px">
-                <form:input path="fee" id="field-fee" tabindex="2" maxlength="35" placeholder="Fee"/>
+                <form:input path="fee" id="field-fee" tabindex=“6” maxlength="35" placeholder="Fee"/>
                 <form:errors path="fee" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -69,7 +71,7 @@
         <div class="control-group<c:if test="${not empty bioErrors}"> error</c:if>">
             <label class="control-label" for="field-bio">Bio</label>
             <div class="controls" style="width:30%;min-width:150px;max-width:450px">
-                <form:input path="bio" id="field-bio" tabindex="3" maxlength="350" placeholder="Bio"/>
+                <form:input path="bio" id="field-bio" tabindex=“7” maxlength="350" placeholder="Bio"/>
                 <form:errors path="bio" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -78,7 +80,7 @@
        		        
         <div class="form-actions">
             <button type="submit" name = "save" value = "true" class="btn btn-primary">Submit changes</button>
-            <button type="button" class="btn">Cancel</button>
+            <button type="reset" class="btn">Cancel</button>
          </div>
            
     </fieldset>

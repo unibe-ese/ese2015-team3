@@ -21,11 +21,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 
+/**
+ * Registers new user by adding them to the database. 
+ * Only handles the registering of new Users, tutors are handled by the TutorFormService
+ */
 @Service
 public class RegisterFormService{
 
     @Autowired UserDao userDao;
     
+    /**
+     * Creates a user with the details given by the RegisterForm, and saves him to the database
+     * @param registerForm a RegisterForm, not null
+     * @return the given RegisterForm, with the id set to the new Users id
+     * @throws InvalidUserException if the email or the username is already in use by another user
+     */
     @Transactional
     public RegisterForm saveFrom(RegisterForm registerForm) throws InvalidUserException{
 

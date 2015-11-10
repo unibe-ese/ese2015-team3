@@ -47,9 +47,9 @@
         </div>
         <c:set var="passwordErrors"><form:errors path="password"/></c:set>
         <div class="control-group<c:if test="${not empty passwordErrors}"> error</c:if>">
-            <label class="control-label" for="field-password">Password</label>
+            <label class="control-label" for="field-password">Password <span class="hint">?</span></label>
             <div class="controls">
-                <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password"/>
+            <form:input type="password" path="password" id="field-password" tabindex="3" maxlength="35" placeholder="Password"/>
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>

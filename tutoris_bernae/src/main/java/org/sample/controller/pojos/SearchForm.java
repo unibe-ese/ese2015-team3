@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import javax.validation.constraints.Digits;
 
 /**
- *  Search Form stores filter criterias as class variables.
+ *  Search Form stores filter criteria.
  *  Available filters are: study course, class and fee.
  */
 public class SearchForm {

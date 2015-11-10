@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Search Service provides the necessary methods to filter tutors.
- * Criterias for search are provided by SearchForm.
+ * Criteria for search are provided by SearchForm.
  */
 @Service
 public class SearchService {
@@ -32,11 +32,11 @@ public class SearchService {
     ClassesDao classesDao;
     
     /**
-     * Find tutors matching provided criterias.
-     * For multiple criterias only tutors matching all of them are returned.
+     * Find tutors matching provided criteria.
+     * For multiple criteria only tutors matching all of them are returned.
      * 
-     * @param searchForm stores the search criterias 
-     * @return a list of tutors matching the criterias.
+     * @param searchForm stores the search criteria 
+     * @return a list of tutors matching the criteria
      */
     @Transactional
     public List<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
@@ -104,6 +104,7 @@ public class SearchService {
     /**
      * Get name of class in the search form.
      * If class criteria was left empty return null.
+     * 
      * @param searchForm has class criteria stored
      * @return name of the class if a criteria was entered, null otherwise
      */

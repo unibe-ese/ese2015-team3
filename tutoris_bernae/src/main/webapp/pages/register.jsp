@@ -59,7 +59,7 @@
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Sign up</button>
              <button type="submit" name = "registerastutor" value = "true" class="btn btn-primary">Sign up as Tutor</button>
-             <button type="button" onclick="location.href='/tutoris_baernae/register'" class="btn">Cancel</button>
+             <button type="reset" class="btn">Cancel</button>
          </div>
            
     </fieldset>

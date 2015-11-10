@@ -39,7 +39,7 @@
        		        
         <div class="form-actions">
             <button type="submit" name = "save" value = "true" class="btn btn-primary">Sign up</button>
-            <button type="button" class="btn">Cancel</button>
+            <button type="reset" class="btn">Cancel</button>
          </div>
            
     </fieldset>

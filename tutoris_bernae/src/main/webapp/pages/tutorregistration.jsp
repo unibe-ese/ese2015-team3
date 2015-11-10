@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@page session="true"%>
+<%@page session="true" %>
 
 <c:import url="template/header.jsp" />
 
@@ -20,16 +20,16 @@
         <c:set var="feeErrors"><form:errors path="fee"/></c:set>
         <div class="control-group<c:if test="${not empty feeErrors}"> error</c:if>">
             <label class="control-label" for="field-fee">Fee</label>
-            <div class="controls">
-                <form:input path="fee" id="field-fee" tabindex="2" maxlength="35" placeholder="Fee"/>
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
+                <form:input path="fee" id="field-fee" tabindex="2" maxlength="35" placeholder="Fee" style="color:black"/>
                 <form:errors path="fee" cssClass="help-inline" element="span"/>
             </div>
         </div>
         <c:set var="bioErrors"><form:errors path="bio"/></c:set>
         <div class="control-group<c:if test="${not empty bioErrors}"> error</c:if>">
             <label class="control-label" for="field-bio">Bio</label>
-            <div class="controls">
-                <form:input path="bio" id="field-bio" tabindex="3" maxlength="350" placeholder="Bio"/>
+            <div class="controls" style="width:30%;min-width:150px;max-width:450px">
+                <form:input path="bio" id="field-bio" tabindex="3" maxlength="350" placeholder="Bio" style="color:black"/>
                 <form:errors path="bio" cssClass="help-inline" element="span"/>
             </div>
         </div>

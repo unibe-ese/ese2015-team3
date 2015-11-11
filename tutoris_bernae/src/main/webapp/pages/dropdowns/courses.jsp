@@ -9,7 +9,7 @@
 	<c:otherwise>
 		<div class="control-group">
 			<div class="controls">
-				<form:select path="studyCourse" required="false">
+				<form:select path="studyCourse" required="true">
 					<form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
 				</form:select>
 				<form:errors path="studyCourse" cssClass="help-inline" element="span"/>
@@ -18,5 +18,5 @@
 	</c:otherwise>
 </c:choose>
 
-	<%@ include file="autocomplete.jsp" %>
+	<%@ include file="../template/autocomplete.jsp" %>
 

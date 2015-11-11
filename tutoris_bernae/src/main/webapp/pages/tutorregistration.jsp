@@ -13,10 +13,14 @@
         <legend>Enter Your Information</legend>
 	<form:input path="userId" type="hidden" value="${tutorForm.userId}"/>
 
-		<%@ include file="template/courses_dropdown.jsp" %>
+		<%@ include file="dropdowns/courses.jsp" %>
+		<%@ include file="template/registerClasses.jsp" %>
+		
 	
-             <c:import url="template/StudyList.jsp" />
-            <c:import url="template/classList.jsp" />
+		<!-- Old imports -->
+        <!-- <c:import url="template/StudyList.jsp" /> -->
+        <!-- <c:import url="template/classList.jsp" /> -->
+        
         <c:set var="feeErrors"><form:errors path="fee"/></c:set>
         <div class="control-group<c:if test="${not empty feeErrors}"> error</c:if>">
             <label class="control-label" for="field-fee">Fee</label>

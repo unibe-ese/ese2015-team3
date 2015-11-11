@@ -16,6 +16,7 @@ import javax.validation.constraints.Pattern;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.User;
+import org.sample.wrapper.ClassesListWrapper;
 
 public class TutorForm {
 
@@ -28,8 +29,9 @@ public class TutorForm {
     private Long studyCourse;
     private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
-    private Long classes;
-    private List<Classes> classList = new LinkedList<Classes>();
+    private Long selectedClassId;
+    private List<Classes> classesList = new LinkedList<Classes>();
+    private List<Classes> classList = new LinkedList<Classes>();  
     
     private String bio;
 
@@ -57,14 +59,6 @@ public class TutorForm {
 		this.studyCourseList = studyCourseList;
 	}
 
-	public List<Classes> getClassList() {
-		return classList;
-	}
-
-	public void setClassList(List<Classes> classList) {
-		this.classList = classList;
-	}
-
 	public String getBio() {
 		return bio;
 	}
@@ -89,11 +83,27 @@ public class TutorForm {
 		this.studyCourse = studyCourse;
 	}
 
-	public Long getClasses() {
-		return classes;
+	public List<Classes> getClassList() {
+		return classList;
 	}
 
-	public void setClasses(Long classes) {
-		this.classes = classes;
+	public void setClassList(List<Classes> classList) {
+		this.classList = classList;
+	}
+
+	public List<Classes> getClassesList() {
+		return classesList;
+	}
+
+	public void setClassesList(List<Classes> classesList) {
+		this.classesList = classesList;
+	}
+
+	public Long getSelectedClassId() {
+		return selectedClassId;
+	}
+
+	public void setSelectedClassId(Long selectedClassId) {
+		this.selectedClassId = selectedClassId;
 	}
 }

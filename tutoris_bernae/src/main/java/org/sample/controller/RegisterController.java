@@ -1,5 +1,8 @@
 package org.sample.controller;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -9,27 +12,30 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
-import org.sample.controller.service.SearchService;
 import org.sample.controller.service.TutorFormService;
-import org.sample.model.User;
+import org.sample.model.Classes;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
+import org.sample.wrapper.ClassesListWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class RegisterController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
-	
+		
     @Autowired
     private StudyCourseDao studyCourseDao;
+    @Autowired
+    private ClassesDao classesDao;
 	@Autowired
 	private RegisterFormService registerFormService;
 	@Autowired
@@ -67,17 +73,47 @@ public class RegisterController {
         	tutorForm.setUserId(registerForm.getId());
         	model.addObject("tutorForm", tutorForm);
             model.addObject("studyCourseList", studyCourseDao.findAll());
-//            model.addObject("classesList", searchService.getAllClasses());
+            model.addObject("classesList", classesDao.findAll());
     	}
     	return model;
     }
         
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST)
-    public ModelAndView create(HttpSession session,HttpServletRequest request,@ModelAttribute TutorForm tutorForm) {
+    public ModelAndView create(HttpSession session,HttpServletRequest request,
+    		@ModelAttribute TutorForm tutorForm, @RequestParam(value="classesList", required=false) List<Classes> classesList,
+    		@RequestParam(value="selectedClassId", required=false) long selectedClassId) {
     	ModelAndView model = new ModelAndView("tutorregistration");
-    	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
-    	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
+//    	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
+    	// get the current classes that have already been added.
+    	List<Classes> classList = new LinkedList<Classes>();
+    	classList = tutorForm.getClassList();
+    	
+		String removeClass = request.getParameter("removeClass");
+		if(removeClass != null){
+			classList.remove(Integer.parseInt(removeClass));
+		}
+		
+		String addRow = request.getParameter("addClass");
+		if(addRow != null){
+	    	// add the new classes
+			Classes selectedClass = classesDao.findOne(selectedClassId);
+			//check if it is already contained in the list
+			if(!classList.contains(selectedClass))
+				classList.add(selectedClass);			
+		}
+
+    	// remove classes that have already been added from the drop-down
+    	List<Classes> selectableClasses = (List<Classes>) classesDao.findAll();
+    	for(Classes tmpClass : selectableClasses){
+    		if(classList.contains(tmpClass))
+    			selectableClasses.remove(tmpClass);
+    	}
+    	tutorForm.setClassList(classList);
+//    	tutorForm.setClassList(ListHelper.handleClassList(request,classList));
     	model.addObject("tutorForm", tutorForm);
+        model.addObject("studyCourseList", studyCourseDao.findAll());
+        model.addObject("classesList", selectableClasses);
+    	model.addObject("classList", classList);
     	return model;
     }
     

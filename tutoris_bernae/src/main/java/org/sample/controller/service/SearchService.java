@@ -3,8 +3,12 @@ package org.sample.controller.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
 import org.sample.controller.pojos.SearchForm;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
@@ -39,7 +43,7 @@ public class SearchService {
      * @return a list of tutors matching the criteria
      */
     @Transactional
-    public List<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
+    public Set<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
     	assert(searchForm!=null);
         StudyCourse courseCriteria = studyCourseDao.findOne(searchForm.getStudyCourseId());
         Classes classCriteria = classesDao.findOne(searchForm.getClassesId());
@@ -56,32 +60,30 @@ public class SearchService {
         	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeBetween(new BigDecimal(0),fee);
 
         List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
-        System.out.println("Size: "+tutorsMatchingCourse.size()+tutorsMatchingClass.size()+tutorsMatchingFee.size());
         if(!tutorsMatchingCourse.isEmpty()) searchResults.add(tutorsMatchingCourse);
         if(!tutorsMatchingClass.isEmpty())searchResults.add(tutorsMatchingClass);
         if(!tutorsMatchingFee.isEmpty())searchResults.add(tutorsMatchingFee);
-        System.out.println("Size of result: "+searchResults.size());
         return findCommonElements(searchResults);
     }
     
     /**
      * helper function to find common elements in multiple lists.
-     * 
      * @return list containing common elements
      */
-    private List<Tutor> findCommonElements(List<List<Tutor>> collections){
+    private Set<Tutor> findCommonElements(List<List<Tutor>> collections){
         
-        List<Tutor> common = new ArrayList<Tutor>();
+        Set<Tutor> common = new HashSet<Tutor>();
 
         if (!collections.isEmpty()){
             Iterator<List<Tutor>> iterator = collections.iterator();
             
             common.addAll(iterator.next());
             while (iterator.hasNext()) {
-            	List<Tutor> newcommon = new ArrayList<Tutor>();
+            	Set<Tutor> newcommon = new HashSet<Tutor>();
             	for(Tutor t : iterator.next()){
                 if(common.contains(t)) newcommon.add(t); 
             	}
+            	common = newcommon;
             }
         } 
         return common;

@@ -1,6 +1,8 @@
 package org.sample.controller;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -71,7 +73,7 @@ public class SearchController {
         ModelAndView model;
         
         if(!result.hasErrors()) {
-            List<Tutor> tutors = searchService.findTutorsBySearchCriterias(searchForm);
+            Set<Tutor> tutors = searchService.findTutorsBySearchCriterias(searchForm);
             if (tutors.isEmpty()){
                 model = new ModelAndView(PAGE_NORESULTS);
             }

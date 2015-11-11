@@ -11,6 +11,7 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
+import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ControllerIntegrationTest;
@@ -38,6 +39,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.junit.Assert.*;
@@ -63,25 +65,45 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
     private SearchService searchService;
     @Autowired
     private TutorDao tutorDao;
+    @Autowired
+    private StudyCourseDao studyCourseDao;
 
     private Tutor tutor1;
     private Tutor tutor2;
     private Tutor tutor3;
+    private StudyCourse course1;
+	private StudyCourse course2;
+	private Classes classes1;
+	private Classes classes2;
     @Before
     public void setUpExampleTutors() {
+    	course1 = new StudyCourse();
+    	course2 = new StudyCourse();
+    	course1 = studyCourseDao.save(course1);
+    	course2 = studyCourseDao.save(course2);
+    	Set<StudyCourse> courses1 = new HashSet<StudyCourse>();
+    	courses1.add(course1);
+    	Set<StudyCourse> courses2 = new HashSet<StudyCourse>();
+    	courses1.add(course2);
+    	classes1 = new Classes();
+    	classes2 = new Classes();
+    	Set<Classes> classesSet1 = new HashSet<Classes>();
+    	classesSet1.add(classes1);
+    	Set<Classes> classesSet2 = new HashSet<Classes>();
+    	classesSet2.add(classes2);
     	tutor1 = new Tutor();
-		tutor1.setClasses(new HashSet<Classes>());
-		tutor1.setCourses(new HashSet<StudyCourse>());
+		tutor1.setClasses(classesSet1);
+		tutor1.setCourses(courses1);
 		tutor1.setFee(new BigDecimal(20.00));
 		tutor1 = tutorDao.save(tutor1);
     	tutor2 = new Tutor();
-		tutor2.setClasses(new HashSet<Classes>());
-		tutor2.setCourses(new HashSet<StudyCourse>());
+		tutor2.setClasses(classesSet1);
+		tutor2.setCourses(courses2);
 		tutor2.setFee(new BigDecimal(40.00));
 		tutor2 = tutorDao.save(tutor2);
     	tutor3 = new Tutor();
-		tutor3.setClasses(new HashSet<Classes>());
-		tutor3.setCourses(new HashSet<StudyCourse>());
+		tutor3.setClasses(classesSet2);
+		tutor3.setCourses(courses1);
 		tutor3.setFee(new BigDecimal(50.00));
 		tutor3 = tutorDao.save(tutor3);
     }
@@ -112,11 +134,43 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
     
     @Test
     public void searchByFee() throws Exception {
-    	List<Tutor> expectedTutors = new LinkedList<Tutor>();
+    	Set<Tutor> expectedTutors = new HashSet<Tutor>();
     	//We expect tutor1 and 2 because their fee is between 0 and 40 (20 for tutor 1, 40 for tutor 2)
     	expectedTutors.add(tutor1);
     	expectedTutors.add(tutor2);
         mockMvc.perform(post("/submitSearch").param("fee", "40.00").param("studyCourseId", "0").param("classesId", "0"))
+                .andExpect(status().isOk()).andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
+                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
+    }
+    
+    @Test
+    public void searchByCourse() throws Exception {
+    	Set<Tutor> expectedTutors = new HashSet<Tutor>();
+    	expectedTutors.add(tutor3);
+    	expectedTutors.add(tutor1);
+        mockMvc.perform(post("/submitSearch").param("fee", "").param("studyCourseId", course1.getId().toString()).param("classesId", "0"))
+                .andExpect(status().isOk()).andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
+                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
+    }
+    
+    @Test
+    public void searchByClasses() throws Exception {
+    	Set<Tutor> expectedTutors = new HashSet<Tutor>();
+    	expectedTutors.add(tutor2);
+    	expectedTutors.add(tutor1);
+        mockMvc.perform(post("/submitSearch").param("fee", "").param("studyCourseId", "0").param("classesId", classes1.getId().toString()))
+                .andExpect(status().isOk()).andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
+                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
+    }
+    
+    @Test
+    public void searchByMultipleCriteria() throws Exception {
+    	Set<Tutor> expectedTutors = new HashSet<Tutor>();
+    	expectedTutors.add(tutor1);
+        mockMvc.perform(post("/submitSearch").param("fee", "80.00").param("studyCourseId", course1.getId().toString()).param("classesId", classes1.getId().toString()))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));

@@ -76,14 +76,8 @@ public class SearchService {
             Iterator<List<Tutor>> iterator = collections.iterator();
             common.addAll(iterator.next());
             while (iterator.hasNext()) {
-            	Set<Tutor> newcommon = new HashSet<Tutor>();
             	List<Tutor> next = iterator.next();
-            	for(Tutor t : next){
-            		for(Tutor b : common){
-            			if(b.equals(t)) newcommon.add(t);
-            		}
-            	}
-            	common = newcommon;
+            	common.retainAll(next); 
             }
         } 
         return common;

@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 /**
  * Dao for the Model StudyCourse.
- * @author pf15ese
+ * @author G.Corsini
  *
  */
 public interface StudyCourseDao extends CrudRepository<StudyCourse,Long> {

@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 
 /**
  * Models the classes that a tutor can register.
- * @author pf15ese
+ * @author G.Corsini
  *
  */
 @Entity

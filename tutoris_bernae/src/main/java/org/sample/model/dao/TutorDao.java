@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 
 /**
  * Dao for the Model Tutor.
- * @author pf15ese
+ * @author G.Corsini
  *
  */
 public interface TutorDao extends CrudRepository<Tutor,Long> {

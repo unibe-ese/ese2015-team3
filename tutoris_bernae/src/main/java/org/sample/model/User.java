@@ -8,7 +8,7 @@ import javax.persistence.OneToOne;
 
 /**
  * Models the user.
- * @author pf15ese
+ * @author G.Corsini
  *
  */
 @Entity

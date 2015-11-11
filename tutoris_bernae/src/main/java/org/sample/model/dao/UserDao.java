@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 /**
  * Dao for the Model User.
- * @author pf15ese
+ * @author G.Corsini
  *
  */
 public interface UserDao extends CrudRepository<User,Long> {

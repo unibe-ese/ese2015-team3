@@ -16,7 +16,7 @@ import org.hibernate.annotations.Type;
 
 /**
  * Models the tutor.
- * @author pf15ese
+ * @author G.Corsini
  *
  */
 @Entity

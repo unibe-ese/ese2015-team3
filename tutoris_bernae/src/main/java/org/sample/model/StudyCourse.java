@@ -11,7 +11,7 @@ import javax.persistence.ManyToMany;
 
 /**
  * Models the courses that a tutor can register.
- * @author pf15ese
+ * @author G.Corsini
  *
  */
 @Entity

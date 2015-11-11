@@ -71,7 +71,7 @@ public class SearchService {
     private Set<Tutor> findCommonElements(List<List<Tutor>> collections){
         
         Set<Tutor> common = new HashSet<Tutor>();
-
+        
         if (!collections.isEmpty()){
             Iterator<List<Tutor>> iterator = collections.iterator();
             common.addAll(iterator.next());

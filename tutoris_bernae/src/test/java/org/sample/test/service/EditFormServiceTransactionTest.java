@@ -1,6 +1,5 @@
 package org.sample.test.service;
 
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
@@ -9,23 +8,15 @@ import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
-import org.sample.model.dao.AddressDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -33,8 +24,6 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

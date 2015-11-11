@@ -1,15 +1,11 @@
 package org.sample.controller.service;
 
 import java.util.HashSet;
-import java.util.Set;
-
 import org.sample.controller.pojos.TutorForm;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
-import org.sample.model.dao.ClassesDao;
-import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;

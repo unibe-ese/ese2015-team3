@@ -1,17 +1,16 @@
 package org.sample.model;
 
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Cascade;
-import org.sample.model.dao.ClassesDao;
-import org.springframework.beans.factory.annotation.Autowired;
-
-
+/**
+ * Models the classes that a tutor can register.
+ * @author pf15ese
+ *
+ */
 @Entity
 public class Classes {
 	
@@ -19,7 +18,7 @@ public class Classes {
     @GeneratedValue
     private Long id;
 	
-	//Currently not in use (do we even need to know that?)
+	//Currently not in use but could be required for more granular searches.
     @ManyToOne
     private StudyCourse studyCourse;
     

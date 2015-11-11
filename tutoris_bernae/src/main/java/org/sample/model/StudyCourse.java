@@ -8,9 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
-
+/**
+ * Models the courses that a tutor can register.
+ * @author pf15ese
+ *
+ */
 @Entity
 public class StudyCourse implements Serializable {
 

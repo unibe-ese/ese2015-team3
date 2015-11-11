@@ -6,7 +6,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-
+/**
+ * Models the user.
+ * @author pf15ese
+ *
+ */
 @Entity
 public class User {
 

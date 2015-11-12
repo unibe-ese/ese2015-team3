@@ -9,9 +9,11 @@ import javax.validation.Valid;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
+import org.sample.controller.service.ClassesService;
 import org.sample.controller.service.EditFormService;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.model.User;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -36,11 +38,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class EditController {
 
+    @Autowired
+    private ClassesDao classesDao;
+    
 	@Autowired
 	private UserDao userDao;
 	
 	@Autowired
 	private EditFormService editFormService;
+	
+	@Autowired
+	private ClassesService classesService;
 	
 	/**
 	 * Creates a page with an editing form for a normal user or a tutor,
@@ -56,7 +64,8 @@ public class EditController {
 		User user = userDao.findByUsername(name);
 		if(user.isTutor()) {
 			ModelAndView model = new ModelAndView("editTutor");
-			model.addObject("tutorForm", new TutorEditForm(user, user.getTutor()));
+			model.addObject("tutorForm", new TutorEditForm(user, user.getTutor(), classesService));
+			model.addObject("allClasses", classesDao.findAll());
 			return model;
 		}
 		else {
@@ -106,13 +115,14 @@ public class EditController {
      * with updated lists
      * 
      */
-    @RequestMapping(value = "/editTutorsubmit", method = RequestMethod.POST)
+    @RequestMapping(value = "/editTutorSubmit", method = RequestMethod.POST)
     public ModelAndView editTutorProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes, HttpServletRequest request) {
     	ModelAndView model = new ModelAndView("editTutor");
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	model.addObject("tutorForm", tutorForm);
+    	model.addObject("allClasses", classesDao.findAll());
     	return model;
     }
 
@@ -128,7 +138,7 @@ public class EditController {
      * @return if the the form was successfully filled a new ModelAndView with ViewName "editDone" or else
      * again a new ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", the given TutorEditForm
      */
-    @RequestMapping(value = "/editTutorsubmit", method = RequestMethod.POST, params = { "save" })
+    @RequestMapping(value = "/editTutorSubmit", method = RequestMethod.POST, params = { "save" })
     public ModelAndView editTutorProfile(@Valid TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes,@RequestParam Boolean save , HttpServletRequest request) {
     	ModelAndView model;
@@ -141,6 +151,7 @@ public class EditController {
             } catch (InvalidUserException e) {
             	model = new ModelAndView("editTutor");
             	model.addObject("tutorForm", tutorForm);
+            	model.addObject("allClasses", classesDao.findAll());
             	model.addObject("page_error", e.getMessage());
             }
         } else {

@@ -13,6 +13,7 @@ import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -80,7 +81,7 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
-		newTutor.setClasses(new HashSet<Classes>());
+		newTutor.setClasses(new HashSet<CompletedClasses>());
 		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();

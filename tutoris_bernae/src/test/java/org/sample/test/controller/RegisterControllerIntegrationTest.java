@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sample.controller.RegisterController;
 import org.sample.controller.exceptions.InvalidUserException;
+import org.sample.controller.pojos.CompletedClassesPrototype;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
@@ -127,7 +128,7 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 	{
 		mockMvc.perform(post("/submitastutor").param("bio", "")
 									.requestAttr("courseList", new LinkedList<StudyCourse>())
-									.requestAttr("classesList", new LinkedList<Classes>())
+									.requestAttr("classesList", new LinkedList<CompletedClassesPrototype>())
 									.param("fee", "")
 									.param("userId", "0")
 									.param("save","true"))
@@ -145,7 +146,7 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		user = userDao.save(user);
 		mockMvc.perform(post("/submitastutor").param("bio", "bio")
 									.requestAttr("courseList", new LinkedList<StudyCourse>())
-									.requestAttr("classesList", new LinkedList<Classes>())
+									.requestAttr("classesList", new LinkedList<CompletedClassesPrototype>())
 									.param("fee", "22")
 									.param("userId", user.getId().toString())
 									.param("save","true"))

@@ -1,10 +1,12 @@
 package org.sample.test.service;
 
 import org.sample.controller.exceptions.InvalidUserException;
+import org.sample.controller.pojos.CompletedClassesPrototype;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -56,7 +58,7 @@ public class EditFormServiceTransactionTest {
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
-		newTutor.setClasses(new HashSet<Classes>());
+		newTutor.setClasses(new HashSet<CompletedClasses>());
 		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
@@ -82,7 +84,7 @@ public class EditFormServiceTransactionTest {
         tutorEditForm.setEmail("newtutortest@tutortest.com");
         tutorEditForm.setPassword("123456");
         tutorEditForm.setUserId(newTutorUser.getId());
-        tutorEditForm.setClassList(new LinkedList<Classes>());
+        tutorEditForm.setClassList(new LinkedList<CompletedClassesPrototype>());
         tutorEditForm.setStudyCourseList(new LinkedList<StudyCourse>());
         tutorEditForm.setBio("newBio");
         tutorEditForm.setFee(new BigDecimal(20));

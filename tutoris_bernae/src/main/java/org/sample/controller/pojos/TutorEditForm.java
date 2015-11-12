@@ -9,7 +9,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
-
+import org.sample.controller.service.ClassesService;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
@@ -37,7 +37,7 @@ public class TutorEditForm {
 
     private List<StudyCourse> studyCourseList; //Studiengang
 
-    private List<Classes> classList;
+    private List<CompletedClassesPrototype> classList = new LinkedList<CompletedClassesPrototype>();
     
     @NotEmpty
     private String bio;
@@ -47,7 +47,7 @@ public class TutorEditForm {
 	private Long tutorId;
 	public TutorEditForm() {}
 
-    public TutorEditForm(User user, Tutor tutor) {
+    public TutorEditForm(User user, Tutor tutor, ClassesService classesService) {
     	assert(user!=null);
     	assert(tutor!=null);
     	this.userId = user.getId();
@@ -60,7 +60,7 @@ public class TutorEditForm {
     	this.tutorId = tutor.getId();
 		this.bio = tutor.getBio();
 		this.fee = tutor.getFee();
-		this.classList = new LinkedList<Classes>(tutor.getClasses());
+		this.classList = new LinkedList<CompletedClassesPrototype>(classesService.toPrototype(tutor.getClasses()));
 		this.studyCourseList = new LinkedList<StudyCourse>(tutor.getCourses());
 	}
 
@@ -120,11 +120,11 @@ public class TutorEditForm {
 		this.studyCourseList = studyCourseList;
 	}
 
-	public List<Classes> getClassList() {
+	public List<CompletedClassesPrototype> getClassList() {
 		return classList;
 	}
 
-	public void setClassList(List<Classes> classList) {
+	public void setClassList(List<CompletedClassesPrototype> classList) {
 		this.classList = classList;
 	}
 

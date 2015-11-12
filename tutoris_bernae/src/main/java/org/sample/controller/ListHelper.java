@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.sample.controller.pojos.CompletedClassesPrototype;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 
@@ -22,15 +23,15 @@ public class ListHelper {
 		return studyCourseList;
 	}
 	
-	public static List<Classes> handleClassList(HttpServletRequest request, List<Classes> classList) {
+	public static List<CompletedClassesPrototype> handleClassList(HttpServletRequest request, List<CompletedClassesPrototype> classList) {
 		if(classList == null)
-			classList = new LinkedList<Classes>();
+			classList = new LinkedList<CompletedClassesPrototype>();
 		String removeClass = request.getParameter("removeClass");
 		if(removeClass != null)
 			classList.remove(Integer.parseInt(removeClass));
 		String addRow = request.getParameter("addClass");
 		if(addRow != null)
-			classList.add(new Classes());
+			classList.add(new CompletedClassesPrototype());
 		return classList;
 	}
 

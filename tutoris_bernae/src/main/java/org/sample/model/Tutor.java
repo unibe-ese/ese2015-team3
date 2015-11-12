@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
@@ -22,7 +23,6 @@ import org.hibernate.annotations.Type;
 @Entity
 public class Tutor implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	
     @Id
     @GeneratedValue
@@ -39,8 +39,8 @@ public class Tutor implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<StudyCourse> courses; //Studiengang
 
-	@ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-    private Set<Classes> classes;
+	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+    private Set<CompletedClasses> classes;
 
     
 	public Long getId() {
@@ -67,11 +67,11 @@ public class Tutor implements Serializable {
 		this.courses = courses;
 	}
 
-	public Set<Classes> getClasses() {
+	public Set<CompletedClasses> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(Set<Classes> classes) {
+	public void setClasses(Set<CompletedClasses> classes) {
 		this.classes = classes;
 	}
 

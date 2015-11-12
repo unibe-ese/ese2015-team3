@@ -118,8 +118,8 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
     }
 
     @Test
-    public void submitSearch() throws Exception {
-        mockMvc.perform(post("/submitSearch").param("fee", "80.00").param("studyCourseId", "0").param("classesId", "0"))
+    public void submitAnySearch() throws Exception {
+        mockMvc.perform(post("/submitSearch").param("fee", "80.00"))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("tutors"))
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
@@ -127,7 +127,7 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
     
     @Test
     public void noSearchResults() throws Exception {
-        mockMvc.perform(post("/submitSearch").param("fee", "1.00").param("studyCourseId", "0").param("classesId", "0"))
+        mockMvc.perform(post("/submitSearch").param("fee", "1.00"))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_NORESULTS)));
     }
@@ -138,7 +138,7 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
     	//We expect tutor1 and 2 because their fee is between 0 and 40 (20 for tutor 1, 40 for tutor 2)
     	expectedTutors.add(tutor1);
     	expectedTutors.add(tutor2);
-        mockMvc.perform(post("/submitSearch").param("fee", "40.00").param("studyCourseId", "0").param("classesId", "0"))
+        mockMvc.perform(post("/submitSearch").param("fee", "40.00"))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
@@ -149,7 +149,7 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
     	Set<Tutor> expectedTutors = new HashSet<Tutor>();
     	expectedTutors.add(tutor3);
     	expectedTutors.add(tutor1);
-        mockMvc.perform(post("/submitSearch").param("fee", "").param("studyCourseId", course1.getId().toString()).param("classesId", "0"))
+        mockMvc.perform(post("/submitSearch").param("studyCourseId", course1.getId().toString()))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
@@ -160,7 +160,7 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
     	Set<Tutor> expectedTutors = new HashSet<Tutor>();
     	expectedTutors.add(tutor2);
     	expectedTutors.add(tutor1);
-        mockMvc.perform(post("/submitSearch").param("fee", "").param("studyCourseId", "0").param("classesId", classes1.getId().toString()))
+        mockMvc.perform(post("/submitSearch").param("classesId", classes1.getId().toString()))
                 .andExpect(status().isOk()).andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
@@ -175,17 +175,7 @@ public class SearchControllerIntegrationTest extends ControllerIntegrationTest{
                 .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
                 .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
     }
-    
-    @Test
-    public void searchByMultipleCriteriaOnesMatch() throws Exception {
-    	Set<Tutor> expectedTutors = new HashSet<Tutor>();
-    	expectedTutors.add(tutor3);
-        mockMvc.perform(post("/submitSearch").param("fee", "").param("studyCourseId", course1.getId().toString()).param("classesId", classes2.getId().toString()))
-                .andExpect(status().isOk()).andExpect(model().hasNoErrors())
-                .andExpect(model().attribute("tutors", Matchers.is(expectedTutors)))
-                .andExpect(forwardedUrl(completeUrl(SearchController.PAGE_RESULTS)));
-    }
-    
+        
     @Test
     public void searchByMultipleCriteriaTwoMatches() throws Exception {
     	Set<Tutor> expectedTutors = new HashSet<Tutor>();

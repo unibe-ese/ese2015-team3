@@ -11,13 +11,16 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody id="personListContainer">
+                <tbody id="classListContainer">
                     <c:forEach items="${tutorForm.classList}" var="classes" varStatus="i" begin="0" >
-                        <tr class="studyCourse">    
-                            <td><form:input path="classList[${i.index}].name" id="name${i.index}" /></td>
+                        <tr class="classList">    
+                        <td><form:select path="classList[${i.index}].classesId" id="classesId${i.index}" value = "classList[${i.index}].classesId">
+					  	<form:options items="${allClasses}" itemValue="id" itemLabel="name" />
+				       	</form:select></td>
+                            
                             <td><form:input path="classList[${i.index}].grade" id="grade${i.index}" /></td>
                             <td><button type="submit" name="removeClass" value="${i.index}">remove it</button></td>
-                              </tr>
+                            </tr>
                     </c:forEach>
                     
                 </tbody>

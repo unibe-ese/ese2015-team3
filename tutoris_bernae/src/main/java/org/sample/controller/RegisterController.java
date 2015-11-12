@@ -15,6 +15,7 @@ import org.sample.controller.service.RegisterFormService;
 import org.sample.controller.service.SearchService;
 import org.sample.controller.service.TutorFormService;
 import org.sample.model.User;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ public class RegisterController {
 	
     @Autowired
     private StudyCourseDao studyCourseDao;
+    @Autowired
+    private ClassesDao classesDao;
 	@Autowired
 	private RegisterFormService registerFormService;
 	@Autowired
@@ -117,6 +120,7 @@ public class RegisterController {
     	TutorForm tutorForm = new TutorForm();
     	tutorForm.setUserId(id);
     	model.addObject("tutorForm", tutorForm);
+    	model.addObject("allClasses", classesDao.findAll());
         model.addObject("studyCourseList", studyCourseDao.findAll());
         return model;
     }
@@ -136,6 +140,7 @@ public class RegisterController {
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	model.addObject("tutorForm", tutorForm);
+    	model.addObject("allClasses", classesDao.findAll());
     	return model;
     }
     
@@ -160,6 +165,7 @@ public class RegisterController {
         }
         else{ model = new ModelAndView("tutorregistration");
             model.addObject("tutorForm", tutorForm);
+            model.addObject("allClasses", classesDao.findAll());
         }
         return model;
 

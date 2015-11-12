@@ -7,8 +7,8 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 
 /**
@@ -31,7 +31,7 @@ public class TutorForm {
     private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
     private Long classes;
-    private List<Classes> classList = new LinkedList<Classes>();
+    private List<CompletedClassesPrototype> classList = new LinkedList<CompletedClassesPrototype>();
     
     @NotEmpty
     private String bio;
@@ -60,11 +60,11 @@ public class TutorForm {
 		this.studyCourseList = studyCourseList;
 	}
 
-	public List<Classes> getClassList() {
+	public List<CompletedClassesPrototype> getClassList() {
 		return classList;
 	}
 
-	public void setClassList(List<Classes> classList) {
+	public void setClassList(List<CompletedClassesPrototype> classList) {
 		this.classList = classList;
 	}
 

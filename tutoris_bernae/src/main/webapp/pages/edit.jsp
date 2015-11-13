@@ -8,7 +8,7 @@
 
 <c:import url="template/function.jsp" />
 <h1>Edit profile!</h1>
-<form:form method="post" modelAttribute="editForm" action="submitEdit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
+<form:form method="post" modelAttribute="editForm" action="editSubmit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
         <legend>You can alter any field</legend>
 		<form:input path="userId" type="hidden" value="${user.id}"/>

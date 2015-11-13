@@ -10,9 +10,11 @@ import javax.validation.constraints.Digits;
 public class SearchForm {
     
     private long id;
-
-    private Long studyCourseId;
-    private Long classesId;
+    
+    //Standard values to avoid null cluttering in the code
+    //0 is not used by the framework as an id, so searching for it will always return nothing
+    private Long studyCourseId = 0L;
+    private Long classesId = 0L;
     
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;

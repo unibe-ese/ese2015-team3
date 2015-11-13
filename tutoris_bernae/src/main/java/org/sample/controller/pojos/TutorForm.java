@@ -31,7 +31,7 @@ public class TutorForm {
     private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
     private Long classes;
-    private List<CompletedClassesPrototype> classList = new LinkedList<CompletedClassesPrototype>();
+    private List<CompletedClasses> classList = new LinkedList<CompletedClasses>();
     
     @NotEmpty
     private String bio;
@@ -60,11 +60,11 @@ public class TutorForm {
 		this.studyCourseList = studyCourseList;
 	}
 
-	public List<CompletedClassesPrototype> getClassList() {
+	public List<CompletedClasses> getClassList() {
 		return classList;
 	}
 
-	public void setClassList(List<CompletedClassesPrototype> classList) {
+	public void setClassList(List<CompletedClasses> classList) {
 		this.classList = classList;
 	}
 

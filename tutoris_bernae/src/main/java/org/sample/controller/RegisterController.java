@@ -14,6 +14,9 @@ import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.controller.service.SearchService;
 import org.sample.controller.service.TutorFormService;
+import org.sample.model.Classes;
+import org.sample.model.ClassesEditor;
+import org.sample.model.CompletedClasses;
 import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
@@ -24,10 +27,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,6 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  *
  */
 @Controller
+//@SessionAttributes(types = TutorForm.class)
 public class RegisterController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
@@ -51,6 +58,11 @@ public class RegisterController {
 	private TutorFormService tutorFormService;
 	@Autowired
 	private UserDao userDao;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
+	}
 	
     /**
      * Creates the register page for users with a register form. This is 
@@ -133,6 +145,7 @@ public class RegisterController {
      * @return ModelAndView with ViewName "tutorregistration" and ModelAttribute "tutorForm", the given TutortForm
      * with updated lists
      */
+
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST)
     public ModelAndView updateListsForTutorForm(HttpSession session,HttpServletRequest request,@ModelAttribute TutorForm tutorForm) {
     	ModelAndView model = new ModelAndView("tutorregistration");

@@ -1,7 +1,6 @@
 package org.sample.test.service;
 
 import org.sample.controller.exceptions.InvalidUserException;
-import org.sample.controller.pojos.CompletedClassesPrototype;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.service.EditFormService;

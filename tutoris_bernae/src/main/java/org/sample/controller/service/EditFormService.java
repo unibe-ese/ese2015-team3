@@ -7,6 +7,7 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -31,7 +32,6 @@ public class EditFormService{
     @Autowired TutorDao tutorDao;
     @Autowired StudyCourseDao studyCourseDao;
     @Autowired ClassesDao classesDao;
-    @Autowired ClassesService classesService;
   
     /**
      * Saves the user with his changed details given by the EditForm to the database
@@ -80,7 +80,7 @@ public class EditFormService{
 		user.setUsername(username);
 		user = userDao.save(user);		// it automatically updates user (based on id)
 		Tutor tutor = tutorDao.findOne(editForm.getTutorId());
-		tutor.setClasses(classesService.toCompletedClasses(editForm.getClassList()));
+		tutor.setClasses(new HashSet<CompletedClasses>(editForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(editForm.getStudyCourseList()));
 		tutor.setBio(editForm.getBio());
 		tutor.setFee(editForm.getFee());

@@ -1,7 +1,4 @@
-
 package org.sample.controller;
-
-import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -9,19 +6,19 @@ import javax.validation.Valid;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
-import org.sample.controller.service.ClassesService;
 import org.sample.controller.service.EditFormService;
-import org.sample.controller.service.RegisterFormService;
+import org.sample.model.Classes;
+import org.sample.model.ClassesEditor;
 import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,8 +44,12 @@ public class EditController {
 	@Autowired
 	private EditFormService editFormService;
 	
-	@Autowired
-	private ClassesService classesService;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
+	}
+	
 	
 	/**
 	 * Creates a page with an editing form for a normal user or a tutor,
@@ -64,7 +65,7 @@ public class EditController {
 		User user = userDao.findByUsername(name);
 		if(user.isTutor()) {
 			ModelAndView model = new ModelAndView("editTutor");
-			model.addObject("tutorForm", new TutorEditForm(user, user.getTutor(), classesService));
+			model.addObject("tutorForm", new TutorEditForm(user, user.getTutor()));
 			model.addObject("allClasses", classesDao.findAll());
 			return model;
 		}
@@ -118,6 +119,7 @@ public class EditController {
     @RequestMapping(value = "/editTutorSubmit", method = RequestMethod.POST)
     public ModelAndView editTutorProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes, HttpServletRequest request) {
+ 
     	ModelAndView model = new ModelAndView("editTutor");
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));

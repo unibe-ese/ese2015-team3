@@ -27,10 +27,10 @@ public class TutorForm {
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 
-    private Long studyCourse;
+    
     private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
-    private Long classes;
+  
     private List<CompletedClasses> classList = new LinkedList<CompletedClasses>();
     
     @NotEmpty

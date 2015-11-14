@@ -25,10 +25,7 @@ public class StudyCourse implements Serializable {
 
     private String name;
     private String faculty; //maybe?
-    // Not working; Cannot save tutor form with that (detached entity..)
-    @ManyToMany(cascade = {CascadeType.ALL})
-    private Set<Tutor> tutor;
-   
+
     /*
     @OneToMany(cascade = {CascadeType.ALL})
     private Set<Classes> classes;
@@ -81,7 +78,6 @@ public class StudyCourse implements Serializable {
 		result = prime * result + ((faculty == null) ? 0 : faculty.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((tutor == null) ? 0 : tutor.hashCode());
 		return result;
 	}
 
@@ -108,11 +104,6 @@ public class StudyCourse implements Serializable {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (tutor == null) {
-			if (other.tutor != null)
-				return false;
-		} else if (!tutor.equals(other.tutor))
 			return false;
 		return true;
 	}

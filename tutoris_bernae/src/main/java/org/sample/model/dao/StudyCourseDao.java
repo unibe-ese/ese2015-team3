@@ -19,12 +19,4 @@ public interface StudyCourseDao extends CrudRepository<StudyCourse,Long> {
 	 */
 	public StudyCourse findByNameLike(String string);
 
-	/**
-	 * Searches the database for an element related to the tutor, whose biography contains the parameter.
-	 * 
-	 * @param string
-	 * @return StudyCourse for the tutor, whose biography contains the string.
-	 */
-	public StudyCourse findByTutorBioLike(String string);
-
 }

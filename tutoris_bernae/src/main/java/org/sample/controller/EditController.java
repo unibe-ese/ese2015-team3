@@ -9,8 +9,11 @@ import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
 import org.sample.model.ClassesEditor;
+import org.sample.model.StudyCourse;
+import org.sample.model.StudyCourseEditor;
 import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
+import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -38,6 +41,9 @@ public class EditController {
     @Autowired
     private ClassesDao classesDao;
     
+    @Autowired
+    private StudyCourseDao studyCourseDao;
+    
 	@Autowired
 	private UserDao userDao;
 	
@@ -48,6 +54,7 @@ public class EditController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
+		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));
 	}
 	
 	
@@ -63,11 +70,8 @@ public class EditController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String name = authentication.getName();
 		User user = userDao.findByUsername(name);
-		if(user.isTutor()) {
-			ModelAndView model = new ModelAndView("editTutor");
-			model.addObject("tutorForm", new TutorEditForm(user, user.getTutor()));
-			model.addObject("allClasses", classesDao.findAll());
-			return model;
+		if(user.isTutor()) {	
+			return createTutorEditFormPage(new TutorEditForm(user, user.getTutor()));
 		}
 		else {
 			ModelAndView model = new ModelAndView("edit");
@@ -76,6 +80,14 @@ public class EditController {
 		}
 	}
 	
+	public ModelAndView createTutorEditFormPage(TutorEditForm form)
+	{
+		ModelAndView model = new ModelAndView("editTutor");
+		model.addObject("tutorForm", form);
+		model.addObject("allClasses", classesDao.findAll());
+		model.addObject("allCourses", studyCourseDao.findAll());
+		return model;
+	}
     /**
      * Saves the edited Profile informations for a user, and shows a success page ("editDone"). If the 
      * entered information weren't complete or wrong the user is directed back to the edit page.
@@ -119,13 +131,9 @@ public class EditController {
     @RequestMapping(value = "/editTutorSubmit", method = RequestMethod.POST)
     public ModelAndView editTutorProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
     						RedirectAttributes redirectAttributes, HttpServletRequest request) {
- 
-    	ModelAndView model = new ModelAndView("editTutor");
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
-    	model.addObject("tutorForm", tutorForm);
-    	model.addObject("allClasses", classesDao.findAll());
-    	return model;
+    	return createTutorEditFormPage(tutorForm);
     }
 
     /**
@@ -151,14 +159,12 @@ public class EditController {
             	editFormService.saveFrom(tutorForm);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {
-            	model = new ModelAndView("editTutor");
-            	model.addObject("tutorForm", tutorForm);
-            	model.addObject("allClasses", classesDao.findAll());
+            	model = createTutorEditFormPage(tutorForm);
             	model.addObject("page_error", e.getMessage());
+            	return model;
             }
         } else {
-          	model = new ModelAndView("editTutor");
-        	model.addObject("tutorForm", tutorForm);
+        	return createTutorEditFormPage(tutorForm);
         }   	
     	return model;
     }

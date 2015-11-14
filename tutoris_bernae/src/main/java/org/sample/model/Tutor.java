@@ -38,7 +38,7 @@ public class Tutor implements Serializable {
     @Type(type="text")
     private String bio;
     
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<StudyCourse> courses; //Studiengang
 
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
@@ -85,7 +85,6 @@ public class Tutor implements Serializable {
 		this.fee = fee;
 	}
 	
-    
     public String getBio() {
 		return bio;
 	}

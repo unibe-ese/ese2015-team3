@@ -8,7 +8,6 @@
                     <tr>
                         <th>Class name</th>
                         <th>Grade</th>
-                        <th>${tutorForm.classList[1].classes.id}</th>
                     </tr>
                 </thead>
                 <tbody id="classListContainer">
@@ -17,7 +16,6 @@
                         <td><form:select path="classList[${i.index}].classes" id="classesId${i.index}" value="${tutorForm.classList[i.index].classes.id}">
 					  	<form:options items="${allClasses}" itemLabel="name" itemValue="id"/>
 				       	</form:select></td>
-                            <td>${tutorForm.classList[i.index].classes.id}</td>
                             <td><form:input path="classList[${i.index}].grade" id="grade${i.index}" /></td>
                             <td><button type="submit" name="removeClass" value="${i.index}">remove it</button></td>
                             </tr>

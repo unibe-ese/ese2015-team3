@@ -34,7 +34,7 @@ public class TutorEditForm {
     @DecimalMin(value="1")
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
-
+    
     private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
     private List<CompletedClasses> classList = new LinkedList<CompletedClasses>();
@@ -151,4 +151,5 @@ public class TutorEditForm {
 	public void setTutorId(Long tutorId) {
 		this.tutorId = tutorId;
 	}
+
 }

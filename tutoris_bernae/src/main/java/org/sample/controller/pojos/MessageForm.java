@@ -27,6 +27,10 @@ public class MessageForm {
 
 	}
 
+	public MessageForm(String reciever) {
+		this.reciever = reciever;
+	}
+
 	public String getReciever() {
 		return reciever;
 	}

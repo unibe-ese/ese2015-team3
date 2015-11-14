@@ -13,7 +13,6 @@ import org.hibernate.annotations.Type;
 /**
  * A message send form one user to another
  * @author pf15ese
- *
  */
 
 @Entity

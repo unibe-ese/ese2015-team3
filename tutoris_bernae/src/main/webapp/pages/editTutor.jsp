@@ -8,7 +8,7 @@
 
 <c:import url="template/function.jsp" />
 <h1>Edit profile!</h1>
-<form:form method="post" modelAttribute="tutorForm" action="editTutorsubmit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
+<form:form method="post" modelAttribute="tutorForm" action="editTutorSubmit" id="editForm" cssClass="form-horizontal"  autocomplete="off">
 
     <fieldset>
         <legend>You can alter any field</legend>

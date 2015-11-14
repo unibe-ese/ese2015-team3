@@ -66,6 +66,13 @@
 			 <a
 					href="/tutoris_baernae/profile">Profile</a>
 			</h1></li>
+			<li class="current">		
+								
+							<h1>
+			 <a
+					href="/tutoris_baernae/messageInbox">Messages</a>
+			</h1></li>
+		
 		</c:if></sec:authorize>
 								<sec:authorize access="!hasAnyRole('ROLE_USER','ROLE_TUTOR')">
 								<li class="current">		

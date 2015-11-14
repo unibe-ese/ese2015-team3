@@ -13,7 +13,7 @@
 		
 		<p><textBox>Bio: ${tutor.bio}</textbox></p>
 		<p>Fee: ${tutor.fee}</p>
-
+<p><a href="/tutoris_baernae/messageNewTo?reciever=${tutor.student.username}">Contact</a></p>
 
 
 <c:if test="${page_error != null }">

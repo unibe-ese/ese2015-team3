@@ -20,12 +20,7 @@
 		<sec:authorize access="hasRole('ROLE_TUTOR')">
 		<p>Bio: ${tutor.bio}</p>
 		<p>Fee: ${tutor.fee}</p>
-		  <c:forEach items="${tutor.classes}" var="class">
-        <li><p>${class.name}, ${class.grade} </p></li>
-    </c:forEach>
-    		  <c:forEach items="${tutor.courses}" var="course">
-        <li><p>${course.name}, ${course.faculty} </p></li>
-    </c:forEach>
+
 		</sec:authorize>
 
 

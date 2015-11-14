@@ -28,8 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- * Updates users which are probably also tutors with the information given
- * by either an editForm (for normal users) or a TutorEditForm (for user with tutor profile)
+ * Offers services to load messages, to send (by saving them to the database) and 
+ * to "read" them
  * @author pf15ese
  */
 @Service
@@ -41,8 +41,7 @@ public class MessageService{
   
     
     /**
-     * Compares to date to order them from newest to oldest
-     *
+     * Compares messages by date to order them from newest to oldest
      */
    public static Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
@@ -90,6 +89,12 @@ public class MessageService{
     	return messageForm;
     }
 
+	/**
+	 * "Reads" a message by returning it and setting the wasRead variabel of
+	 * the message to true in the database
+	 * @param messageId a Long definig the message we want to read
+	 * @return the Message given by the id with wasRead = true
+	 */
 	public Message read(Long messageId) {
 		Message opened = messageDao.findOne(messageId);
 		opened.setWasRead(true);

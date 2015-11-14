@@ -25,7 +25,7 @@
         <div class="control-group<c:if test="${not empty messageSubjectErrors}"> error</c:if>">
             <label class="control-label" for="field-messageSubject">Subject</label>
             <div class="controls">
-                <form:input path="messageSubject" id="field-messageSubject" tabindex="2" maxlength="35" placeholder="First Name"/>
+                <form:input path="messageSubject" id="field-messageSubject" tabindex="2" maxlength="35" placeholder="Subject"/>
                 <form:errors path="messageSubject" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="control-group<c:if test="${not empty messageTextErrors}"> error</c:if>">
             <label class="control-label" for="field-messageText">Message</label>
             <div class="controls">
-                <form:Textarea path="messageText" type = "text" id="field-messageText" tabindex="3" maxlength="35" placeholder="Text"/>
+                <form:textarea path="messageText" type = "text" id="field-messageText" tabindex="3" maxlength="35" placeholder="Text"/>
                 <form:errors path="messageText" cssClass="help-inline" element="span"/>
             </div>
         </div>

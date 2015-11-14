@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Shows the profile of the logged in user or tutor
+ * Allows the user to see the messages he received and writing new ones
  * @author pf15ese
  */
 @Controller
@@ -34,12 +34,11 @@ private MessageDao messageDao;
 @Autowired
 private MessageService messageService;
 	
+	
 	/**
-	 * Creates a page with all user informations of the current logged in user. If the user is also a tutor
-	 * all tutor informations are added to the page as well
-	 * @return ModelAndView with ViewName "profile" and ModelAttribute "user", the logged in user
-	 * and if the user was a tutor there exist the ModelAttribute "tutor" the logged in users tutor
-	 * informations
+	 * Creates a page with all messages that the logged in user recieved
+	 * @return ModelAndView with ViewName "messageInbox" and modelattribute "user", the logged in user,
+	 * and "messages" all his messages
 	 */
 	@RequestMapping(value = "/messageInbox", method = RequestMethod.GET)
 	public ModelAndView showMessageInbox() {
@@ -50,13 +49,13 @@ private MessageService messageService;
 		 return model;
 	}
 
-	private User getUserFromSecurityContext() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	     String name = authentication.getName();
-		 User user = userDao.findByUsername(name);
-		return user;
-	}
-	
+	/**
+	 * Creates a page with one selected message given by the parameter 
+	 * and all other messages that the logged in user recieved
+	 * @param messageId Long the id of the message that should be under the "selectedMessage" attribute
+	 * @return ModelAndView with ViewName "messageInbox" and modelattribute "user", the logged in user,
+	 * "selectedMessage" the message given by the messageId and "messages" all his messages
+	 */
 	@RequestMapping(value = "/messageInboxShow", method = RequestMethod.GET)
 	public ModelAndView showSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId) {
 		ModelAndView model;
@@ -71,28 +70,17 @@ private MessageService messageService;
 			return model;
 		}
 	}
-
-	private ModelAndView createInboxPage(User user) {
-		ModelAndView model;
-		model = new ModelAndView("messageInbox");
-		model.addObject("messages", messageService.getOrderedMessagesList(user));
-		return model;
-	}
-	
-	private ModelAndView createAnswerPage(User user, MessageForm messageForm) {
-		ModelAndView model;
-		model = new ModelAndView("messageAnswer");
-		model.addObject("messages", messageService.getOrderedMessagesList(user));
-		model.addObject("messageForm", messageForm);
-		return model;
-	}
 	
 	
 	/**
-	 * an
-	 * @param messageId
-	 * @param session
-	 * @return
+	 * Creates a page with a message form to answer one selected message given by the parameter 
+	 * and all other messages that the logged in user recieved
+	 * @param messageId Long the id of the message that we want to answer to and that 
+	 * should be under the "selectedMessage" attribute
+	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" a prefilled message form
+	 * suited to the message we want too answer to, "user", the logged in user,
+	 * "selectedMessage" the message given by the messageId and "messages" all his messages
+	 * Also stores the message we answer to in the session under "answeredMessage"
 	 */
 	@RequestMapping(value = "/messageInboxAnswer", method = RequestMethod.GET)
 	public ModelAndView answerSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId, HttpSession session) {
@@ -110,6 +98,28 @@ private MessageService messageService;
 		}
 	}
 	
+	/**
+	 * Creates a page with a message form to answer one selected message given by the parameter 
+	 * and all other messages that the logged in user recieved
+	 * @param reciver a String of the username that we want to contact via a message
+	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" a prefilled message form
+	 * suited to the reciever we want to write to, "user", the logged in user,
+	 * and "messages" all his messages
+	 */
+	@RequestMapping(value = "/messageNewTo", method = RequestMethod.GET)
+	public ModelAndView writeNewMessage(@RequestParam(value = "reciever", required = true) String reciever) {
+		ModelAndView model;
+		User user = getUserFromSecurityContext();
+		model = createAnswerPage(user,new MessageForm(reciever));
+		return model;
+	}
+	
+	/**
+	 * Creates a page with a message form to write a message to anyone.
+	 * Also has all  messages that the logged in user recieved
+	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" an empty message form
+	 * "user", the logged in user, and "messages" all his messages
+	 */
 	@RequestMapping(value = "/messageNew", method = RequestMethod.GET)
 	public ModelAndView writeNewMessage() {
 		ModelAndView model;
@@ -118,6 +128,19 @@ private MessageService messageService;
 		return model;
 	}
 	
+	
+	/**
+	 * Saves (sends) a message and displays a success message back on the messageInbox page. Returns to the
+	 * messageAnswer page if the form is not filled out correctly. Also deletes the sessionattribute "answeredMessaged"
+	 * if the message could be sent. 
+	 * @param messageForm a Valid MessageForm
+	 * @param result
+	 * @param session
+	 * @return a new ModelAndView with ViewName "messageInbox", a modelattribute "submitMessage", a success message
+	 * "user", the logged in user, and "messages" all his messages. Or if the form was not filled correctly
+	 * a ModelAndView with ViewName "messageAnswer", and the modelattributes "submitMessage", a message with informations about 
+	 * the fault, "messageForm" a messageForm and "user", the logged in user, and "messages"
+	 */
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST)
 	public ModelAndView submitMessage(@Valid MessageForm messageForm, BindingResult result,HttpSession session) {
 		User user = getUserFromSecurityContext();
@@ -138,5 +161,27 @@ private MessageService messageService;
         	return createAnswerPage(user,messageForm);
         }   	
     }
+	
+	private ModelAndView createInboxPage(User user) {
+		ModelAndView model;
+		model = new ModelAndView("messageInbox");
+		model.addObject("messages", messageService.getOrderedMessagesList(user));
+		return model;
+	}
+	
+	private ModelAndView createAnswerPage(User user, MessageForm messageForm) {
+		ModelAndView model;
+		model = new ModelAndView("messageAnswer");
+		model.addObject("messages", messageService.getOrderedMessagesList(user));
+		model.addObject("messageForm", messageForm);
+		return model;
+	}
+	
+	private User getUserFromSecurityContext() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	     String name = authentication.getName();
+		 User user = userDao.findByUsername(name);
+		return user;
+	}
 	
 }

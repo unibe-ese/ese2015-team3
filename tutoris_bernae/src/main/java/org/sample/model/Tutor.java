@@ -131,16 +131,6 @@ public class Tutor implements Serializable {
 				return false;
 		} else if (!bio.equals(other.bio))
 			return false;
-		if (completedClasses == null) {
-			if (other.completedClasses != null)
-				return false;
-		} else if (!completedClasses.equals(other.completedClasses))
-			return false;
-		if (courses == null) {
-			if (other.courses != null)
-				return false;
-		} else if (!courses.equals(other.courses))
-			return false;
 		if (fee == null) {
 			if (other.fee != null)
 				return false;
@@ -150,11 +140,6 @@ public class Tutor implements Serializable {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (student == null) {
-			if (other.student != null)
-				return false;
-		} else if (!student.equals(other.student))
 			return false;
 		return true;
 	}

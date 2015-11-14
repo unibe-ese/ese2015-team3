@@ -84,19 +84,4 @@ public class TutorForm {
 		this.userId = userId;
 	}
 
-	public Long getStudyCourse() {
-		return studyCourse;
-	}
-
-	public void setStudyCourse(Long studyCourse) {
-		this.studyCourse = studyCourse;
-	}
-
-	public Long getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Long classes) {
-		this.classes = classes;
-	}
 }

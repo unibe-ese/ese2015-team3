@@ -102,6 +102,17 @@ public class Tutor implements Serializable {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((averageGrade == null) ? 0 : averageGrade.hashCode());
+		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
+		result = prime * result + ((fee == null) ? 0 : fee.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -110,13 +121,41 @@ public class Tutor implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Tutor other = (Tutor) obj;
+		if (averageGrade == null) {
+			if (other.averageGrade != null)
+				return false;
+		} else if (!averageGrade.equals(other.averageGrade))
+			return false;
+		if (bio == null) {
+			if (other.bio != null)
+				return false;
+		} else if (!bio.equals(other.bio))
+			return false;
+		if (completedClasses == null) {
+			if (other.completedClasses != null)
+				return false;
+		} else if (!completedClasses.equals(other.completedClasses))
+			return false;
+		if (courses == null) {
+			if (other.courses != null)
+				return false;
+		} else if (!courses.equals(other.courses))
+			return false;
+		if (fee == null) {
+			if (other.fee != null)
+				return false;
+		} else if (!fee.equals(other.fee))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (student == null) {
+			if (other.student != null)
+				return false;
+		} else if (!student.equals(other.student))
+			return false;
 		return true;
 	}
-
-
 }

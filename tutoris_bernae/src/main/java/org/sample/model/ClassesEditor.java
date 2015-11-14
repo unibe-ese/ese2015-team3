@@ -1,17 +1,8 @@
 package org.sample.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.beans.PropertyEditorSupport;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import org.sample.controller.pojos.CompletedClassesPrototype;
-import org.sample.model.dao.*;
+import org.sample.model.dao.ClassesDao;
 
 /**
  * Offers Services for accessing classDao. Can also convert prototypes to real classes and back.

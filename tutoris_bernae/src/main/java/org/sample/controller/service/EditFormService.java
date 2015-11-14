@@ -32,6 +32,7 @@ public class EditFormService{
     @Autowired TutorDao tutorDao;
     @Autowired StudyCourseDao studyCourseDao;
     @Autowired ClassesDao classesDao;
+	@Autowired CompletedClassesService completedClassesService;
   
     /**
      * Saves the user with his changed details given by the EditForm to the database
@@ -80,8 +81,9 @@ public class EditFormService{
 		user.setUsername(username);
 		user = userDao.save(user);		// it automatically updates user (based on id)
 		Tutor tutor = tutorDao.findOne(editForm.getTutorId());
-		tutor.setClasses(new HashSet<CompletedClasses>(editForm.getClassList()));
+		tutor.setCompletedClasses(new HashSet<CompletedClasses>(editForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(editForm.getStudyCourseList()));
+		tutor.setAverageGrade(completedClassesService.calculateAverageGrade(editForm.getClassList()));
 		tutor.setBio(editForm.getBio());
 		tutor.setFee(editForm.getFee());
 		tutor = tutorDao.save(tutor);

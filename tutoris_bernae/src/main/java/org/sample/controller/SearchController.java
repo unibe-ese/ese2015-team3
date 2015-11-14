@@ -79,8 +79,6 @@ public class SearchController {
             }
             else{
             model = new ModelAndView(PAGE_RESULTS);
-            model.addObject("classe", searchService.getClasseName(searchForm));
-            model.addObject("grades", searchService.getClasseGrade(searchForm));
             model.addObject("tutors",tutors);}
             
         }

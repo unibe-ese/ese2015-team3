@@ -35,7 +35,7 @@ public class TutorEditForm {
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 
-    private List<StudyCourse> studyCourseList; //Studiengang
+    private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
     private List<CompletedClasses> classList = new LinkedList<CompletedClasses>();
     
@@ -60,7 +60,7 @@ public class TutorEditForm {
     	this.tutorId = tutor.getId();
 		this.bio = tutor.getBio();
 		this.fee = tutor.getFee();
-		this.classList = new LinkedList<CompletedClasses>(tutor.getClasses());
+		this.classList = new LinkedList<CompletedClasses>(tutor.getCompletedClasses());
 		this.studyCourseList = new LinkedList<StudyCourse>(tutor.getCourses());
 	}
 

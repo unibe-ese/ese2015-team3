@@ -52,10 +52,11 @@ public class SearchService {
         //Add the list of results form all criterias that we searched for
         //Obviously if the criteria is null it wasn't filled out in the form and we don't ask for it
         if(courseCriteria!=null){
-        	 searchResults.add((List<Tutor>) tutorDao.findByCoursesLike(courseCriteria));
+        	searchResults.add((List<Tutor>) tutorDao.findByCoursesLike(courseCriteria));
         }
+        
         if(classCriteria!=null){
-        	searchResults.add((List<Tutor>) tutorDao.findByClassesLike(classCriteria));
+        	searchResults.add((List<Tutor>) tutorDao.findByCompletedClassesClassesLike(classCriteria));
         }
         if(fee!= null){
         	 searchResults.add((List<Tutor>) tutorDao.findByFeeBetween(new BigDecimal(0),fee));

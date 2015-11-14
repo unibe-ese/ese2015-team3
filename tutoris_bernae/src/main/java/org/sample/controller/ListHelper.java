@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.sample.controller.pojos.CompletedClassesPrototype;
-import org.sample.model.Classes;
 import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 

@@ -1,14 +1,18 @@
 package org.sample.model;
 
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import org.sample.model.dao.ClassesDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Models the classes that a tutor can register.
@@ -17,29 +21,42 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Entity
 public class CompletedClasses {
+
 	//Currently not in use but could be required for more granular searches.
 	@Id
 	@GeneratedValue
 	private Long id;
-
-	@OneToOne
+	
+	@ManyToOne
 	private Classes classes;
 
-	private Integer grade;
+	private BigDecimal grade;
 
 	public CompletedClasses(){}
 
 	public CompletedClasses(Classes classes, Integer grade) {
 		this.classes=classes;
+		this.grade=new BigDecimal(grade);
+	}
+	
+	public CompletedClasses(Classes classes,  BigDecimal grade) {
+		this.classes=classes;
 		this.grade=grade;
 	}
 
+	public Long getId() {
+		return id;
+	}
 
-	public Integer getGrade() {
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public BigDecimal getGrade() {
 		return grade;
 	}
 
-	public void setGrade(Integer grade) {
+	public void setGrade(BigDecimal grade) {
 		this.grade = grade;
 	}
 
@@ -87,6 +104,13 @@ public class CompletedClasses {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "CompletedClasses [id=" + id + ", classes=" + classes + ", grade=" + grade + "]";
+	}
+
+
 	
 	
 

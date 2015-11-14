@@ -5,8 +5,10 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.sample.controller.exceptions.InvalidTutorException;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
+import org.sample.controller.service.CompletedClassesService;
 import org.sample.controller.service.TutorFormService;
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -28,6 +30,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.reset;
 
@@ -42,9 +45,7 @@ import org.mockito.stubbing.Answer;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader=AnnotationConfigContextLoader.class)
 public class TutorFormServiceTest {
-private List<Classes> classes = new LinkedList<Classes>();
-private List<StudyCourse> courses = new LinkedList<StudyCourse>();
-private User testUser = new User();
+	
 	@Configuration
     static class ContextConfiguration {
 
@@ -64,8 +65,15 @@ private User testUser = new User();
             TutorFormService tutorFormService = new TutorFormService();
             return tutorFormService;
         }
+		@Bean
+		public CompletedClassesService completedClassesServiceMock() {
+			CompletedClassesService completedClassesServiceMock = mock(CompletedClassesService.class);
+			return completedClassesServiceMock;
+		}
     }
-	
+	@Qualifier("completedClassesServiceMock")
+	@Autowired
+	private CompletedClassesService completedClassesServiceMock;
 	@Autowired
     private TutorFormService tutorFormService;
 	@Qualifier("tutorDaoMock")
@@ -76,73 +84,49 @@ private User testUser = new User();
 	private UserDao userDao;
 	
     @Test
-    public void CorrectDataSaved() {
-
+    public void TutorFormCorrectDataSaved() {
         TutorForm tutorForm = new TutorForm();
-        
-        for(int i = 0;i<2;i++)
-        {
-        	StudyCourse course = new StudyCourse();
-        	course.setName("Course "+i);
-        	course.setFaculty("Faculty "+i);
-        	courses.add(course);
-        }
-        
-        for(int i = 0;i<3;i++)
-        {
-        	Classes nextClass = new Classes();
-        	nextClass.setName("Class"+i);
-        	//nextClass.setStudyCourse(courses.get(i%2));
-        	nextClass.setGrade(i+2);
-        	classes.add(nextClass);
-        }
-        
-        tutorForm.setFee(new BigDecimal(20.50));
-        tutorForm.setStudyCourseList(courses);
-        tutorForm.setClassList(classes);
-        tutorForm.setBio("I am awesome");
-        tutorForm.setUserId(1L);
-        Tutor newTutor = new Tutor();
+        User user = new User();
+        Classes classes1 = new Classes();
+        CompletedClasses completedClasses1 = new CompletedClasses(classes1, 5);
+        LinkedList<CompletedClasses> completedClassesList = new LinkedList<CompletedClasses>();
+        completedClassesList.add(completedClasses1);
+        tutorForm.setUserId(0L);
+        tutorForm.setClassList(completedClassesList);
+        tutorForm.setStudyCourseList(new LinkedList<StudyCourse>());
+        tutorForm.setBio("newBio");
+        tutorForm.setFee(new BigDecimal(20));
+        when(userDao.findOne(any(Long.class))).thenReturn(user);
         when(tutorDao.save(any(Tutor.class)))
-                .thenAnswer(new Answer<Tutor>() {
-                    public Tutor answer(InvocationOnMock invocation) throws Throwable {
-                        Tutor tutor = (Tutor) invocation.getArguments()[0];
-                        assertEquals(new HashSet<Classes>(classes),tutor.getClasses());
-                        assertEquals(new HashSet<StudyCourse>(courses),tutor.getCourses());
-                        assertEquals(new BigDecimal(20.50),tutor.getFee());
-                        assertEquals("I am awesome",tutor.getBio());
-                        assertEquals(testUser, tutor.getStudent());
-
-                        tutor.setId(1L);
-                        return tutor;
-                    }
-                });
-        when(userDao.findOne(any(Long.class))).thenAnswer(new Answer<User>() {
-            public User answer(InvocationOnMock invocation) throws Throwable {
-                Long id = (Long) invocation.getArguments()[0];
-                assertEquals(new Long(1), id);
-                return testUser;
+        .thenAnswer(new Answer<Tutor>() {
+            public Tutor answer(InvocationOnMock invocation) throws Throwable {
+            	Classes classes1 = new Classes();
+                CompletedClasses completedClasses1 = new CompletedClasses(classes1, 5);
+                Set<CompletedClasses> completedClassesList = new HashSet<CompletedClasses>();
+                completedClassesList.add(completedClasses1);
+                Tutor tutor = (Tutor) invocation.getArguments()[0];
+                assertEquals(completedClassesList, tutor.getCompletedClasses());
+                assertEquals("newBio", tutor.getBio());
+                assertEquals(new BigDecimal(20),tutor.getFee());
+                return tutor;
             }
         });
+        
         when(userDao.save(any(User.class)))
         .thenAnswer(new Answer<User>() {
             public User answer(InvocationOnMock invocation) throws Throwable {
-                User user = (User) invocation.getArguments()[0];
+            	User user = (User) invocation.getArguments()[0];
+                assertEquals("ROLE_TUTOR", user.getRole());
                 assertEquals(true, user.isTutor());
-
                 return user;
             }
         });
-
-
-        assertNull(tutorForm.getId());
         
-
         tutorFormService.saveFrom(tutorForm);
-
-        assertNotNull(tutorForm.getId());
-        assertTrue(tutorForm.getId() > 0);
+        
+        
     }
+   
     
     @After
     public void reset_mocks() {

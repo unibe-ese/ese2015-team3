@@ -33,6 +33,8 @@ public class Tutor implements Serializable {
     
     private BigDecimal fee;
     
+    private BigDecimal averageGrade;
+    
     @Type(type="text")
     private String bio;
     
@@ -40,7 +42,7 @@ public class Tutor implements Serializable {
     private Set<StudyCourse> courses; //Studiengang
 
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-    private Set<CompletedClasses> classes;
+    private Set<CompletedClasses> completedClasses;
 
     
 	public Long getId() {
@@ -67,12 +69,12 @@ public class Tutor implements Serializable {
 		this.courses = courses;
 	}
 
-	public Set<CompletedClasses> getClasses() {
-		return classes;
+	public Set<CompletedClasses> getCompletedClasses() {
+		return completedClasses;
 	}
 
-	public void setClasses(Set<CompletedClasses> classes) {
-		this.classes = classes;
+	public void setCompletedClasses(Set<CompletedClasses> completedClasses) {
+		this.completedClasses = completedClasses;
 	}
 
 	public BigDecimal getFee() {
@@ -92,6 +94,14 @@ public class Tutor implements Serializable {
 		this.bio = bio;
 	}
 
+	public BigDecimal getAverageGrade() {
+		return averageGrade;
+	}
+
+	public void setAverageGrade(BigDecimal averageGrade) {
+		this.averageGrade = averageGrade;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -108,5 +118,6 @@ public class Tutor implements Serializable {
 			return false;
 		return true;
 	}
+
 
 }

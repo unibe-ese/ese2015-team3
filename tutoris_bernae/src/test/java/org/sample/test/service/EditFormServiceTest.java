@@ -1,3 +1,4 @@
+
 package org.sample.test.service;
 
 import static org.junit.Assert.assertEquals;
@@ -7,7 +8,10 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Test;
@@ -17,8 +21,10 @@ import org.mockito.stubbing.Answer;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
+import org.sample.controller.service.CompletedClassesService;
 import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -33,6 +39,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import static org.hamcrest.CoreMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,8 +74,15 @@ public class EditFormServiceTest {
 			EditFormService editFormService = new EditFormService();
 			return editFormService;
 		}
+		@Bean
+		public CompletedClassesService completedClassesServiceMock() {
+			CompletedClassesService completedClassesServiceMock = mock(CompletedClassesService.class);
+			return completedClassesServiceMock;
+		}
     }
-	
+	@Qualifier("completedClassesServiceMock")
+	@Autowired
+	private CompletedClassesService completedClassesServiceMock;
 	@Autowired
     private EditFormService editFormService;
 	@Qualifier("userDaoMock")
@@ -83,6 +97,7 @@ public class EditFormServiceTest {
 	@Qualifier("classesDaoMock")
 	@Autowired
 	private ClassesDao classesDao;
+
 	private User user;
 
     @Test
@@ -118,18 +133,22 @@ public class EditFormServiceTest {
         editFormService.saveFrom(editForm);
     }
     
-    // TODO: test classes and courses list as well
+    // TODO: test courses list as well
     @Test
     public void TutorEditFormCorrectDataSaved() {
         TutorEditForm editForm = new TutorEditForm();
         user = new User();
+        Classes classes1 = new Classes();
+        CompletedClasses completedClasses1 = new CompletedClasses(classes1, 5);
+        LinkedList<CompletedClasses> completedClassesList = new LinkedList<CompletedClasses>();
+        completedClassesList.add(completedClasses1);
         editForm.setFirstName("First2");
         editForm.setLastName("Last2");
         editForm.setUsername("user2");
         editForm.setEmail("test@test2.com");
         editForm.setPassword("1234567");
         editForm.setUserId(0L);
-        editForm.setClassList(new LinkedList<Classes>());
+        editForm.setClassList(completedClassesList);
         editForm.setStudyCourseList(new LinkedList<StudyCourse>());
         editForm.setBio("newBio");
         editForm.setFee(new BigDecimal(20));
@@ -160,9 +179,14 @@ public class EditFormServiceTest {
         when(tutorDao.save(any(Tutor.class)))
         .thenAnswer(new Answer<Tutor>() {
             public Tutor answer(InvocationOnMock invocation) throws Throwable {
+            	Classes classes1 = new Classes();
+                CompletedClasses completedClasses1 = new CompletedClasses(classes1, 5);
+                Set<CompletedClasses> completedClassesList = new HashSet<CompletedClasses>();
+                completedClassesList.add(completedClasses1);
                 Tutor tutor= (Tutor) invocation.getArguments()[0];
-                assertEquals( "newBio",tutor.getBio());
-                assertEquals( new BigDecimal(20),tutor.getFee());
+                assertEquals(completedClassesList, tutor.getCompletedClasses());
+                assertEquals("newBio", tutor.getBio());
+                assertEquals(new BigDecimal(20),tutor.getFee());
                 return tutor;
             }
         });

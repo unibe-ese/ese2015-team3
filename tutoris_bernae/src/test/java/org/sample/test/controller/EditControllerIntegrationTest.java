@@ -13,9 +13,11 @@ import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ControllerIntegrationTest;
@@ -45,7 +47,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,6 +67,8 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	private TutorDao tutorDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private ClassesDao classesDao;
 	
 	private User newUser;
 	private User newTutorUser;
@@ -80,7 +86,7 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
-		newTutor.setClasses(new HashSet<Classes>());
+		newTutor.setCompletedClasses(new HashSet<CompletedClasses>());
 		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
@@ -176,26 +182,41 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	{
 		mockMvc.perform(get("/edit")).andExpect(status().isMovedTemporarily()); //moved Temporarily because your moved to the login page
 	}
-	// TODO Find out how to add a form to a mockmvc request or how to add course and classlist as parameters
-	// so that this test can be completed
-	/*
+
+	//TODO find out how to correctly add class and course list as parameters
 	@Test
 	public void editTutorDone() throws Exception
 	{
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_TUTOR");
-		Authentication authentication = 
-		        new UsernamePasswordAuthenticationToken("tutortest","123", authorities);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		mockMvc.perform(post("/submitTutorEdit").principal(authentication)
-										.param("userId", newUser.getId().toString())
-										.param("firstName","test")
-										.param("lastName","test")
-										.param("username","test")
-										.param("password","123")
-										.param("email","test@mail.de"))
-										.andExpect(status().isOk())
-										.andExpect(forwardedUrl(completeUrl("editDone")));
-	}*/
+        Classes classes = new Classes();
+        classesDao.save(classes);
+		CompletedClasses completedClasses = new CompletedClasses(classes, 4);
+		List<CompletedClasses> completedClassesList = new LinkedList<CompletedClasses>();
+		completedClassesList.add(completedClasses);
+		session = createSessionWithUser("tutortest","123", "ROLE_TUTOR");
+		mockMvc.perform(post("/editTutorSubmit").session(session)
+				//.requestAttr("courseList", new LinkedList<StudyCourse>())
+				//.requestAttr("classesList", completedClassesList)
+				.param("userId", newTutorUser.getId().toString())
+				.param("tutorId", newTutor.getId().toString())
+				.param("firstName","first")
+				.param("lastName","last")
+				.param("username","TestUser")
+				.param("password","123A#qqq")
+				.param("email","test@mail.de")
+				.param("bio","new Bio")
+				.param("fee","48")
+				.param("save","true"))
+				.andExpect(status().isOk())
+				.andExpect(forwardedUrl(completeUrl("editDone")));
+		assertEquals("test@mail.de", newTutorUser.getEmail());
+		assertEquals("last", newTutorUser.getLastName());
+		assertEquals("first", newTutorUser.getFirstName());
+		assertEquals("TestUser", newTutorUser.getUsername());
+		assertEquals("test@mail.de", newTutorUser.getEmail());
+		assertEquals("123A#qqq", newTutorUser.getPassword());
+		assertEquals("new Bio", newTutor.getBio());
+		assertEquals(new BigDecimal(48), newTutor.getFee());
+		assertEquals("123A#qqq", newTutorUser.getPassword());
+	}
 	
-
 }

@@ -1,8 +1,9 @@
 package org.sample.controller.service;
 
 import java.util.HashSet;
+
 import org.sample.controller.pojos.TutorForm;
-import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TutorFormService {
 	@Autowired TutorDao tutorDao;
 	@Autowired UserDao userDao;
+	@Autowired CompletedClassesService completedClassesService;
     
     /**
      * Creates a tutor out of a TutorForm and save him to the database, and also
@@ -24,11 +26,12 @@ public class TutorFormService {
      */
     @Transactional
 	public void saveFrom(TutorForm tutorForm) {
-    	assert(tutorForm!=null);
-    	assert(tutorForm.getUserId()!=null);
+    	assert (tutorForm!=null);
+    	assert (tutorForm.getUserId()!=null);
 		Tutor tutor = new Tutor();
 		User user = userDao.findOne(tutorForm.getUserId());
-		tutor.setClasses(new HashSet<Classes>(tutorForm.getClassList()));
+		tutor.setCompletedClasses(new HashSet<CompletedClasses>(tutorForm.getClassList()));
+		tutor.setAverageGrade(completedClassesService.calculateAverageGrade(tutorForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(tutorForm.getStudyCourseList()));
 		tutor.setBio(tutorForm.getBio());
 		tutor.setFee(tutorForm.getFee());

@@ -9,8 +9,8 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -34,10 +34,10 @@ public class TutorEditForm {
     @DecimalMin(value="1")
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
+    
+    private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
-    private List<StudyCourse> studyCourseList; //Studiengang
-
-    private List<Classes> classList;
+    private List<CompletedClasses> classList = new LinkedList<CompletedClasses>();
     
     @NotEmpty
     private String bio;
@@ -60,7 +60,7 @@ public class TutorEditForm {
     	this.tutorId = tutor.getId();
 		this.bio = tutor.getBio();
 		this.fee = tutor.getFee();
-		this.classList = new LinkedList<Classes>(tutor.getClasses());
+		this.classList = new LinkedList<CompletedClasses>(tutor.getCompletedClasses());
 		this.studyCourseList = new LinkedList<StudyCourse>(tutor.getCourses());
 	}
 
@@ -120,11 +120,11 @@ public class TutorEditForm {
 		this.studyCourseList = studyCourseList;
 	}
 
-	public List<Classes> getClassList() {
+	public List<CompletedClasses> getClassList() {
 		return classList;
 	}
 
-	public void setClassList(List<Classes> classList) {
+	public void setClassList(List<CompletedClasses> classList) {
 		this.classList = classList;
 	}
 
@@ -151,4 +151,5 @@ public class TutorEditForm {
 	public void setTutorId(Long tutorId) {
 		this.tutorId = tutorId;
 	}
+
 }

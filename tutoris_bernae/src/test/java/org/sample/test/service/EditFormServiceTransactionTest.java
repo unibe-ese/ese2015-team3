@@ -5,9 +5,11 @@ import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +42,8 @@ public class EditFormServiceTransactionTest {
 	private UserDao userDao;
 	@Autowired
 	private TutorDao tutorDao;
+	@Autowired
+	private ClassesDao classesDao;
 	
 	
 	private User newUser;
@@ -44,10 +51,16 @@ public class EditFormServiceTransactionTest {
 	private Tutor newTutor;
 	private TutorEditForm tutorEditForm;
 	private EditForm editForm;
+	private Classes classes1;
+	private CompletedClasses completedClasses1;
+	private Set<CompletedClasses> completedClassesOld;
+	private Classes classes2;
+	private CompletedClasses completedClasses2;
+	private List<CompletedClasses> completedClassesNew;
 
 	
 	@Before
-	public void setUp(){
+	public void setUpExampleDatas(){
 		newUser = new User();
 		newUser.setUsername("test");
 		newUser.setFirstName("First");
@@ -56,7 +69,12 @@ public class EditFormServiceTransactionTest {
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
-		newTutor.setClasses(new HashSet<Classes>());
+		classes1 = new Classes();
+		classesDao.save(classes1);
+		completedClasses1 = new CompletedClasses(classes1, 4);
+		completedClassesOld = new HashSet<CompletedClasses>();
+		completedClassesOld.add(completedClasses1);
+		newTutor.setCompletedClasses(completedClassesOld);
 		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
@@ -74,19 +92,6 @@ public class EditFormServiceTransactionTest {
         editForm.setEmail("test@test.com");
         editForm.setPassword("123456");
         editForm.setUserId(newUser.getId());
-        
-        tutorEditForm = new TutorEditForm();
-        tutorEditForm.setFirstName("newTutorTest");
-        tutorEditForm.setLastName("newLast");
-        tutorEditForm.setUsername("newuser");
-        tutorEditForm.setEmail("newtutortest@tutortest.com");
-        tutorEditForm.setPassword("123456");
-        tutorEditForm.setUserId(newTutorUser.getId());
-        tutorEditForm.setClassList(new LinkedList<Classes>());
-        tutorEditForm.setStudyCourseList(new LinkedList<StudyCourse>());
-        tutorEditForm.setBio("newBio");
-        tutorEditForm.setFee(new BigDecimal(20));
-        tutorEditForm.setTutorId(newTutor.getId());
 	}
 
     @Test
@@ -102,10 +107,29 @@ public class EditFormServiceTransactionTest {
         assertEquals(false,user.isTimetableActive());
     }
     
-    // TODO: test changed classes and courses list as well
+    // TODO: test changed courses list as well
     @Test
     public void TutorEditFormCorrectDataSavedInDatabase() {
+        classes2 = new Classes();
+        classesDao.save(classes2);
+		completedClasses2 = new CompletedClasses(classes2, 4);
+		completedClassesNew = new LinkedList<CompletedClasses>();
+		completedClassesNew.add(completedClasses2);
+        tutorEditForm = new TutorEditForm();
+        tutorEditForm.setFirstName("newTutorTest");
+        tutorEditForm.setLastName("newLast");
+        tutorEditForm.setUsername("newuser");
+        tutorEditForm.setEmail("newtutortest@tutortest.com");
+        tutorEditForm.setPassword("123456");
+        tutorEditForm.setUserId(newTutorUser.getId());
+        tutorEditForm.setClassList(completedClassesNew);
+        tutorEditForm.setStudyCourseList(new LinkedList<StudyCourse>());
+        tutorEditForm.setBio("newBio");
+        tutorEditForm.setFee(new BigDecimal(20));
+        tutorEditForm.setTutorId(newTutor.getId());
+        
         editFormService.saveFrom(tutorEditForm);
+       
         User user = userDao.findOne(tutorEditForm.getUserId());
         assertEquals("newTutorTest",user.getFirstName());
         assertEquals("newLast",user.getLastName());
@@ -117,6 +141,8 @@ public class EditFormServiceTransactionTest {
         Tutor tutor = tutorDao.findOne(tutorEditForm.getTutorId());
         assertEquals("newBio",tutor.getBio());
         assertEquals(new BigDecimal(20),tutor.getFee());
+        //We need to compare the completedClasses, but because our example data isn't saved we have to compare like this
+        assertTrue(CompletedClassesCollectionEqualsWithoutId(completedClassesNew,tutor.getCompletedClasses()));
     }
     
     @Test(expected=InvalidUserException.class) 
@@ -132,8 +158,20 @@ public class EditFormServiceTransactionTest {
         editFormService.saveFrom(editForm);
 
     }
-	
-   
-
+    
+    //Checks if two collections of completed classes are equals, except the id of the classes.
+    //Use this if comparing a saved (in the database) collection of completedClasses and and unsaved.
+    public boolean CompletedClassesCollectionEqualsWithoutId(Collection<CompletedClasses> expected, Collection<CompletedClasses> given)
+    {
+    	assertEquals(expected.size(),given.size());
+    	Checking: for(CompletedClasses c : given){
+    		for(CompletedClasses e : expected){
+    			if(e.getGrade() == c.getGrade() && e.getClasses().equals(c.getClasses())) continue Checking;
+    		}
+    		return false;
+    	}
+    	return true;
+    	
+    }
 
 }

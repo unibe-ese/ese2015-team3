@@ -14,7 +14,13 @@ import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.controller.service.SearchService;
 import org.sample.controller.service.TutorFormService;
+import org.sample.model.Classes;
+import org.sample.model.ClassesEditor;
+import org.sample.model.CompletedClasses;
+import org.sample.model.StudyCourse;
+import org.sample.model.StudyCourseEditor;
 import org.sample.model.User;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +29,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -36,18 +45,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  *
  */
 @Controller
+//@SessionAttributes(types = TutorForm.class)
 public class RegisterController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
 	
     @Autowired
     private StudyCourseDao studyCourseDao;
+    @Autowired
+    private ClassesDao classesDao;
 	@Autowired
 	private RegisterFormService registerFormService;
 	@Autowired
 	private TutorFormService tutorFormService;
 	@Autowired
 	private UserDao userDao;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
+		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));
+	}
 	
     /**
      * Creates the register page for users with a register form. This is 
@@ -72,7 +90,9 @@ public class RegisterController {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String name = authentication.getName();
 		User user = userDao.findByUsername(name);
-        return createTutorFormPage(user.getId());
+    	TutorForm tutorForm = new TutorForm();
+    	tutorForm.setUserId(user.getId());
+        return createTutorFormPage(tutorForm);
     }
     
     /**
@@ -97,7 +117,9 @@ public class RegisterController {
             try { 
                 registerForm = registerFormService.saveFrom(registerForm);
                 if (registerastutor != null) {
-                    return createTutorFormPage(registerForm.getId());
+                	TutorForm tutorForm = new TutorForm();
+                	tutorForm.setUserId(registerForm.getId());
+                    return createTutorFormPage(tutorForm);
                 }
                 model = new ModelAndView(PAGE_SUBMIT);
             } catch (InvalidUserException e) {
@@ -110,14 +132,12 @@ public class RegisterController {
     	return model;
     }
     
-    private ModelAndView createTutorFormPage(Long id)
+    private ModelAndView createTutorFormPage(TutorForm form)
     {
-    	ModelAndView model;
-    	model = new ModelAndView("tutorregistration");
-    	TutorForm tutorForm = new TutorForm();
-    	tutorForm.setUserId(id);
-    	model.addObject("tutorForm", tutorForm);
-        model.addObject("studyCourseList", studyCourseDao.findAll());
+    	ModelAndView model = new ModelAndView("tutorregistration");
+    	model.addObject("tutorForm", form);
+    	model.addObject("allClasses", classesDao.findAll());
+        model.addObject("allCourses", studyCourseDao.findAll());
         return model;
     }
         
@@ -129,14 +149,12 @@ public class RegisterController {
      * @return ModelAndView with ViewName "tutorregistration" and ModelAttribute "tutorForm", the given TutortForm
      * with updated lists
      */
+
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST)
     public ModelAndView updateListsForTutorForm(HttpSession session,HttpServletRequest request,@ModelAttribute TutorForm tutorForm) {
-    	ModelAndView model = new ModelAndView("tutorregistration");
-        model.addObject("studyCourseList", studyCourseDao.findAll());
     	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
-    	model.addObject("tutorForm", tutorForm);
-    	return model;
+    	return createTutorFormPage(tutorForm);
     }
     
     /**
@@ -155,11 +173,11 @@ public class RegisterController {
         tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
         if (!result.hasErrors()){
-            model = new ModelAndView(PAGE_SUBMIT);
-            tutorFormService.saveFrom(tutorForm);
+        	tutorFormService.saveFrom(tutorForm);
+        	model = new ModelAndView(PAGE_SUBMIT);
         }
-        else{ model = new ModelAndView("tutorregistration");
-            model.addObject("tutorForm", tutorForm);
+        else { 
+        	model = createTutorFormPage(tutorForm);
         }
         return model;
 

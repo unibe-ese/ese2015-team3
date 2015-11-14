@@ -1,6 +1,7 @@
 package org.sample.model.dao;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
@@ -28,7 +29,7 @@ public interface TutorDao extends CrudRepository<Tutor,Long> {
 	 * @param course
 	 * @return List of Tutors that match the criteria.
 	 */
-	public Iterable<Tutor> findByClassesLike(Classes classCriteria);
+	//public Iterable<Tutor> findByClassesLike(Classes classCriteria);
         
 	/**
 	 * Searches the database for tutors who have registered a fee between the parameters.
@@ -38,5 +39,7 @@ public interface TutorDao extends CrudRepository<Tutor,Long> {
 	 * @return List of Tutors that match the criteria.
 	 */
 	public Iterable<Tutor> findByFeeBetween(BigDecimal min,BigDecimal fee);
+
+	public Iterable<Tutor> findByCompletedClassesClassesLike(Classes classCriteria);
         
 }

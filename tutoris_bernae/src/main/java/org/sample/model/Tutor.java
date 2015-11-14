@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
@@ -22,7 +23,6 @@ import org.hibernate.annotations.Type;
 @Entity
 public class Tutor implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	
     @Id
     @GeneratedValue
@@ -33,14 +33,16 @@ public class Tutor implements Serializable {
     
     private BigDecimal fee;
     
+    private BigDecimal averageGrade;
+    
     @Type(type="text")
     private String bio;
     
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<StudyCourse> courses; //Studiengang
 
-	@ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-    private Set<Classes> classes;
+	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+    private Set<CompletedClasses> completedClasses;
 
     
 	public Long getId() {
@@ -67,12 +69,12 @@ public class Tutor implements Serializable {
 		this.courses = courses;
 	}
 
-	public Set<Classes> getClasses() {
-		return classes;
+	public Set<CompletedClasses> getCompletedClasses() {
+		return completedClasses;
 	}
 
-	public void setClasses(Set<Classes> classes) {
-		this.classes = classes;
+	public void setCompletedClasses(Set<CompletedClasses> completedClasses) {
+		this.completedClasses = completedClasses;
 	}
 
 	public BigDecimal getFee() {
@@ -83,13 +85,31 @@ public class Tutor implements Serializable {
 		this.fee = fee;
 	}
 	
-    
     public String getBio() {
 		return bio;
 	}
 
 	public void setBio(String bio) {
 		this.bio = bio;
+	}
+
+	public BigDecimal getAverageGrade() {
+		return averageGrade;
+	}
+
+	public void setAverageGrade(BigDecimal averageGrade) {
+		this.averageGrade = averageGrade;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((averageGrade == null) ? 0 : averageGrade.hashCode());
+		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
+		result = prime * result + ((fee == null) ? 0 : fee.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -101,12 +121,41 @@ public class Tutor implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Tutor other = (Tutor) obj;
+		if (averageGrade == null) {
+			if (other.averageGrade != null)
+				return false;
+		} else if (!averageGrade.equals(other.averageGrade))
+			return false;
+		if (bio == null) {
+			if (other.bio != null)
+				return false;
+		} else if (!bio.equals(other.bio))
+			return false;
+		if (completedClasses == null) {
+			if (other.completedClasses != null)
+				return false;
+		} else if (!completedClasses.equals(other.completedClasses))
+			return false;
+		if (courses == null) {
+			if (other.courses != null)
+				return false;
+		} else if (!courses.equals(other.courses))
+			return false;
+		if (fee == null) {
+			if (other.fee != null)
+				return false;
+		} else if (!fee.equals(other.fee))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (student == null) {
+			if (other.student != null)
+				return false;
+		} else if (!student.equals(other.student))
+			return false;
 		return true;
 	}
-
 }

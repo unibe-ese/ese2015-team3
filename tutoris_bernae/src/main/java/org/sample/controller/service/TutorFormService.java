@@ -1,6 +1,8 @@
 package org.sample.controller.service;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.sample.controller.pojos.TutorForm;
 import org.sample.model.CompletedClasses;
@@ -12,14 +14,17 @@ import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
 @Service
 public class TutorFormService {
 	@Autowired TutorDao tutorDao;
 	@Autowired UserDao userDao;
 	@Autowired CompletedClassesService completedClassesService;
-    
-    /**
+	
+	/**
      * Creates a tutor out of a TutorForm and save him to the database, and also
      * updates the user belonging to that tutor.
      * @param tutorForm a TutorForm, not null

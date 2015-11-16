@@ -8,7 +8,6 @@ import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MessageService;
 import org.sample.model.Message;
 import org.sample.model.User;
-import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,8 +28,6 @@ public class MessageController {
 
 @Autowired
 private UserDao userDao;
-@Autowired
-private MessageDao messageDao;
 @Autowired
 private MessageService messageService;
 	
@@ -70,7 +67,6 @@ private MessageService messageService;
 			return model;
 		}
 	}
-	
 	
 	/**
 	 * Creates a page with a message form to answer one selected message given by the parameter 

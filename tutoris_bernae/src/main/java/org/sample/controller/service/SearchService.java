@@ -54,7 +54,6 @@ public class SearchService {
         if(courseCriteria!=null){
         	searchResults.add((List<Tutor>) tutorDao.findByCoursesLike(courseCriteria));
         }
-        
         if(classCriteria!=null){
         	searchResults.add((List<Tutor>) tutorDao.findByCompletedClassesClassesLike(classCriteria));
         }
@@ -118,20 +117,4 @@ public class SearchService {
         return null;
     }
     
-    /**
-     * Get grade of class.
-     * If no class criteria was entered return null.
-     * 
-     * @param searchForm has class criteria stored
-     * @return grade achieved or null if no criteria was provided
-     */
-    public Integer getClasseGrade(SearchForm searchForm) {
-        if (searchForm.getClassesId() != null) {
-            Classes classe = classesDao.findOne(searchForm.getClassesId());
-            if (classe != null) {
-                return classe.getGrade();
-            }
-        }
-        return null;
-    }
 }

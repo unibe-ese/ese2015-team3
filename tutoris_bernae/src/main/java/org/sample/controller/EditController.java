@@ -37,26 +37,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class EditController {
-
-    @Autowired
-    private ClassesDao classesDao;
-    
-    @Autowired
-    private StudyCourseDao studyCourseDao;
     
 	@Autowired
 	private UserDao userDao;
 	
 	@Autowired
 	private EditFormService editFormService;
-	
-	
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
-		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));
-	}
-	
 	
 	/**
 	 * Creates a page with an editing form for a normal user or a tutor,
@@ -71,7 +57,7 @@ public class EditController {
 	    String name = authentication.getName();
 		User user = userDao.findByUsername(name);
 		if(user.isTutor()) {	
-			return createTutorEditFormPage(new TutorEditForm(user, user.getTutor()));
+			return new ModelAndView("redirect:/editTutor");
 		}
 		else {
 			ModelAndView model = new ModelAndView("edit");
@@ -80,14 +66,6 @@ public class EditController {
 		}
 	}
 	
-	public ModelAndView createTutorEditFormPage(TutorEditForm form)
-	{
-		ModelAndView model = new ModelAndView("editTutor");
-		model.addObject("tutorForm", form);
-		model.addObject("allClasses", classesDao.findAll());
-		model.addObject("allCourses", studyCourseDao.findAll());
-		return model;
-	}
     /**
      * Saves the edited Profile informations for a user, and shows a success page ("editDone"). If the 
      * entered information weren't complete or wrong the user is directed back to the edit page.
@@ -117,55 +95,5 @@ public class EditController {
         }   	
     	return model;
     }
-    
-    /**
-     * A helping method for adding or deleting elements on the course and class list
-     * @param tutorForm a TutorForm which must not be valid yet
-     * @param result
-     * @param redirectAttributes
-     * @param request
-     * @return ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", the given TutorEditForm
-     * with updated lists
-     * 
-     */
-    @RequestMapping(value = "/editTutorSubmit", method = RequestMethod.POST)
-    public ModelAndView editTutorProfile(@ModelAttribute TutorEditForm tutorForm, BindingResult result, 
-    						RedirectAttributes redirectAttributes, HttpServletRequest request) {
-    	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
-    	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
-    	return createTutorEditFormPage(tutorForm);
-    }
-
-    /**
-     * Saves the edited Profile informations for a tutor, and shows a success page ("editDone"). If the 
-     * entered information weren't complete or wrong the tutor is directed back to the editTutor page.
-     * @param tutorForm
-     * @param result
-     * @param redirectAttributes
-     * @param save a Boolean request parameter so that the controller knows the profile needs to be saved,
-     * and not only that the lists needs updating
-     * @param request
-     * @return if the the form was successfully filled a new ModelAndView with ViewName "editDone" or else
-     * again a new ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", the given TutorEditForm
-     */
-    @RequestMapping(value = "/editTutorSubmit", method = RequestMethod.POST, params = { "save" })
-    public ModelAndView editTutorProfile(@Valid TutorEditForm tutorForm, BindingResult result, 
-    						RedirectAttributes redirectAttributes,@RequestParam Boolean save , HttpServletRequest request) {
-    	ModelAndView model;
-    	tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
-    	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
-    	if (!result.hasErrors()) {
-            try {
-            	editFormService.saveFrom(tutorForm);
-            	model = new ModelAndView("editDone");
-            } catch (InvalidUserException e) {
-            	model = createTutorEditFormPage(tutorForm);
-            	model.addObject("page_error", e.getMessage());
-            	return model;
-            }
-        } else {
-        	return createTutorEditFormPage(tutorForm);
-        }   	
-    	return model;
-    }
+   
 }

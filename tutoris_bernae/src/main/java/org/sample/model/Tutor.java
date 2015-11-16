@@ -1,6 +1,5 @@
 package org.sample.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -21,7 +20,7 @@ import org.hibernate.annotations.Type;
  *
  */
 @Entity
-public class Tutor implements Serializable {
+public class Tutor {
 
 	
     @Id

@@ -59,7 +59,7 @@ public class TutorRegisterController {
 	@Autowired
 	private UserDao userDao;
 
-	@InitBinder
+	@InitBinder("tutorForm")
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
 		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));

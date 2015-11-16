@@ -53,7 +53,7 @@ public class EditTutorController {
 	private EditFormService editFormService;
 	
 	
-	@InitBinder
+	@InitBinder("tutorEditForm")
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
 		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));

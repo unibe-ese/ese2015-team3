@@ -19,7 +19,7 @@ import org.springframework.validation.Validator;
 @Component
 public class AdditionalUserValidator implements Validator
 {
-
+	
 	public boolean supports(Class<?> clazz) {
 		// TODO Auto-generated method stub
 		return false;

@@ -20,7 +20,7 @@ public class MessageForm {
     
 	public MessageForm(Message selectedMessage) {
 		reciever = selectedMessage.getSender().getUsername();
-		messageSubject = "AW:"+selectedMessage.getMessageSubject();
+		messageSubject = "AW: "+selectedMessage.getMessageSubject();
 	}
 	
 	public MessageForm() {

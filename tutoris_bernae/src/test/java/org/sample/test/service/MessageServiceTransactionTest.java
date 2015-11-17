@@ -47,8 +47,6 @@ public class MessageServiceTransactionTest {
 	private UserDao userDao;
 	@Autowired
 	private MessageDao messageDao;
-
-	
 	
 	private User sender;
 	private User reciever;
@@ -72,7 +70,7 @@ public class MessageServiceTransactionTest {
 	}
 
     @Test
-    public void MessageFormCorrectDataSavedInDatabase() {
+    public void messageFormCorrectDataSavedInDatabase() {
     	MessageForm messageForm = new MessageForm();
     	messageForm.setReciever("tutortest");
     	messageForm.setMessageSubject("meeting");
@@ -87,5 +85,32 @@ public class MessageServiceTransactionTest {
         assertEquals(reciever,message.getReciever());
         assertEquals(false,message.getWasRead());
     }
+    
+    @Test
+    public void readMessage()
+    {
+    	Message message = new Message();
+    	message = messageDao.save(message);
+    	messageService.read(message.getId());
+    	assertEquals(true, messageDao.findOne(message.getId()).getWasRead());
+    }
+    
+    // makes more sense in a unit test, isn't changed at all through transaction
+    /*@Test
+    public void MessagesCorrectOrdered() {
+    	Date now = new Date();
+    	Date before = new Date(now.getTime()-1000);
+    	Date beforeBefore = new Date(now.getTime()-10000);
+    	message1 = new Message();
+    	message1.setSendDate(now);
+    	message1.setReciever(reciever);
+    	message2 = new Message();
+    	message2.setSendDate(before);
+    	message2.setReciever(reciever);
+    	message3 = new Message();
+    	message3.setSendDate(beforeBefore);
+    	message3.setReciever(reciever);
+    	unorderedMessageList =
+    }*/
 
 }

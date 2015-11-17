@@ -10,7 +10,7 @@
 		<c:if test="${not empty submitMessage}">
 			<div class="message">${submitMessage}</div>
 		</c:if>
-	<a href="/tutoris_baernae/messageInboxNew"> New </a>  
+	<a href="/tutoris_baernae/messageNew"> New </a>  
 	<c:if test = "${not empty selectedMessage}">
 	<p>${selectedMessage.sender.username}<p>
 	<p>${selectedMessage.messageSubject}<p>

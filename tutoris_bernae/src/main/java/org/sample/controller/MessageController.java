@@ -6,15 +6,22 @@ import javax.validation.Valid;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MessageService;
+import org.sample.model.Classes;
+import org.sample.model.ClassesEditor;
 import org.sample.model.Message;
+import org.sample.model.StudyCourse;
+import org.sample.model.StudyCourseEditor;
 import org.sample.model.User;
-import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
+import org.sample.validators.ClassCourseListValidator;
+import org.sample.validators.MessageRecieverValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,10 +37,12 @@ public class MessageController {
 @Autowired
 private UserDao userDao;
 @Autowired
-private MessageDao messageDao;
-@Autowired
 private MessageService messageService;
 	
+@InitBinder("messageForm")
+public void initBinder(WebDataBinder binder) {
+	binder.addValidators(new MessageRecieverValidator(userDao));
+}
 	
 	/**
 	 * Creates a page with all messages that the logged in user recieved
@@ -44,7 +53,6 @@ private MessageService messageService;
 	public ModelAndView showMessageInbox() {
 		 ModelAndView model = new ModelAndView("messageInbox");
 		 User user = getUserFromSecurityContext();
-		 model.addObject("user", user);
 		 model.addObject("messages", messageService.getOrderedMessagesList(user));
 		 return model;
 	}
@@ -70,7 +78,6 @@ private MessageService messageService;
 			return model;
 		}
 	}
-	
 	
 	/**
 	 * Creates a page with a message form to answer one selected message given by the parameter 

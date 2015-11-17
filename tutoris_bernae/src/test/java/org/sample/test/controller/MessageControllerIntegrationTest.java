@@ -1,0 +1,216 @@
+package org.sample.test.controller;
+
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Test;
+import org.sample.controller.pojos.MessageForm;
+import org.sample.model.Message;
+import org.sample.model.Tutor;
+import org.sample.model.User;
+import org.sample.model.dao.ClassesDao;
+import org.sample.model.dao.MessageDao;
+import org.sample.model.dao.TutorDao;
+import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ControllerIntegrationTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.hamcrest.Matchers.is;
+
+public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
+	@Autowired
+	private TutorDao tutorDao;
+	@Autowired
+	private UserDao userDao;
+	@Autowired
+	private ClassesDao classesDao;
+	
+	private User sender;
+	private User reciever;
+
+	
+	MockHttpSession session;
+	private Message message1;
+	private Message message2;
+	private Message message3;
+	private List<Message> unorderedMessageList;
+	@Autowired
+	private MessageDao messageDao;
+	@Before
+	public void setUp()
+	{
+    	Date now = new Date();
+    	Date before = new Date(now.getTime()-1000);
+    	Date beforeBefore = new Date(now.getTime()-10000);
+		sender = new User();
+		sender.setUsername("sender");
+		sender.setPassword("1232w%Dres");
+		sender = userDao.save(sender);
+		reciever = new User();
+		reciever.setUsername("reciever");
+		reciever.setPassword("1232w%Dres");
+		reciever = userDao.save(reciever);
+    	message1 = new Message();
+    	message1.setSendDate(now);
+    	message1.setReciever(reciever);
+    	message1.setSender(sender);
+    	message1.setMessageSubject("Hi");
+    	message2 = new Message();
+    	message2.setSendDate(before);
+    	message2.setReciever(reciever);
+       	message1.setSender(sender);
+    	message3 = new Message();
+    	message3.setSendDate(beforeBefore);
+    	message3.setReciever(reciever);
+       	message1.setSender(sender);
+       	messageDao.save(message1);
+       	messageDao.save(message2);
+       	messageDao.save(message3);
+       	unorderedMessageList = new LinkedList<Message>();
+		unorderedMessageList.add(message1);
+		unorderedMessageList.add(message2);
+		unorderedMessageList.add(message3);
+	}
+	
+	@Test
+	public void messageInbox() throws Exception
+	{
+		List<Message> unorderedMessageList = new LinkedList<Message>();
+		unorderedMessageList.add(message1);
+		unorderedMessageList.add(message2);
+		unorderedMessageList.add(message3);
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(get("/messageInbox").session(session))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(forwardedUrl(completeUrl("messageInbox")));
+								
+	}	
+	
+	@Test
+	public void selectedMessageInbox() throws Exception
+	{
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(get("/messageInboxShow?messageId="+message1.getId()).session(session))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attribute("selectedMessage", Matchers.is(message1)))
+										.andExpect(forwardedUrl(completeUrl("messageInbox")));
+								
+	}	
+	
+	@Test
+	public void answerSelectedMessageInbox() throws Exception
+	{
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(get("/messageInboxAnswer?messageId="+message1.getId()).session(session))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
+										.andExpect(forwardedUrl(completeUrl("messageAnswer")))
+		.andExpect(model().attribute("messageForm", hasProperty("reciever", Matchers.is("sender"))))
+		.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is("AW: Hi"))));
+								
+	}	
+	
+	@Test
+	public void newMessage() throws Exception
+	{
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(get("/messageNew").session(session))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
+										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
+								
+	}
+	
+	@Test
+	public void messageSubmit() throws Exception
+	{
+		Message exampleMessage = new Message();
+		exampleMessage.setReciever(sender);
+		exampleMessage.setMessageSubject("subject");
+		exampleMessage.setMessageText("text");
+		List<Message> onlyExampleMessage = new LinkedList<Message>();
+		onlyExampleMessage.add(exampleMessage);
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(post("/messageSubmit").session(session).param("reciever", "sender")
+										.param("messageSubject", "subject")
+										.param("messageText", "text"))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attribute("submitMessage", Matchers.is("message sent!")))
+										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
+										.andExpect(forwardedUrl(completeUrl("messageInbox")));
+		assertNotNull((List<Message>)messageDao.findAllByReciever(sender));
+	}
+	
+	@Test
+	public void messageSubmitWithFieldErrors() throws Exception
+	{
+
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(post("/messageSubmit").session(session).param("reciever", "")
+										.param("messageSubject", "")
+										.param("messageText", ""))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attributeHasFieldErrors("messageForm", "reciever"))
+										.andExpect(model().attributeHasFieldErrors("messageForm", "messageSubject"))
+										.andExpect(model().attributeHasFieldErrors("messageForm", "messageText"))
+										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
+								
+	}
+	
+	@Test
+	public void messageSubmitToUnexistingReciever() throws Exception
+	{
+
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(post("/messageSubmit").session(session).param("reciever", "ShouldNotExist")
+										.param("messageSubject", "Hi there")
+										.param("messageText", "abaac"))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attributeHasFieldErrors("messageForm", "reciever"))
+										.andExpect(forwardedUrl(completeUrl("messageAnswer")));					
+	}
+	
+	@Test
+	public void newMessageTo() throws Exception
+	{
+		List<Message> unorderedMessageList = new LinkedList<Message>();
+		unorderedMessageList.add(message1);
+		unorderedMessageList.add(message2);
+		unorderedMessageList.add(message3);
+		session = createSessionWithUser("reciever", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(get("/messageNewTo?reciever="+sender.getUsername()).session(session))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
+										.andExpect(model().attribute("messageForm", hasProperty("reciever", Matchers.is("sender"))))
+										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
+								
+	}
+	
+	@Test
+	public void needsLogin() throws Exception
+	{
+		mockMvc.perform(get("/message")).andExpect(status().isMovedTemporarily()); //moved Temporarily because your moved to the login page
+	}
+}

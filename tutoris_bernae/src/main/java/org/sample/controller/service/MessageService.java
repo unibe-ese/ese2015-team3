@@ -78,7 +78,7 @@ public class MessageService{
     	assert(sender!=null);
     	Message message = new Message();
     	User reciever = userDao.findByUsername(messageForm.getReciever());
-    	if(reciever==null) throw new InvalidUserException("The user you want to send a message to does not exist");
+    	if(reciever==null) throw new InvalidUserException("The user you want to send a message does not exist");
     	message.setSender(sender);
     	message.setReciever(reciever);
     	message.setSendDate(new Date());

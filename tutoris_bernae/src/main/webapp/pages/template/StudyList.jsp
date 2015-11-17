@@ -12,6 +12,7 @@
                     </tr>
                 </thead>
                 <tbody id="studyCourseListContainer">
+                	<form:errors path="studyCourseList" cssClass="help-inline" element="span"/>
                     <c:forEach items="${tutorForm.studyCourseList}" varStatus="i" begin="0" >
                         <tr class="studyCourse">
                            <td><form:select path="studyCourseList[${i.index}]" value="${tutorForm.studyCourseList[i.index].id}">

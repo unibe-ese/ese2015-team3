@@ -37,9 +37,6 @@ public class User {
     @OneToOne
     private Tutor tutor;
     
-	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-    private Set<Message> recievedMessages;
-    
     private boolean isTimetableActive;
 //    private Object timetable;
 
@@ -123,13 +120,6 @@ public class User {
 		this.role = role;
 	}
 
-	public Set<Message> getRecievedMessages() {
-		return recievedMessages;
-	}
-
-	public void setRecievedMessages(Set<Message> recievedMessages) {
-		this.recievedMessages = recievedMessages;
-	}
 
 	@Override
 	public int hashCode() {

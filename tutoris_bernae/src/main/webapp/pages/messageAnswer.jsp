@@ -12,13 +12,13 @@
 		</c:if>
 <form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
-    <c:set var="recieverErrors"><form:errors path="reciever"/></c:set>
-        <div class="control-group<c:if test="${not empty recieverErrors}"> error</c:if>">
-            <label class="control-label" for="field-reciever"> To: </label>
+    <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
+        <div class="control-group<c:if test="${not empty receiverErrors}"> error</c:if>">
+            <label class="control-label" for="field-receiver"> To: </label>
 
             <div class="controls">
-                <form:input path="reciever" id="field-reciever" tabindex="1" maxlength="45" placeholder="reciever"/>
-                <form:errors path="reciever" cssClass="help-inline" element="span"/>
+                <form:input path="receiver" id="field-receiver" tabindex="1" maxlength="45" placeholder="receiver"/>
+                <form:errors path="receiver" cssClass="help-inline" element="span"/>
             </div>
         </div>
         <c:set var="messageSubjectErrors"><form:errors path="messageSubject"/></c:set>

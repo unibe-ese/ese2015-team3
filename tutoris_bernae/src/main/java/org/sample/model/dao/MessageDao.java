@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface MessageDao extends CrudRepository<Message,Long> {
 
-	Iterable<Message> findAllByReciever(User user);
+	Iterable<Message> findAllByReceiver(User user);
 }

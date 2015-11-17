@@ -60,7 +60,7 @@ public class MessageService{
      */
    	@Transactional
     public List<Message> getOrderedMessagesList(User user) {
-    	List<Message> messages = (List<Message>) messageDao.findAllByReciever(user);
+    	List<Message> messages = (List<Message>) messageDao.findAllByReceiver(user);
     	Collections.sort(messages,MessageDateComparator);
     	return messages;
     }
@@ -69,18 +69,18 @@ public class MessageService{
      * Sends the message by saving it to the database.
      * @param messageForm a valid messageForm, not null
      * @param Userthe sender of the message, not null
-     * @throws InvalidUserException if the reciever doesn't exist/couldn't be found by the
-     * string reciever given in the messageForm
+     * @throws InvalidUserException if the receiver doesn't exist/couldn't be found by the
+     * string receiver given in the messageForm
      */
     @Transactional
     public MessageForm send(MessageForm messageForm, User sender) throws InvalidUserException{
     	assert(messageForm!=null);
     	assert(sender!=null);
     	Message message = new Message();
-    	User reciever = userDao.findByUsername(messageForm.getReciever());
-    	if(reciever==null) throw new InvalidUserException("The user you want to send a message does not exist");
+    	User receiver = userDao.findByUsername(messageForm.getReceiver());
+    	if(receiver==null) throw new InvalidUserException("The user you want to send a message does not exist");
     	message.setSender(sender);
-    	message.setReciever(reciever);
+    	message.setReceiver(receiver);
     	message.setSendDate(new Date());
     	message.setMessageSubject(messageForm.getMessageSubject());
     	message.setMessageText(messageForm.getMessageText());

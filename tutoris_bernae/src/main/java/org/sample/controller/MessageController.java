@@ -6,15 +6,10 @@ import javax.validation.Valid;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MessageService;
-import org.sample.model.Classes;
-import org.sample.model.ClassesEditor;
 import org.sample.model.Message;
-import org.sample.model.StudyCourse;
-import org.sample.model.StudyCourseEditor;
 import org.sample.model.User;
 import org.sample.model.dao.UserDao;
-import org.sample.validators.ClassCourseListValidator;
-import org.sample.validators.MessageRecieverValidator;
+import org.sample.validators.MessageReceiverValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,11 +36,11 @@ private MessageService messageService;
 	
 @InitBinder("messageForm")
 public void initBinder(WebDataBinder binder) {
-	binder.addValidators(new MessageRecieverValidator(userDao));
+	binder.addValidators(new MessageReceiverValidator(userDao));
 }
 	
 	/**
-	 * Creates a page with all messages that the logged in user recieved
+	 * Creates a page with all messages that the logged in user received
 	 * @return ModelAndView with ViewName "messageInbox" and modelattribute "user", the logged in user,
 	 * and "messages" all his messages
 	 */
@@ -110,14 +105,14 @@ public void initBinder(WebDataBinder binder) {
 	 * and all other messages that the logged in user recieved
 	 * @param reciver a String of the username that we want to contact via a message
 	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" a prefilled message form
-	 * suited to the reciever we want to write to, "user", the logged in user,
+	 * suited to the receiver we want to write to, "user", the logged in user,
 	 * and "messages" all his messages
 	 */
 	@RequestMapping(value = "/messageNewTo", method = RequestMethod.GET)
-	public ModelAndView writeNewMessage(@RequestParam(value = "reciever", required = true) String reciever) {
+	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) String receiver) {
 		ModelAndView model;
 		User user = getUserFromSecurityContext();
-		model = createAnswerPage(user,new MessageForm(reciever));
+		model = createAnswerPage(user,new MessageForm(receiver));
 		return model;
 	}
 	

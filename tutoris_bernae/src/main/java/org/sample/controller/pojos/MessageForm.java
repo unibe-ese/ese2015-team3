@@ -4,12 +4,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.sample.model.Message;
 
 /**
- * Stores a message consisting of a subject, a text and the wished reciever
+ * Stores a message consisting of a subject, a text and the wished receiver
  */
 public class MessageForm {
 
     @NotEmpty
-    private String reciever;
+    private String receiver;
     @NotEmpty
     private String messageSubject;
     @NotEmpty
@@ -19,7 +19,7 @@ public class MessageForm {
     
     
 	public MessageForm(Message selectedMessage) {
-		reciever = selectedMessage.getSender().getUsername();
+		receiver = selectedMessage.getSender().getUsername();
 		messageSubject = "AW: "+selectedMessage.getMessageSubject();
 	}
 	
@@ -27,16 +27,16 @@ public class MessageForm {
 
 	}
 
-	public MessageForm(String reciever) {
-		this.reciever = reciever;
+	public MessageForm(String receiver) {
+		this.receiver = receiver;
 	}
 
-	public String getReciever() {
-		return reciever;
+	public String getReceiver() {
+		return receiver;
 	}
 
-	public void setReciever(String reciever) {
-		this.reciever = reciever;
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
 	}
 
 	public String getMessageSubject() {

@@ -23,7 +23,7 @@ public class Message {
 	private Long id;
 
 	@ManyToOne
-	private User reciever;
+	private User receiver;
 	
 	@ManyToOne
 	private User sender;
@@ -37,12 +37,12 @@ public class Message {
     
     private Boolean wasRead = false;
 
-	public User getReciever() {
-		return reciever;
+	public User getReceiver() {
+		return receiver;
 	}
 
-	public void setReciever(User reciever) {
-		this.reciever = reciever;
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 
 	public String getMessageSubject() {
@@ -98,7 +98,7 @@ public class Message {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((reciever == null) ? 0 : reciever.hashCode());
+		result = prime * result + ((receiver == null) ? 0 : receiver.hashCode());
 		result = prime * result + ((messageSubject == null) ? 0 : messageSubject.hashCode());
 		result = prime * result + ((messageText == null) ? 0 : messageText.hashCode());
 		return result;
@@ -118,10 +118,10 @@ public class Message {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (reciever == null) {
-			if (other.reciever != null)
+		if (receiver == null) {
+			if (other.receiver != null)
 				return false;
-		} else if (!reciever.equals(other.reciever))
+		} else if (!receiver.equals(other.receiver))
 			return false;
 		if (messageSubject == null) {
 			if (other.messageSubject != null)

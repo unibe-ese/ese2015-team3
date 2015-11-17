@@ -49,7 +49,7 @@ public class MessageServiceTransactionTest {
 	private MessageDao messageDao;
 	
 	private User sender;
-	private User reciever;
+	private User receiver;
 	private Message message1;
 	private Message message2;
 	private Message message3;
@@ -63,16 +63,16 @@ public class MessageServiceTransactionTest {
 		sender.setUsername("test");
 		sender.setEmail("mail@mail.mail");
 		sender = userDao.save(sender);
-		reciever = new User();
-		reciever.setUsername("tutortest");
-		reciever.setEmail("tutormail@mail.mail");
-		reciever = userDao.save(reciever);
+		receiver = new User();
+		receiver.setUsername("tutortest");
+		receiver.setEmail("tutormail@mail.mail");
+		receiver = userDao.save(receiver);
 	}
 
     @Test
     public void messageFormCorrectDataSavedInDatabase() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReciever("tutortest");
+    	messageForm.setReceiver("tutortest");
     	messageForm.setMessageSubject("meeting");
     	messageForm.setMessageText(".....");
     	messageService.send(messageForm,sender);
@@ -82,8 +82,17 @@ public class MessageServiceTransactionTest {
         Date now = new Date();
         assertTrue(now.compareTo(message.getSendDate())>=0); //now should be after or at the same moment as the text was sended
         assertEquals(sender,message.getSender());
-        assertEquals(reciever,message.getReciever());
+        assertEquals(receiver,message.getReceiver());
         assertEquals(false,message.getWasRead());
+    }
+    
+    @Test(expected=InvalidUserException.class) 
+    public void receiverUnexisting() {
+    	MessageForm messageForm = new MessageForm();
+    	messageForm.setReceiver(null);
+    	messageForm.setMessageSubject("meeting");
+    	messageForm.setMessageText(".....");
+    	messageService.send(messageForm,sender);
     }
     
     @Test
@@ -98,19 +107,6 @@ public class MessageServiceTransactionTest {
     // makes more sense in a unit test, isn't changed at all through transaction
     /*@Test
     public void MessagesCorrectOrdered() {
-    	Date now = new Date();
-    	Date before = new Date(now.getTime()-1000);
-    	Date beforeBefore = new Date(now.getTime()-10000);
-    	message1 = new Message();
-    	message1.setSendDate(now);
-    	message1.setReciever(reciever);
-    	message2 = new Message();
-    	message2.setSendDate(before);
-    	message2.setReciever(reciever);
-    	message3 = new Message();
-    	message3.setSendDate(beforeBefore);
-    	message3.setReciever(reciever);
-    	unorderedMessageList =
     }*/
 
 }

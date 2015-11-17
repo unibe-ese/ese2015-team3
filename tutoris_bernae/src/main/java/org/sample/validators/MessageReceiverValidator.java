@@ -10,12 +10,12 @@ import org.springframework.validation.Validator;
 
 
 /**
- * Validates reciever in messageForms by checking if they exists in the database or not.
+ * Validates receiver in messageForms by checking if they exists in the database or not.
  * Also supports message for convenience but does nothing with them
  * @author pf15ese
  */
 @Component
-public class MessageRecieverValidator implements Validator
+public class MessageReceiverValidator implements Validator
 {
 	private UserDao userDao;
 	
@@ -24,27 +24,27 @@ public class MessageRecieverValidator implements Validator
 	/**
 	 * DO NOT USE!
 	 * Just there because Spring needs an empty one for yet unknown reason
-	 * Use MessageRecieverValidator(UserDao userDao) instead
+	 * Use MessagereceiverValidator(UserDao userDao) instead
 	 */
-	public MessageRecieverValidator() {
+	public MessageReceiverValidator() {
 	}
 	
-	public MessageRecieverValidator(UserDao userDao) {
+	public MessageReceiverValidator(UserDao userDao) {
 		this.userDao = userDao;
 	}
 
 	public void validate(Object target, Errors errors) {
 		if(target.getClass().equals(Message.class)) return;
 		MessageForm messageForm = (MessageForm) target;
-		if(!recieverExists(messageForm.getReciever()))
-			errors.rejectValue("reciever","message.NotExistingReciever","The user you want to send a message to does not exist");
+		if(!receiverExists(messageForm.getReceiver()))
+			errors.rejectValue("receiver","message.NotExistingreceiver","The user you want to send a message to does not exist");
 	}
 
 	public boolean supports(Class<?> clazz) {
 		return MessageForm.class.equals(clazz);
 	}
 
-	private boolean recieverExists(String reciever) {
-		return !(userDao.findByUsername(reciever) == null);
+	private boolean receiverExists(String receiver) {
+		return !(userDao.findByUsername(receiver) == null);
 	}
 }

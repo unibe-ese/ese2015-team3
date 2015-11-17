@@ -1,6 +1,6 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ page session="true" %>
 <!DOCTYPE HTML>
 <!--
 	Verti by HTML5 UP
@@ -25,8 +25,10 @@
                 <script src="/tutoris_baernae/js/tooltip.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="/tutoris_baernae/css/skel.css" />
+                        <link rel="stylesheet" href="/tutoris_baernae/css/main.css"/>
 			<link rel="stylesheet" href="/tutoris_baernae/css/style.css" />
 			<link rel="stylesheet" href="/tutoris_baernae/css/style-desktop.css" />
+                        <link rel="stylesheet" href="/tutoris_baernae/css/font-awesome.min.css" />
 		</noscript>
 		<!--[if lte IE 8]><link rel="stylesheet" href="/tutoris_bernae/css/ie/v8.css" /><![endif]-->
 	</head>
@@ -47,47 +49,43 @@
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
-								<li class><a href="/tutoris_baernae/">Welcome</a></li>
-								<li><a href="#">About</a></li>
+								<li><a href="/tutoris_baernae/">Welcome</a></li>
 								
 								<li><a href="/tutoris_baernae/findTutor">Find Tutor</a></li>
-								<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TUTOR')">
-								<li>	<h1> <c:if test="${pageContext.request.userPrincipal.name != null}">
-								User : ${pageContext.request.userPrincipal.name}</h1></c:if> </li>
-								<li class="current">		
-								<c:if test="${pageContext.request.userPrincipal.name != null}">
-							<h1>
-			 <a
-					href="javascript:formSubmit()">Logout</a>
-			</h1></li>
-			<li class="current">		
-								
-							<h1>
-			 <a
-					href="/tutoris_baernae/profile">Profile</a>
-			</h1></li>
-			<li class="current">		
-								
-							<h1>
-			 <a
-					href="/tutoris_baernae/messageInbox">Messages</a>
-			</h1></li>
-		
-		</c:if></sec:authorize>
-								<sec:authorize access="!hasAnyRole('ROLE_USER','ROLE_TUTOR')">
-								<li class="current">		
-								
-							<h1>
-			 <a
-					href="/tutoris_baernae/login">Login</a>
-			</h1></li>
-						<li class="current">		
-								
-							<h1>
-			 <a
-					href="/tutoris_baernae/register">Register</a>
-			</h1></li>
-		</sec:authorize>
+                                                                
+                                                        <%-- AUTHORIZED --%>			
+                                                        <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" var="loggedIn">
+                                                                    <li class="current">
+                                                                    <h1><a href="#"><c:if test="${loggedIn}"><i class="fa fa-user"></i> : ${pageContext.request.userPrincipal.name    }</a></h1></c:if>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <a href="/tutoris_baernae/profile"><i class="fa fa-user"></i> View Profile</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="/tutoris_baernae/edit"><i class="fa fa-pencil"></i> Edit Profile</a>
+                                                                        </li>
+                                                                        <li><hr></li>
+                                                                        <li>
+                                                                            <a href="javascript:formSubmit()"><i class="fa fa-sign-out"></i> Logout</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    </li>
+								<c:if test="${loggedIn}">
+                                                                <li class="current">
+                                                                    <h1><a href="/tutoris_baernae/messageInbox"><i class="fa fa-envelope"></i> Inbox</a></h1>
+                                                                </li>
+                                                                </c:if>
+                                                                </sec:authorize>
+                                                                
+                                                        <%-- NOT AUTHORIZED --%>
+                                                                <sec:authorize access="!hasAnyRole('ROLE_USER','ROLE_TUTOR')">
+								<li class="current">
+                                                                    <h1><a href="/tutoris_baernae/login">Login</a></h1>
+                                                                </li>
+                                                                <li class="current">
+                                                                    <h1><a href="/tutoris_baernae/register">Register</a></h1>
+                                                                </li>
+                                                                </sec:authorize>
 							</ul>
 						</nav>
                                                 <script language="javascript">setPage()</script>

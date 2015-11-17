@@ -18,8 +18,14 @@ public class FileUploadController {
 		setCommandName("fileUploadForm");
 	}*/
  
+    @RequestMapping(value = "/fileupload", method = RequestMethod.GET)
+    protected ModelAndView view() throws Exception {
+    	ModelAndView model = new ModelAndView("fileUploadForm");
+    	return model;
+    }
+
 	@RequestMapping(value = "/fileupload", method = RequestMethod.POST)
-	protected ModelAndView onSubmit(HttpServletRequest request,
+	protected ModelAndView fileupload(HttpServletRequest request,
 		HttpServletResponse response, Object command, BindException errors)
 		throws Exception {
  

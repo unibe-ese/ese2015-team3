@@ -259,7 +259,6 @@
 
 		.dropotron li
 		{
-			border-top: solid 1px #eee;
 			line-height: 3em;
 		}
 
@@ -303,9 +302,7 @@
 				position: absolute;
 				top: -0.5em;
 				left: 1em;
-				border-bottom: solid 0.75em #ffffff;
-				border-left: solid 0.75em transparent;
-				border-right: solid 0.75em transparent;
+
 				z-index: 1;
 			}
 

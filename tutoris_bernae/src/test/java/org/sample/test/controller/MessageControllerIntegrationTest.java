@@ -1,6 +1,7 @@
 package org.sample.test.controller;
 
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -72,11 +73,11 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
     	message2 = new Message();
     	message2.setSendDate(before);
     	message2.setReceiver(receiver);
-       	message1.setSender(sender);
+       	message2.setSender(sender);
     	message3 = new Message();
     	message3.setSendDate(beforeBefore);
     	message3.setReceiver(receiver);
-       	message1.setSender(sender);
+       	message3.setSender(sender);
        	messageDao.save(message1);
        	messageDao.save(message2);
        	messageDao.save(message3);
@@ -109,6 +110,21 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
 										.andExpect(model().attribute("selectedMessage", Matchers.is(message1)))
+										.andExpect(forwardedUrl(completeUrl("messageInbox")));
+								
+	}
+	
+	@Test
+	public void cannotSelectForeignMessage() throws Exception
+	{
+		Message foreignMessage = new Message();
+		foreignMessage.setReceiver(sender);
+		messageDao.save(foreignMessage);
+		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(get("/messageInboxShow?messageId="+foreignMessage.getId()).session(session))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
+										.andExpect(model().attribute("selectedMessage", nullValue()))
 										.andExpect(forwardedUrl(completeUrl("messageInbox")));
 								
 	}	

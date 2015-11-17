@@ -64,7 +64,7 @@ public void initBinder(WebDataBinder binder) {
 		ModelAndView model;
 		User user = getUserFromSecurityContext();
 		model = createInboxPage(user);
-		Message selectedMessage = messageService.read(messageId);
+		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
 			model.addObject("selectedMessage", selectedMessage);
 			return model;
@@ -88,7 +88,7 @@ public void initBinder(WebDataBinder binder) {
 	public ModelAndView answerSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId, HttpSession session) {
 		ModelAndView model;
 		User user = getUserFromSecurityContext();
-		Message selectedMessage = messageService.read(messageId);
+		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
 			session.setAttribute("answeredMessage", selectedMessage);
 			model = createAnswerPage(user,new MessageForm(selectedMessage));

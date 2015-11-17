@@ -92,11 +92,15 @@ public class MessageService{
 	/**
 	 * "Reads" a message by returning it and setting the wasRead variabel of
 	 * the message to true in the database
-	 * @param messageId a Long definig the message we want to read
-	 * @return the Message given by the id with wasRead = true
+	 * @param messageId a Long defining the message we want to read
+	 * @param user the user who wants to read the message
+	 * @return the Message given by the id with wasRead = true if the user is the receiver
+	 * of the message or null if the user isn't the reciever of the message
 	 */
-	public Message read(Long messageId) {
+	public Message read(Long messageId, User user) {
 		Message opened = messageDao.findOne(messageId);
+		if(opened.getReceiver()!=user)
+			return null;
 		opened.setWasRead(true);
 		messageDao.save(opened);
 		return opened;

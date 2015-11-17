@@ -99,9 +99,23 @@ public class MessageServiceTransactionTest {
     public void readMessage()
     {
     	Message message = new Message();
+    	message.setReceiver(receiver);
     	message = messageDao.save(message);
-    	messageService.read(message.getId());
+    	messageService.read(message.getId(),receiver);
     	assertEquals(true, messageDao.findOne(message.getId()).getWasRead());
+    }
+    
+    @Test
+    public void readForeignMessageReturnsNullAndDoesNotRead()
+    {
+    	Message message = new Message();
+    	message.setReceiver(sender);
+    	message = messageDao.save(message);
+    	//Try reading the message sender got although we are reciever
+    	//Therefore we should get a null value and not be able to read it
+    	Message shouldBeNull = messageService.read(message.getId(),receiver);
+    	assertTrue(shouldBeNull==null);
+    	assertEquals(false, messageDao.findOne(message.getId()).getWasRead());
     }
     
     // makes more sense in a unit test, isn't changed at all through transaction

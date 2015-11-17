@@ -155,6 +155,13 @@ public class MessageServiceTest {
     	message1.setSendDate(now);
     	message1.setReceiver(receiver);
     	
+        when(messageDao.findOne(any(Long.class)))
+        .thenAnswer(new Answer<Message>() {
+            public Message answer(InvocationOnMock invocation) throws Throwable {
+                return message1;
+            }
+        });   
+    	
         when(messageDao.save(any(Message.class)))
         .thenAnswer(new Answer<Message>() {
             public Message answer(InvocationOnMock invocation) throws Throwable {
@@ -163,6 +170,8 @@ public class MessageServiceTest {
                 return message;
             }
         });      
+        
+        messageService.read(0L, receiver);
 
     }
     

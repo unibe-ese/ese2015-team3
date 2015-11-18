@@ -34,6 +34,7 @@ private UserDao userDao;
 @Autowired
 private MessageService messageService;
 	
+
 @InitBinder("messageForm")
 public void initBinder(WebDataBinder binder) {
 	binder.addValidators(new MessageReceiverValidator(userDao));
@@ -91,11 +92,11 @@ public void initBinder(WebDataBinder binder) {
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
 			session.setAttribute("answeredMessage", selectedMessage);
-			model = createAnswerPage(user,new MessageForm(selectedMessage));
+			model = createAnswerPage(user,new MessageForm(selectedMessage),true,session);
 			return model;
 		}
 		else {
-			model = createAnswerPage(user,new MessageForm());
+			model = createAnswerPage(user,new MessageForm(),false,session);
 			return model;
 		}
 	}
@@ -109,10 +110,11 @@ public void initBinder(WebDataBinder binder) {
 	 * and "messages" all his messages
 	 */
 	@RequestMapping(value = "/messageNewTo", method = RequestMethod.GET)
-	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) String receiver) {
+	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) String receiver,
+										HttpSession session) {
 		ModelAndView model;
 		User user = getUserFromSecurityContext();
-		model = createAnswerPage(user,new MessageForm(receiver));
+		model = createAnswerPage(user,new MessageForm(receiver),false,session);
 		return model;
 	}
 	
@@ -123,10 +125,10 @@ public void initBinder(WebDataBinder binder) {
 	 * "user", the logged in user, and "messages" all his messages
 	 */
 	@RequestMapping(value = "/messageNew", method = RequestMethod.GET)
-	public ModelAndView writeNewMessage() {
+	public ModelAndView writeNewMessage(HttpSession session) {
 		ModelAndView model;
 		User user = getUserFromSecurityContext();
-		model = createAnswerPage(user,new MessageForm());
+		model = createAnswerPage(user,new MessageForm(),false,session);
 		return model;
 	}
 	
@@ -155,12 +157,12 @@ public void initBinder(WebDataBinder binder) {
             	model.addObject("submitMessage", "message sent!");
             	return model;
             } catch (InvalidUserException e) {
-            	ModelAndView model = createAnswerPage(user,messageForm);
+            	ModelAndView model = createAnswerPage(user,messageForm,true,session);
             	model.addObject("submitMessage", e.getMessage());
             	return model;
             }
         } else {
-        	return createAnswerPage(user,messageForm);
+        	return createAnswerPage(user,messageForm,true,session);
         }   	
     }
 	
@@ -171,8 +173,10 @@ public void initBinder(WebDataBinder binder) {
 		return model;
 	}
 	
-	private ModelAndView createAnswerPage(User user, MessageForm messageForm) {
+	private ModelAndView createAnswerPage(User user, MessageForm messageForm, boolean keepAnsweredMessage, HttpSession session) {
 		ModelAndView model;
+		if(!keepAnsweredMessage)
+			session.removeAttribute("answeredMessage");
 		model = new ModelAndView("messageAnswer");
 		model.addObject("messages", messageService.getOrderedMessagesList(user));
 		model.addObject("messageForm", messageForm);

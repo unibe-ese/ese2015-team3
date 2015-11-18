@@ -27,6 +27,13 @@
                 <div class="col-1-3">Last Name:</div>
                 <div class="col-2-3">${user.lastName}</div>
             </div>
+            <c:if test="${tutor.averageGrade} != null">
+            <div>
+                <div class="col-1-3">Average Grade:</div>
+                <div class="col-2-3">${tutor.averageGrade}</div>
+            </div>
+            </c:if>
+            
             <sec:authorize access="hasRole('ROLE_TUTOR')">
             <div>
                 <div class="col-1-3">Fee:</div>
@@ -43,12 +50,11 @@
     <sec:authorize access="hasRole('ROLE_TUTOR')">        
     <div class="col-1-3">
         <div class="module classes">
-            <div class="col-2-3"><i class="fa fa-folder-open-o"></i> Class</div>
-            <div class=" col-1-3">Grade</div>
-        <c:forEach items="${tutor.completedClasses}" var="completedclasses">
-            <div class="col-2-3"> <i class="fa fa-child"></i> ${completedclasses.classes.name}</div>
-            <div class=" col-1-3"> ${completedclasses.grade}</div>
-            <div class="col-1-3"> </div>
+            <div class="col-2-3"><b>Class</b></div>
+            <div class=" col-1-3"><b>Grade</b></div>
+        <c:forEach items="${tutor.completedClasses}" var="completedClasses">
+            <div class="col-2-3">${completedClasses.classes.name}</div>
+            <div class="col-1-3">${completedClasses.grade}</div>
         </c:forEach>
         </div>
     </div>

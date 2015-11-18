@@ -10,7 +10,29 @@
 		<c:if test="${not empty submitMessage}">
 			<div class="message">${submitMessage}</div>
 		</c:if>
-<form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
+<fieldset>
+<div class="grid">
+	<div class="col-1-3">
+		<div>
+		<div class="module">
+		<a href="/tutoris_baernae/messageNew"> New </a>  
+		</div>
+
+		<div class="module">
+		<c:forEach items="${messages}" var="messages">
+		<p><c:if test = "${!messages.wasRead}">
+			Unread! 
+			</c:if>
+		${messages.sender.username},${messages.messageSubject},
+		<a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}"> open </a>  
+		</p>
+		</c:forEach>
+		</div>
+		</div>
+	</div>
+		<div class="col-1-3">
+		<div>
+		<form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
     <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
         <div class="control-group<c:if test="${not empty receiverErrors}"> error</c:if>">
@@ -41,22 +63,21 @@
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Send</button>
          </div>
-           
     </fieldset>
 </form:form>
-
-	<c:if test = "${not empty answeredMessage}">
-	<p>${answeredMessage.sender.username}<p>
-	<p>${answeredMessage.messageSubject}<p>
-	<p>${answeredMessage.messageText}<p>
-	</c:if>
-		 <c:forEach items="${messages}" var="messages">
-		 <p><c:if test = "${!messages.wasRead}">
-	Unread! 
-	</c:if>${messages.sender.username},${messages.messageSubject},
-		 <a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}"> open </a>
-		 <a href="/tutoris_baernae/messageInboxAnswer?messageId=${messages.id}"> Answer </a>  
-		 </p>
-		 </c:forEach>
+		</div>
+	</div>
+	<div class="col-1-3">
+		<c:if test = "${not empty answeredMessage}">
+		<div> 
+		<div class="module">From:${answeredMessage.sender.username}</div>
+		<div class="module">Subject:${answeredMessage.messageSubject}</div>
+	 	<div class="module"><p>${answeredMessage.messageText}<p></div>
+		</c:if>
+		</div>
+	</div>
+	<div class="col-1-3"></div>
+</div>
+<fieldset>
 </div>
 <c:import url="template/footer.jsp" />

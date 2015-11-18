@@ -10,20 +10,40 @@
 		<c:if test="${not empty submitMessage}">
 			<div class="message">${submitMessage}</div>
 		</c:if>
-	<a href="/tutoris_baernae/messageNew"> New </a>  
-	<c:if test = "${not empty selectedMessage}">
-	<p>${selectedMessage.sender.username}<p>
-	<p>${selectedMessage.messageSubject}<p>
-	<p>${selectedMessage.messageText}<p>
-	<a href="/tutoris_baernae/messageInboxAnswer?messageId=${selectedMessage.id}"> Answer </a>  
-	</c:if>
-	
-		 <c:forEach items="${messages}" var="messages">
-		 <p><c:if test = "${!messages.wasRead}">
-	Unread! 
-	</c:if>${messages.sender.username},${messages.messageSubject},
-		 <a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}"> open </a>  
-		 </p>
-		 </c:forEach>
+<fieldset>
+<div class="grid">
+	<div class="col-1-3">
+		<div>
+		<div class="module">
+		<a href="/tutoris_baernae/messageNew"> New </a>  
+		</div>
+
+		<div class="module">
+		<c:forEach items="${messages}" var="messages">
+		<p><c:if test = "${!messages.wasRead}">
+			Unread! 
+			</c:if>
+		${messages.sender.username},${messages.messageSubject},
+		<a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}"> open </a>  
+		</p>
+		</c:forEach>
+		</div>
+		</div>
+	</div>
+	<div class="col-1-3">
+		<c:if test = "${not empty selectedMessage}">
+		<div>
+		 
+		<div class="module">From:${selectedMessage.sender.username}</div>
+		<div class="module">Subject:${selectedMessage.messageSubject}</div>
+	 	<div class="module"><p>${selectedMessage.messageText}<p></div>
+		<a href="/tutoris_baernae/messageInboxAnswer?messageId=${selectedMessage.id}"> Answer </a>  
+		
+		</c:if>
+		</div>
+	</div>
+	<div class="col-1-3"></div>
+</div>
+<fieldset>
 </div>
 <c:import url="template/footer.jsp" />

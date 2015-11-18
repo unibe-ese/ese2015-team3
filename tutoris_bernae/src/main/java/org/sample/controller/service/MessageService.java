@@ -99,7 +99,7 @@ public class MessageService{
 	 */
 	public Message read(Long messageId, User user) {
 		Message opened = messageDao.findOne(messageId);
-		if(opened.getReceiver()!=user)
+		if(!opened.getReceiver().equals(user))
 			return null;
 		opened.setWasRead(true);
 		messageDao.save(opened);

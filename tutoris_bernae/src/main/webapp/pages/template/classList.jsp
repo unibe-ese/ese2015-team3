@@ -24,9 +24,10 @@
 					  		<form:option value = "5"> 5.00 </form:option>
 					  		<form:option value = "5.50"> 5.50 </form:option>
 					  		<form:option value = "6.00"> 6.00 </form:option>
+					  		</form:select>
 					  		</td>
                             <td><button type="submit" name="removeClass" value="${i.index}">remove it</button></td>
-                            </tr>
+                         </tr>
                     </c:forEach>
                 </tbody>
             </table>

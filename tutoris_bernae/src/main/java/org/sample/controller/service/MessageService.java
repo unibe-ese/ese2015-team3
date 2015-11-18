@@ -38,7 +38,6 @@ public class MessageService{
     @Autowired UserDao userDao;  
     @Autowired MessageDao messageDao;  
    
-  
     
     /**
      * Compares messages by date to order them from newest to oldest
@@ -90,8 +89,9 @@ public class MessageService{
     }
 
 	/**
-	 * "Reads" a message by returning it and setting the wasRead variabel of
-	 * the message to true in the database
+	 * "Reads" a message for a user by returning it and setting the wasRead variabel of
+	 * the message to true in the database. If the user isn't the receiver, the message
+	 * isn't read and null is returned
 	 * @param messageId a Long defining the message we want to read
 	 * @param user the user who wants to read the message
 	 * @return the Message given by the id with wasRead = true if the user is the receiver

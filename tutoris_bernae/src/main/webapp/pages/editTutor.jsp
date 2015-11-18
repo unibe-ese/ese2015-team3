@@ -94,7 +94,13 @@
                         <td><form:select path="classList[${i.index}].classes" id="classesId${i.index}" value="${tutorEditForm.classList[i.index].classes.id}">
 					  	<form:options items="${allClasses}" itemLabel="name" itemValue="id"/>
 				       	</form:select></td>
-                            <td><form:input path="classList[${i.index}].grade" id="grade${i.index}" /></td>
+                            <td><form:select path="classList[${i.index}].grade" id="grade${i.index}" value="${tutorEditForm.classList[i.index].grade}">
+					  		<form:option value = "4"> 4.00 </form:option>
+					  		<form:option value = "4.50"> 4.50 </form:option>
+					  		<form:option value = "5"> 5.00 </form:option>
+					  		<form:option value = "5.50"> 5.50 </form:option>
+					  		<form:option value = "6.00"> 6.00 </form:option>
+					  		</form:select></td>
                             <td><button type="submit" name="removeClass" value="${i.index}">remove it</button></td>
                             </tr>
                     </c:forEach>

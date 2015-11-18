@@ -164,9 +164,20 @@
 
 	/* Forms */
 
-		form
+		form-mc
 		{
+                    position: relative;
 		}
+                
+                form-mc:before, form:after {content: ""; display: table;}
+                
+                form-mc:after{ clear: both;}
+                
+                .mc-column{
+                    width: 50%; 
+                    padding: 10px; 
+                    float: left;
+                }
 		
 			form label
 			{
@@ -186,9 +197,7 @@
 				-webkit-appearance: none;
                                 color: #555;
 				display: block;
-				width: 30%;
-                                min-width: 150px;
-                                max-width: 450px;
+                                width: 90%;
 				border-radius: 0px;
 				border: solid 1px #eee;
 			}
@@ -213,10 +222,18 @@
 				
 			form textarea
 			{
-				min-height: 9em;
-				padding: 1em;
+                            resize: vertical;
+                            min-height: 9.4em;
+                            padding: 1em;
 			}
 
+                        .form-actions{
+                            clear: both;
+                            float: left;
+                            padding: 10px;
+                            
+                        }
+                        
 			form .formerize-placeholder
 			{
 				color: #555 !important;
@@ -247,6 +264,21 @@
 				border: 0;
 			}
                         
+                        @media screen and (max-width: 70em) {
+                            .mc-column {
+                                width: 50%;
+                            }
+                            .mc-column:nth-child(3) {
+                                width: 100%;
+                            }
+                        }
+                        
+                        @media screen and (max-width: 48em) {
+                            .mc-column {
+                                width: 100%;
+                                padding: 10px;
+                            }
+                        }
 
 	/* Tables */
 	

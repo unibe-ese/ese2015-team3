@@ -19,7 +19,8 @@
     <mvc:default-servlet-handler/>     
 	
   	<!-- view resolver  -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
@@ -34,5 +35,11 @@
     
     <!-- resources  -->
     <mvc:resources mapping="/resources/**" location="/" />
+    
+    <bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+			<property name="maxUploadSize" value="8000000"/>
+	</bean>
+    
 	
 </beans>

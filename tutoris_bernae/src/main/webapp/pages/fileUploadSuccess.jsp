@@ -4,8 +4,9 @@
 <body>
 	<h2>Spring MVC file upload example</h2>
 
-	FileName : "
-	<strong> ${fileName} </strong>" - Uploaded Successful.
+		<span>Upload successful</span>
+	<!-- FileName : "
+	<strong> ${fileName} </strong>" - Uploaded Successful. -->
 
 </body>
 </html>

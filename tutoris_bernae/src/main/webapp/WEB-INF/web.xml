@@ -17,6 +17,7 @@
     	<param-value>
     		/WEB-INF/config/springData.xml
     		/WEB-INF/config/springSecurity.xml
+    		<!--  /WEB-INF/config/commonsMultipartResolver.xml -->
     	</param-value>
 	</context-param>
     

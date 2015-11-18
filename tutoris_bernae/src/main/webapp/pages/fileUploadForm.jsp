@@ -19,15 +19,15 @@
 <body>
 	<h2>Spring MVC file upload example</h2>
 
-	<form:form method="POST" modelAttribute="picture" action="fileupload" enctype="multipart/form-data">
+	<form:form method="post" action="fileupload" enctype="multipart/form-data">
 
-		<form:errors path="*" cssClass="errorblock" element="div" />
+		<!-- <form:errors path="*" cssClass="errorblock" element="div" /> -->
 
 		Please select a file to upload : <input type="file" name="file" />
-		<button type="submit" action="fileupload" name="fileupload" value="true">Upload </button>
+		<!-- <button type="submit" action="fileupload" name="fileupload" value="true">Upload </button> -->
+		<input type="submit" value="Upload"/>
 		
-		<span><form:errors path="file" cssClass="error" />
-		</span>
+		<!-- <span><form:errors path="file" cssClass="error" /></span> -->
 
 	</form:form>
 

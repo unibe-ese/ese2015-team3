@@ -8,7 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,11 +29,12 @@ public class FileUploadController {
     }
 
 	@RequestMapping(value = "/fileupload", method = RequestMethod.POST)
-	protected ModelAndView fileupload(HttpServletRequest request,
-		HttpServletResponse response, Object command, BindException errors)
-		throws Exception {
+	protected ModelAndView fileupload(HttpServletRequest request, @RequestParam CommonsMultipartFile file)
+//			HttpServletRequest request, HttpServletResponse response, Object command, BindException errors)
+//			@RequestParam("file") MultipartFile file)
+			throws Exception {
  
-		FileUpload file = (FileUpload)command;
+/*		FileUpload file = (FileUpload)command;
 		
 		MultipartFile multipartFile = file.getFile();
 		
@@ -39,7 +44,9 @@ public class FileUploadController {
 			fileName = multipartFile.getOriginalFilename();
 			//do whatever you want
 		}
-		
-		return new ModelAndView("fileUploadSuccess", "fileName", fileName);
+*/		
+		//ModelAndView model = new ModelAndView("fileUploadSuccess", "fileName", fileName);
+		ModelAndView model = new ModelAndView("fileUploadSuccess");
+		return model;
 	}
 }

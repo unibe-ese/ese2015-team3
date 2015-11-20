@@ -1,17 +1,16 @@
 package org.sample.model;
 
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Cascade;
-import org.sample.model.dao.ClassesDao;
-import org.springframework.beans.factory.annotation.Autowired;
-
-
+/**
+ * Models the classes that a tutor can register.
+ * @author G.Corsini
+ *
+ */
 @Entity
 public class Classes {
 	
@@ -19,13 +18,12 @@ public class Classes {
     @GeneratedValue
     private Long id;
 	
-	//Currently not in use (do we even need to know that?)
+	//Currently not in use but could be required for more granular searches.
     @ManyToOne
     private StudyCourse studyCourse;
     
 
     private String name;
-    private Integer grade;
     
 	public Long getId() {
 		return id;
@@ -51,11 +49,35 @@ public class Classes {
 		this.name = name;
 	}
 
-	public Integer getGrade() {
-		return grade;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((studyCourse == null) ? 0 : studyCourse.hashCode());
+		return result;
 	}
 
-	public void setGrade(Integer grade) {
-		this.grade = grade;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Classes other = (Classes) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 }

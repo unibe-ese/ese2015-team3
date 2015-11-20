@@ -1,38 +1,42 @@
 package org.sample.controller.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.sample.controller.pojos.TutorForm;
-import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
-import org.sample.model.dao.ClassesDao;
-import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
 @Service
 public class TutorFormService {
 	@Autowired TutorDao tutorDao;
 	@Autowired UserDao userDao;
-    
-    /**
+	@Autowired CompletedClassesService completedClassesService;
+	
+	/**
      * Creates a tutor out of a TutorForm and save him to the database, and also
      * updates the user belonging to that tutor.
      * @param tutorForm a TutorForm, not null
      */
     @Transactional
 	public void saveFrom(TutorForm tutorForm) {
-    	assert(tutorForm!=null);
-    	assert(tutorForm.getUserId()!=null);
+    	assert (tutorForm!=null);
+    	assert (tutorForm.getUserId()!=null);
 		Tutor tutor = new Tutor();
 		User user = userDao.findOne(tutorForm.getUserId());
-		tutor.setClasses(new HashSet<Classes>(tutorForm.getClassList()));
+		tutor.setCompletedClasses(new HashSet<CompletedClasses>(tutorForm.getClassList()));
+		tutor.setAverageGrade(completedClassesService.calculateAverageGrade(tutorForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(tutorForm.getStudyCourseList()));
 		tutor.setBio(tutorForm.getBio());
 		tutor.setFee(tutorForm.getFee());

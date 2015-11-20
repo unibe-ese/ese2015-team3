@@ -7,15 +7,15 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 
 /**
  * A register form for tutors, stores all needed
  * information to upgrade a user to a tutor.
  */
-public class TutorForm {
+public class TutorForm implements ClassCourseList{
 
     private Long id;
 
@@ -27,11 +27,11 @@ public class TutorForm {
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
 
-    private Long studyCourse;
+    
     private List<StudyCourse> studyCourseList = new LinkedList<StudyCourse>(); //Studiengang
 
-    private Long classes;
-    private List<Classes> classList = new LinkedList<Classes>();
+  
+    private List<CompletedClasses> classList = new LinkedList<CompletedClasses>();
     
     @NotEmpty
     private String bio;
@@ -60,11 +60,11 @@ public class TutorForm {
 		this.studyCourseList = studyCourseList;
 	}
 
-	public List<Classes> getClassList() {
+	public List<CompletedClasses> getClassList() {
 		return classList;
 	}
 
-	public void setClassList(List<Classes> classList) {
+	public void setClassList(List<CompletedClasses> classList) {
 		this.classList = classList;
 	}
 
@@ -84,19 +84,4 @@ public class TutorForm {
 		this.userId = userId;
 	}
 
-	public Long getStudyCourse() {
-		return studyCourse;
-	}
-
-	public void setStudyCourse(Long studyCourse) {
-		this.studyCourse = studyCourse;
-	}
-
-	public Long getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Long classes) {
-		this.classes = classes;
-	}
 }

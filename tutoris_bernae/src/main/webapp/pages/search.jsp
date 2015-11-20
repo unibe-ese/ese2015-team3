@@ -11,46 +11,44 @@
 
 <h1>Search Tutor</h1>
 
-<form:form method="POST" modelAttribute="searchForm" action="submitSearch" id="searchForm" cssClass="form-horizontal" autocomplete="off">
+<form:form method="POST" modelAttribute="searchForm" action="submitSearch" id="searchForm" cssClass="form-mc" autocomplete="off">
     <fieldset>
-        <legend>Enter search criterias</legend>
+        <legend>Enter search criteria</legend>
 
-        <c:set var="studyCourseIdErrors"><form:errors path="studyCourseId"/></c:set>
-        
-        <div class="control-group<c:if test="${not empty studyCourseIdErrors}">error</c:if>">
-            <label class="control-label" for="field-studyCourseId">Study Course</label>
-            
-            <div class="controls">
-
-            <form:select path="studyCourseId" required="false">
-                <form:option value="0">-- no course selected --</form:option>
-                <form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
-            </form:select>
-            <form:errors path="studyCourseId" cssClass="help-inline" element="span"/>
+        <div class="mc-column">
+            <c:set var="studyCourseIdErrors"><form:errors path="studyCourseId"/></c:set>
+            <div class="control-group<c:if test="${not empty studyCourseIdErrors}">error</c:if>">
+                <label class="control-label" for="field-studyCourseId">Study Course</label>
+                <div class="controls">
+                    <form:select path="studyCourseId" required="false">
+                        <form:option value="0">-- no course selected --</form:option>
+                        <form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
+                    </form:select>
+                    <form:errors path="studyCourseId" cssClass="help-inline" element="span"/>
+                </div>
+            </div>
+            <c:set var="feeErrors"><form:errors path="fee"/></c:set>
+            <div class="control-group<c:if test="${not empty feeErrors}">error</c:if>"> 
+                <label class="control-label" for="field-fee">Fee</label>
+                <div class="controls">
+                    <form:input path="fee" id="field-fee" tabindex="3" maxlength="35" placeholder="Fee"/>
+                    <form:errors path="fee" cssClass="help-inline" element="span"/>
+                </div>
             </div>
         </div>
-            
-        <c:set var="classesIdErrors"><form:errors path="classesId"/></c:set>
-        <div class="control-group<c:if test="${not empty classesIdErrors}">error</c:if>">
-            <label class="control-label" for="field-classesId">Study Course</label>
-            
-            <div class="controls">
-            <form:select path="classesId" required="false">
-                <form:option value="0">-- no class selected --</form:option>
-                <form:options items="${classesList}" itemLabel="name" itemValue="id"/>
-            </form:select>
-            <form:errors path="classesId" cssClass="help-inline" element="span"/>
-            </div>
-        </div>    
         
-        <c:set var="feeErrors"><form:errors path="fee"/></c:set>
-        <div class="control-group<c:if test="${not empty feeErrors}">error</c:if>"> 
-            <label class="control-label" for="field-fee">Fee</label>
-            
-            <div class="controls">
-                <form:input path="fee" id="field-fee" tabindex="3" maxlength="35" placeholder="Fee"/>
-                <form:errors path="fee" cssClass="help-inline" element="span"/>
-            </div>
+        <div class="mc-column">
+            <c:set var="classesIdErrors"><form:errors path="classesId"/></c:set>
+            <div class="control-group<c:if test="${not empty classesIdErrors}">error</c:if>">
+                <label class="control-label" for="field-classesId">Study Course</label>
+                <div class="controls">
+                    <form:select path="classesId" required="false">
+                        <form:option value="0">-- no class selected --</form:option>
+                        <form:options items="${classesList}" itemLabel="name" itemValue="id"/>
+                    </form:select>
+                    <form:errors path="classesId" cssClass="help-inline" element="span"/>
+                </div>
+            </div> 
         </div>
         
         <div class="form-actions">

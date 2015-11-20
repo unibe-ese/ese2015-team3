@@ -9,6 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.custom.java.version>1.7</project.custom.java.version>
 	</properties>
 
 	<repositories>
@@ -322,8 +323,38 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+					        <groupId>org.apache.maven.plugins</groupId>
+					        <artifactId>maven-compiler-plugin</artifactId>
+					        <version>3.3</version>
+					        <configuration>
+					          <source>1.7</source>
+					          <target>1.7</target>
+					        </configuration>
+					      </plugin>
 				</plugins>
 			</build>
+			<reporting>
+			    <plugins>
+			        <plugin>
+			            <groupId>org.codehaus.mojo</groupId>
+			            <artifactId>findbugs-maven-plugin</artifactId>
+			            <version>3.0.3</version>
+			            <configuration>
+			                <!--
+			                    Enables analysis which takes more memory but finds more bugs.
+			                    If you run out of memory, changes the value of the effort element
+			                    to 'low'.
+			                -->
+			                <effort>Max</effort>
+			                <!-- Reports all bugs (other values are medium and max) -->
+			                <threshold>Low</threshold>
+			                <!-- Produces XML report -->
+			                <xmlOutput>true</xmlOutput>
+			            </configuration>
+			        </plugin>
+			    </plugins>
+			</reporting>
 		</profile>
 	</profiles>
 	<groupId>com.github.unibe-ese.ese2015-team3</groupId>

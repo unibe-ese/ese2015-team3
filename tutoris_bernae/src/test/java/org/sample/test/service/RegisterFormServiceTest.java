@@ -1,11 +1,19 @@
 package org.sample.test.service;
 
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.RegisterForm;
+import org.sample.controller.pojos.TutorEditForm;
+import org.sample.controller.pojos.TutorForm;
+import org.sample.controller.service.EditFormService;
 import org.sample.controller.service.RegisterFormService;
+import org.sample.model.Classes;
+import org.sample.model.CompletedClasses;
+import org.sample.model.StudyCourse;
+import org.sample.model.Tutor;
 import org.sample.model.User;
-import org.sample.model.dao.AddressDao;
+import org.sample.model.dao.ClassesDao;
+import org.sample.model.dao.StudyCourseDao;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,17 +21,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
 import static org.mockito.Mockito.reset;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,23 +47,49 @@ public class RegisterFormServiceTest {
 	@Configuration
     static class ContextConfiguration {
 
-	    @Bean
-	    public UserDao userDaoMock() {
-	    	UserDao userDao = mock(UserDao.class);
-	    	return userDao;
-	    }
-        @Bean
-        public RegisterFormService registerFormService() {
-            RegisterFormService registerFormService = new RegisterFormService();
-            return registerFormService;
-        }
+		@Bean
+		public UserDao userDaoMock() {
+			UserDao userDao = mock(UserDao.class);
+			return userDao;
+		}
+		@Bean
+		public StudyCourseDao studyCourseDaoMock() {
+			StudyCourseDao studyCourseDao= mock(StudyCourseDao.class);
+			return studyCourseDao;
+		}
+		@Bean
+		public ClassesDao classesDaoMock() {
+			ClassesDao classesDao= mock(ClassesDao.class);
+			return classesDao;
+		}
+		@Bean
+		public TutorDao tutorDaoMock() {
+			TutorDao tutorDao = mock(TutorDao.class);
+			return tutorDao;
+		}
+		@Bean
+		public RegisterFormService registerFormService() {
+			RegisterFormService registerFormService = new RegisterFormService();
+			return registerFormService;
+		}
     }
 	
-	@Autowired
-    private RegisterFormService registerFormService;
+
 	@Qualifier("userDaoMock")
 	@Autowired
 	private UserDao userDao;
+	@Qualifier("tutorDaoMock")
+	@Autowired
+	private TutorDao tutorDao;
+	@Qualifier("studyCourseDaoMock")
+	@Autowired
+	private StudyCourseDao studyCourseDao;
+	@Qualifier("classesDaoMock")
+	@Autowired
+	private ClassesDao classesDao;
+	@Autowired
+    private RegisterFormService registerFormService;
+
 
     @Test
     public void CorrectDataSaved() {
@@ -88,6 +124,7 @@ public class RegisterFormServiceTest {
         assertNotNull(registerForm.getId());
         assertTrue(registerForm.getId() > 0);
     }
+    
     
     @After
     public void reset_mocks() {

@@ -2,10 +2,8 @@ package org.sample.controller.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -40,50 +38,46 @@ public class SearchService {
      * For multiple criteria only tutors matching all of them are returned.
      * 
      * @param searchForm stores the search criteria, not null 
-     * @return a list of tutors matching the criteria
+     * @return a set of tutors matching the criteria
      */
     @Transactional
     public Set<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
     	assert(searchForm!=null);
+    	assert(searchForm.getClassesId()!=null);
+    	assert(searchForm.getStudyCourseId()!=null);
         StudyCourse courseCriteria = studyCourseDao.findOne(searchForm.getStudyCourseId());
         Classes classCriteria = classesDao.findOne(searchForm.getClassesId());
         BigDecimal fee = searchForm.getFee();
-        List<Tutor> tutorsMatchingCourse = new ArrayList<Tutor>();
-        List<Tutor> tutorsMatchingClass = new ArrayList<Tutor>();
-        List<Tutor> tutorsMatchingFee = new ArrayList<Tutor>();
-        
-        if(courseCriteria!=null)
-        	 tutorsMatchingCourse = (List<Tutor>) tutorDao.findByCoursesLike(courseCriteria);
-        if(classCriteria!=null)
-        	tutorsMatchingClass = (List<Tutor>) tutorDao.findByClassesLike(classCriteria);
-        if(fee!= null)
-        	 tutorsMatchingFee = (List<Tutor>) tutorDao.findByFeeBetween(new BigDecimal(0),fee);
-
         List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
-        if(!tutorsMatchingCourse.isEmpty()) searchResults.add(tutorsMatchingCourse);
-        if(!tutorsMatchingClass.isEmpty())searchResults.add(tutorsMatchingClass);
-        if(!tutorsMatchingFee.isEmpty())searchResults.add(tutorsMatchingFee);
+        //Add the list of results form all criterias that we searched for
+        //Obviously if the criteria is null it wasn't filled out in the form and we don't ask for it
+        if(courseCriteria!=null){
+        	searchResults.add((List<Tutor>) tutorDao.findByCoursesLike(courseCriteria));
+        }
+        if(classCriteria!=null){
+        	searchResults.add((List<Tutor>) tutorDao.findByCompletedClassesClassesLike(classCriteria));
+        }
+        if(fee!= null){
+        	 searchResults.add((List<Tutor>) tutorDao.findByFeeBetween(new BigDecimal(0),fee));
+        }
         return findCommonElements(searchResults);
     }
     
-    /**
+
+	/**
      * helper function to find common elements in multiple lists.
      * @return list containing common elements
      */
     private Set<Tutor> findCommonElements(List<List<Tutor>> collections){
         
         Set<Tutor> common = new HashSet<Tutor>();
-
+        
         if (!collections.isEmpty()){
             Iterator<List<Tutor>> iterator = collections.iterator();
-            
             common.addAll(iterator.next());
             while (iterator.hasNext()) {
-            	Set<Tutor> newcommon = new HashSet<Tutor>();
-            	for(Tutor t : iterator.next()){
-                if(common.contains(t)) newcommon.add(t); 
-            	}
-            	common = newcommon;
+            	List<Tutor> next = iterator.next();
+            	common.retainAll(next); 
             }
         } 
         return common;
@@ -123,20 +117,4 @@ public class SearchService {
         return null;
     }
     
-    /**
-     * Get grade of class.
-     * If no class criteria was entered return null.
-     * 
-     * @param searchForm has class criteria stored
-     * @return grade achieved or null if no criteria was provided
-     */
-    public Integer getClasseGrade(SearchForm searchForm) {
-        if (searchForm.getClassesId() != null) {
-            Classes classe = classesDao.findOne(searchForm.getClassesId());
-            if (classe != null) {
-                return classe.getGrade();
-            }
-        }
-        return null;
-    }
 }

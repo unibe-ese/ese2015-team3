@@ -33,11 +33,11 @@
     </tbody>
 </table>
 
-<button type="button" class="btn" onclick="location.href='/tutoris_baernae/findTutor'">Search again</button>
+<button type="button" class="button btn" onclick="location.href='/tutoris_baernae/findTutor'">Search again</button>
 
 <c:if test="${page_error != null}">
     <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <button type="button" class="button close" data-dismiss="alert">&times;</button>
         <h4>Error!</h4>
         ${page_error}
     </div>

@@ -18,5 +18,4 @@
 	</c:otherwise>
 </c:choose>
 
-	<%@ include file="autocomplete.jsp" %>
 

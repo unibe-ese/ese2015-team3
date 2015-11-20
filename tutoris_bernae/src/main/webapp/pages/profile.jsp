@@ -1,6 +1,5 @@
 <%@page import="org.sample.model.User"%>
-<%@ page language="java" pageEncoding="UTF-8"
-	contentType="text/html;charset=utf-8"%>
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -13,7 +12,9 @@
 <form:form method="post" modelAttribute="signupForm" action="create"
 	id="signupForm" cssClass="form-horizontal" autocomplete="off">
 	<fieldset>
-		<a href="/tutoris_baernae/edit">Edit Profile</a>
+		<img id="profile_picture" src="/tutoris_baernae/img/profile_pics/${user.profilePicture}" alt="profile_pic" /> </br>
+		<a href="/tutoris_baernae/fileupload" class="button">Edit profile picture</a></br>
+		<a href="/tutoris_baernae/edit" class="button">Edit Profile</a>
 		<p>FirstName: ${user.firstName}</p>
 		<p>Lastname: ${user.lastName }</p>
 		<p>Email: ${user.email}</p>

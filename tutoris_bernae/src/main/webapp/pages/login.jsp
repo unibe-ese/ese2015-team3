@@ -44,8 +44,8 @@
         </div>
 
 	        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Sign up</button>
-            <button type="reset" class="btn">Cancel</button>
+            <button type="submit" class="button">Log In</button>
+            <button type="reset" class="button btn" onclick="window.history.back();">Cancel</button>
            
         </div>
 		  </table>

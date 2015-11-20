@@ -1,52 +1,73 @@
 package org.sample.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 
-import org.sample.model.FileUpload;
+import org.sample.model.User;
+import org.sample.model.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileUploadController {
-/*	public FileUploadController(){
-		setCommandClass(FileUpload.class);
-		setCommandName("fileUploadForm");
-	}*/
- 
+	
+	@Autowired
+	private UserDao userDao;
+
+
+    private String saveDir = "C:/Users/gc/Downloads/";
+    
     @RequestMapping(value = "/fileupload", method = RequestMethod.GET)
     protected ModelAndView view() throws Exception {
     	ModelAndView model = new ModelAndView("fileUploadForm");
     	return model;
     }
 
-	@RequestMapping(value = "/fileupload", method = RequestMethod.POST)
-	protected ModelAndView fileupload(HttpServletRequest request, @RequestParam CommonsMultipartFile file)
-//			HttpServletRequest request, HttpServletResponse response, Object command, BindException errors)
-//			@RequestParam("file") MultipartFile file)
-			throws Exception {
- 
-/*		FileUpload file = (FileUpload)command;
+	@RequestMapping(value = "/fileuploadpage", method = RequestMethod.POST)
+	protected ModelAndView fileuploadpage(@RequestParam MultipartFile file) throws Exception {
 		
-		MultipartFile multipartFile = file.getFile();
+		String workingDir = System.getProperty("user.dir");
+		saveDir = workingDir + "/src/main/webapp/img/profile_pics/"; 
+		File dir = new File(saveDir);//workingDir + File.separator + "src" + File.separator + "main" + File.separator + "webapp" + File.separator + "img" + File.separator + "profile_pics");
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
 		
 		String fileName="";
+		if (file != null) {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		    String name = authentication.getName();
+			User user = userDao.findByUsername(name);
+			String currentProfilePictureName = user.getProfilePicture();
+			
+			fileName = file.getOriginalFilename();
+			String[] splittedName = fileName.split("\\.");
+			String fileNameEnding = splittedName[splittedName.length-1]; // get the last part of the name which should be the ending
 
-		if(multipartFile!=null){
-			fileName = multipartFile.getOriginalFilename();
-			//do whatever you want
+			if(currentProfilePictureName == null) { //no profile picture is set yet
+				fileName = "pp" + user.getId().toString() + "_0." + fileNameEnding.toLowerCase();				
+			} else{ //if  a profile picture is already set: increment the profile picture counter.
+				splittedName = currentProfilePictureName.split("_");
+				splittedName = splittedName[splittedName.length-1].split("\\.");
+				Long profPicCounter = Long.parseLong(splittedName[0]);
+				profPicCounter = profPicCounter + 1;
+				fileName = "pp" + user.getId().toString() + "_" + profPicCounter.toString() + "." + fileNameEnding.toLowerCase();				
+			}
+			
+			if(!fileName.equals("")){
+				file.transferTo(new File(saveDir + fileName));
+				user.setProfilePicture(fileName);
+				userDao.save(user);
+			}
 		}
-*/		
-		//ModelAndView model = new ModelAndView("fileUploadSuccess", "fileName", fileName);
-		ModelAndView model = new ModelAndView("fileUploadSuccess");
+ 
+		ModelAndView model = new ModelAndView("fileUploadSuccess", "fileName", fileName);
 		return model;
 	}
 }

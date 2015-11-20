@@ -53,26 +53,24 @@
                 <form:errors path="password" cssClass="help-inline" element="span"/>
             </div>
         </div>
-           <br>
-           <br>
+        
+        <br>
+		<c:if test="${page_error != null }">
+	        <div class="alert alert-error">
+	            <h4>Error!</h4>
+	                ${page_error}
+	        </div>
+	    </c:if>
+        <br>
+
        		        
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Sign up</button>
-             <button type="submit" name = "registerastutor" value = "true" class="btn btn-primary">Sign up as Tutor</button>
-             <button type="reset" class="btn">Cancel</button>
+			<button type="submit" class="button btn btn-primary">Sign up</button>
+            <button type="submit" name = "registerastutor" value = "true" class="button btn btn-primary">Sign up and register as Tutor</button>
+            <button type="reset" class="button btn" onclick="window.history.back();">Cancel</button>
          </div>
            
     </fieldset>
 </form:form>
-
-
-	<c:if test="${page_error != null }">
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Error!</h4>
-                ${page_error}
-        </div>
-    </c:if>
-
 
 <c:import url="template/footer.jsp" />

@@ -30,6 +30,8 @@ public class User {
     
     private boolean isTimetableActive;
 //    private Object timetable;
+    
+    private String profilePicture;
 
     public String getUsername() {
 		return username;
@@ -109,5 +111,13 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 }

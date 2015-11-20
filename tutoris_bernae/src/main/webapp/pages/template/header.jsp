@@ -48,7 +48,6 @@
 						<nav id="nav">
 							<ul>
 								<li class><a href="/tutoris_baernae/">Welcome</a></li>
-								<li><a href="#">About</a></li>
 								
 								<li><a href="/tutoris_baernae/findTutor">Find Tutor</a></li>
 								<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TUTOR')">

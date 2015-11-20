@@ -74,25 +74,23 @@
                 <form:errors path="bio" cssClass="help-inline" element="span"/>
             </div>
         </div>
-           <br>
-           <br>
+        
+		<br>
+		<c:if test="${page_error != null }">
+	        <div class="alert alert-error">
+	            <button type="button" class="close" data-dismiss="alert">&times;</button>
+	            <h4>Error!</h4>
+	                ${page_error}
+	        </div>
+	    </c:if>
+       <br>
        		        
         <div class="form-actions">
-            <button type="submit" name = "save" value = "true" class="btn btn-primary">Submit changes</button>
-            <button type="reset" class="btn">Cancel</button>
+            <button type="submit" name = "save" value = "true" class="button btn btn-primary">Submit changes</button>
+            <button type="reset" class="button btn" onclick="window.history.back();">Cancel</button>
          </div>
            
     </fieldset>
 </form:form>
-
-
-	<c:if test="${page_error != null }">
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Error!</h4>
-                ${page_error}
-        </div>
-    </c:if>
-
 
 <c:import url="template/footer.jsp" />

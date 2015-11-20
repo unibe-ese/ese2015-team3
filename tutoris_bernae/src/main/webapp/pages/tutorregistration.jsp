@@ -13,8 +13,9 @@
         <legend>Enter Your Information</legend>
 	<form:input path="userId" type="hidden" value="${tutorForm.userId}"/>
 
-             <c:import url="template/StudyList.jsp" />
-            <c:import url="template/classList.jsp" />
+        <c:import url="template/StudyList.jsp" />
+        <c:import url="template/classList.jsp" />
+        
         <c:set var="feeErrors"><form:errors path="fee"/></c:set>
         <div class="control-group<c:if test="${not empty feeErrors}"> error</c:if>">
             <label class="control-label" for="field-fee">Fee</label>
@@ -32,25 +33,23 @@
             </div>
         </div>
 
-           <br>
-           <br>
-       		        
+        <br>     
+        <c:if test="${page_error != null }">
+	        <div class="alert alert-error">
+	            <h4>Error!</h4>
+	                ${page_error}
+	        </div>
+    	</c:if>
+    	<br>
+    	
+                 		        	
         <div class="form-actions">
-            <button type="submit" name = "save" value = "true" class="btn btn-primary">Sign up</button>
-            <button type="reset" class="btn">Cancel</button>
+            <button type="submit" name = "save" value = "true" class="button btn btn-primary">Sign up</button>
+            <button type="reset" class="button btn" onclick="location.href='#';">Cancel</button>
          </div>
            
     </fieldset>
 </form:form>
-
-
-	<c:if test="${page_error != null }">
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Error!</h4>
-                ${page_error}
-        </div>
-    </c:if>
 
 
 <c:import url="template/footer.jsp" />

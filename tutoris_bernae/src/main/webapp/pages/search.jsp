@@ -40,7 +40,7 @@
         <div class="mc-column">
             <c:set var="classesIdErrors"><form:errors path="classesId"/></c:set>
             <div class="control-group<c:if test="${not empty classesIdErrors}">error</c:if>">
-                <label class="control-label" for="field-classesId">Study Course</label>
+                <label class="control-label" for="field-classesId">Class</label>
                 <div class="controls">
                     <form:select path="classesId" required="false">
                         <form:option value="0">-- no class selected --</form:option>

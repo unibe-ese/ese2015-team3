@@ -1,7 +1,10 @@
 package org.sample.controller.pojos;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sample.model.Message;
+import org.sample.model.MessageSubject;
 
 /**
  * Stores a message consisting of a subject, a text and the wished receiver
@@ -10,8 +13,8 @@ public class MessageForm {
 
     @NotEmpty
     private String receiver;
-    @NotEmpty
-    private String messageSubject;
+    @NotNull
+    private MessageSubject messageSubject;
     @NotEmpty
     private String messageText;
     
@@ -20,7 +23,7 @@ public class MessageForm {
     
 	public MessageForm(Message selectedMessage) {
 		receiver = selectedMessage.getSender().getUsername();
-		messageSubject = "AW: "+selectedMessage.getMessageSubject();
+		messageSubject = selectedMessage.getMessageSubject();
 	}
 	
 	public MessageForm() {
@@ -39,11 +42,11 @@ public class MessageForm {
 		this.receiver = receiver;
 	}
 
-	public String getMessageSubject() {
+	public MessageSubject getMessageSubject() {
 		return messageSubject;
 	}
 
-	public void setMessageSubject(String messageSubject) {
+	public void setMessageSubject(MessageSubject messageSubject) {
 		this.messageSubject = messageSubject;
 	}
 

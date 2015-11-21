@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.Type;
 
 /**
- * A message send form one user to another
+ * A message sent from one user to another TODO (add fields to doc)
  * @author pf15ese
  */
 
@@ -28,7 +28,8 @@ public class Message {
 	@ManyToOne
 	private User sender;
 
-	private String messageSubject;
+	@ManyToOne
+	private MessageSubject messageSubject;
 
 	@Type(type="text")
 	private String messageText;
@@ -43,14 +44,6 @@ public class Message {
 
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
-	}
-
-	public String getMessageSubject() {
-		return messageSubject;
-	}
-
-	public void setMessageSubject(String subject) {
-		this.messageSubject = subject;
 	}
 
 	public String getMessageText() {
@@ -83,6 +76,14 @@ public class Message {
 
 	public void setSender(User sender) {
 		this.sender = sender;
+	}
+
+	public MessageSubject getMessageSubject() {
+		return messageSubject;
+	}
+
+	public void setMessageSubject(MessageSubject messageSubject) {
+		this.messageSubject = messageSubject;
 	}
 
 	public Long getId() {

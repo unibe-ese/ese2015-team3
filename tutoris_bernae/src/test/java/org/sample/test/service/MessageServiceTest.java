@@ -10,6 +10,7 @@ import org.sample.controller.service.MessageService;
 import org.sample.model.Classes;
 import org.sample.model.CompletedClasses;
 import org.sample.model.Message;
+import org.sample.model.MessageSubject;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
 import org.sample.model.User;
@@ -103,7 +104,8 @@ public class MessageServiceTest {
     public void messageFormCorrectDataSaved() {
     	MessageForm messageForm = new MessageForm();
     	messageForm.setReceiver("tutortest");
-    	messageForm.setMessageSubject("meeting");
+    	final MessageSubject test = new MessageSubject();
+    	messageForm.setMessageSubject(test);
     	messageForm.setMessageText(".....");
     	
     	when(userDao.findByUsername(any(String.class)))
@@ -117,7 +119,7 @@ public class MessageServiceTest {
         .thenAnswer(new Answer<Message>() {
             public Message answer(InvocationOnMock invocation) throws Throwable {
             	Message message = (Message) invocation.getArguments()[0];
-                assertEquals("meeting", message.getMessageSubject());
+                assertEquals(test, message.getMessageSubject());
                 assertEquals(".....", message.getMessageText());
                 Date now = new Date();
                 assertTrue(now.compareTo(message.getSendDate())>=0); //now should be after or at the same moment as the text was sended
@@ -135,7 +137,8 @@ public class MessageServiceTest {
     public void receiverUnexisting() {
     	MessageForm messageForm = new MessageForm();
     	messageForm.setReceiver(null);
-    	messageForm.setMessageSubject("meeting");
+    	MessageSubject test = new MessageSubject();
+    	messageForm.setMessageSubject(test);
     	messageForm.setMessageText(".....");
     	
     	when(userDao.findByUsername(any(String.class)))

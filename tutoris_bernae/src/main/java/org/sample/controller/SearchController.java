@@ -1,15 +1,16 @@
 package org.sample.controller;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.SearchService;
+import org.sample.model.CompletedClasses;
 import org.sample.model.Tutor;
+import org.sample.model.dao.CompletedClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class SearchController {
     private SearchService searchService;
     @Autowired
     private TutorDao tutorDao;
+    @Autowired
+    private CompletedClassesDao completedClassesDao;
     
 
     @Autowired
@@ -65,7 +68,7 @@ public class SearchController {
      * 
      * @param searchForm: a valid SearchForm
      * @param result
-     * @return ModelAndView model with View "searchResults" and attributes "classe", 
+     * @return ModelAndView model with View "searchResults" and attributes "classes", 
      * "grade" and "tutors"
      */
     @RequestMapping(value = "/submitSearch", method = RequestMethod.POST)
@@ -80,7 +83,6 @@ public class SearchController {
             else{
             model = new ModelAndView(PAGE_RESULTS);
             model.addObject("tutors",tutors);}
-            
         }
         else model = new ModelAndView(PAGE_SEARCH);
         return model;

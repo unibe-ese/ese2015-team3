@@ -19,10 +19,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sample.controller.pojos.MessageForm;
 import org.sample.model.Message;
+import org.sample.model.MessageSubject;
 import org.sample.model.Tutor;
 import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.MessageDao;
+import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ControllerIntegrationTest;
@@ -39,6 +41,8 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	private UserDao userDao;
 	@Autowired
 	private ClassesDao classesDao;
+	@Autowired
+	private MessageSubjectDao messageSubjectDao;
 	
 	private User sender;
 	private User receiver;
@@ -48,6 +52,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	private Message message1;
 	private Message message2;
 	private Message message3;
+	private MessageSubject test;
 	private List<Message> unorderedMessageList;
 	@Autowired
 	private MessageDao messageDao;
@@ -65,11 +70,13 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		receiver.setUsername("receiver");
 		receiver.setPassword("1232w%Dres");
 		receiver = userDao.save(receiver);
+		test = new MessageSubject();
+		test = messageSubjectDao.save(test);
     	message1 = new Message();
     	message1.setSendDate(now);
     	message1.setReceiver(receiver);
     	message1.setSender(sender);
-    	message1.setMessageSubject("Hi");
+    	message1.setMessageSubject(test);
     	message2 = new Message();
     	message2.setSendDate(before);
     	message2.setReceiver(receiver);
@@ -139,7 +146,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
 										.andExpect(forwardedUrl(completeUrl("messageAnswer")))
 		.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender"))))
-		.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is("AW: Hi"))));
+		.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is(test))));
 								
 	}	
 	
@@ -158,15 +165,9 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void messageSubmit() throws Exception
 	{
-		Message exampleMessage = new Message();
-		exampleMessage.setReceiver(sender);
-		exampleMessage.setMessageSubject("subject");
-		exampleMessage.setMessageText("text");
-		List<Message> onlyExampleMessage = new LinkedList<Message>();
-		onlyExampleMessage.add(exampleMessage);
 		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "sender")
-										.param("messageSubject", "subject")
+										.param("messageSubject", ""+test.getId())
 										.param("messageText", "text"))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
@@ -199,7 +200,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 
 		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "ShouldNotExist")
-										.param("messageSubject", "Hi there")
+										.param("messageSubject", ""+test.getId())
 										.param("messageText", "abaac"))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))

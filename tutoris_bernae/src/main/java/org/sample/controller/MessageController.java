@@ -1,5 +1,7 @@
 package org.sample.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -7,7 +9,10 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MessageService;
 import org.sample.model.Message;
+import org.sample.model.MessageSubject;
+import org.sample.model.MessageSubjectEditor;
 import org.sample.model.User;
+import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.MessageReceiverValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,11 +39,23 @@ public class MessageController {
 private UserDao userDao;
 @Autowired
 private MessageService messageService;
+@Autowired
+private MessageSubjectDao messageSubjectDao;
 	
 
 @InitBinder("messageForm")
 public void initBinder(WebDataBinder binder) {
+	binder.registerCustomEditor(MessageSubject.class, new MessageSubjectEditor(messageSubjectDao));
 	binder.addValidators(new MessageReceiverValidator(userDao));
+}
+
+@ModelAttribute("messageSubjectList")
+public List<MessageSubject> getMessageSubjectList()
+{
+	User user = getUserFromSecurityContext();
+	List<MessageSubject> accessibleSubjects = (List<MessageSubject>) messageSubjectDao.findAllByRole("ROLE_USER");
+	if(user.isTutor()) accessibleSubjects.addAll((List<MessageSubject>) messageSubjectDao.findAllByRole("ROLE_TUTOR"));
+	return accessibleSubjects;
 }
 	
 	/**

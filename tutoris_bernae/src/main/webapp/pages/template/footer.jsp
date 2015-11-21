@@ -12,7 +12,7 @@
 						<div class="12u">
 							<div id="copyright">
 								<ul class="menu">
-									<li>&copy; Untitled. All rights reserved</li>
+									<li>&copy; 2015 University Bern - ESE Team 3. All rights reserved</li>
 								</ul>
 							</div>
 						</div>

@@ -33,33 +33,9 @@
 		input[type="reset"],
 		.button
 		{
-      -webkit-appearance: button;
-      -moz-appearance: button;
-      appearance: button;
-
-      padding: 0.5em 1em;
-      margin: 0.3em;
-      background: none repeat scroll 0 0 #505050;
-      border-radius: 6px;
-      
-      text-decoration: none;
-      color: #fff;
-      font-size: 1em;
-      letter-spacing: 0.025em;
-      font-weight: 800;
-      
-      transition: background-color 0.25s ease-in-out 0s;
-      
+			font-size: 1.35em;
+			padding: 0.6em 1.5em;
 		}
-    
-      input[type="button"]:hover,
-      input[type="submit"]:hover,
-      input[type="reset"]:hover,
-      .button:hover
-      {
-        background: #c3c3c3;
-
-      }
 
 			input[type="button"].big,
 			input[type="submit"].big,
@@ -162,7 +138,7 @@
 	
 	#footer-wrapper
 	{
-		/* padding: 3em 0 4em 0; */
+		padding: 3em 0 4em 0;
 	}
 
 /*********************************************************************************/
@@ -283,6 +259,7 @@
 
 		.dropotron li
 		{
+			border-top: solid 1px #eee;
 			line-height: 3em;
 		}
 
@@ -326,7 +303,9 @@
 				position: absolute;
 				top: -0.5em;
 				left: 1em;
-
+				border-bottom: solid 0.75em #ffffff;
+				border-left: solid 0.75em transparent;
+				border-right: solid 0.75em transparent;
 				z-index: 1;
 			}
 

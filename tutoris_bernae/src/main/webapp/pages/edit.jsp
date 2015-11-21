@@ -60,26 +60,23 @@
             </div>
         </div>
         
-           <br>
-           <br>
+        <br>
+		<c:if test="${page_error != null }">
+	        <div class="alert alert-error">
+	            <h4>Error!</h4>
+	                ${page_error}
+	        </div>
+	    </c:if>
+        <br>
        		        
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Submit changes</button>
-            <button type="reset" class="btn">Cancel</button>
+            <button type="submit" class="button btn btn-primary">Submit changes</button>
+            <button type="reset" class="button btn" onclick="window.history.back();">Cancel</button>
          </div>
            
     </fieldset>
 </form:form>
-<a href="/tutoris_baernae/upgrade">Upgrade to Tutor</a>
-
-
-	<c:if test="${page_error != null }">
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Error!</h4>
-                ${page_error}
-        </div>
-    </c:if>
+<a href="/tutoris_baernae/upgrade" class="button">Upgrade to Tutor</a>
 
 
 <c:import url="template/footer.jsp" />

@@ -11,7 +11,7 @@
 <form:form method="post" modelAttribute="tutorForm" action="submitastutor" id="tutorForm" cssClass="form-mc"  autocomplete="off">
     <fieldset>
         <legend>Enter Your Information</legend>
-	
+
         <form:input path="userId" type="hidden" value="${tutorForm.userId}"/>
         
         <div class="mc-column">
@@ -21,6 +21,7 @@
                 <label class="control-label" for="field-fee">Fee</label>
                 <div class="controls">
                 <form:input path="fee" id="field-fee" tabindex="2" maxlength="35" placeholder="Fee"/>
+
                 <form:errors path="fee" cssClass="help-inline" element="span"/>
                 </div>
             </div>
@@ -37,26 +38,23 @@
                 </div>
             </div>
         </div>
-       
-           <br>
-           <br>
-       		        
+
+        <br>     
+        <c:if test="${page_error != null }">
+	        <div class="alert alert-error">
+	            <h4>Error!</h4>
+	                ${page_error}
+	        </div>
+    	</c:if>
+    	<br>
+
         <div class="form-actions">
-            <button type="submit" name = "save" value = "true" class="btn btn-primary">Sign up</button>
-            <button type="reset" class="btn">Cancel</button>
+            <button type="submit" name = "save" value = "true" class="button btn btn-primary">Sign up</button>
+            <button type="reset" class="button btn" onclick="location.href='#';">Cancel</button>
          </div>
            
     </fieldset>
 </form:form>
-
-
-	<c:if test="${page_error != null }">
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Error!</h4>
-                ${page_error}
-        </div>
-    </c:if>
 
 
 <c:import url="template/footer.jsp" />

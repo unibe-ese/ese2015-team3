@@ -25,8 +25,11 @@ import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.ClassCourseListValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -61,7 +64,9 @@ public class RegisterController {
 	@Autowired
 	private UserDao userDao;
 
-	
+    @Autowired
+    protected AuthenticationManager authenticationManager;
+    
     /**
      * Creates the register page for users with a register form. This is 
      * also the first step for registering as a tutor, because every tutor needs a user profile
@@ -100,6 +105,7 @@ public class RegisterController {
                 	tutorForm.setUserId(registerForm.getId());
                     return createTutorFormPage(tutorForm);
                 }
+                authenticateUserAndSetSession(userDao.findOne(registerForm.getId()),request);
                 model = new ModelAndView(PAGE_SUBMIT);
             } catch (InvalidUserException e) {
                 model = new ModelAndView(PAGE_REGISTER);
@@ -118,5 +124,16 @@ public class RegisterController {
     	model.addObject("allClasses", classesDao.findAll());
         model.addObject("allCourses", studyCourseDao.findAll());
         return model;
+    }
+    
+    private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        request.getSession();
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);    
     }
 }

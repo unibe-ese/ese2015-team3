@@ -25,8 +25,11 @@ import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.ClassCourseListValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -59,6 +62,9 @@ public class TutorRegisterController {
 	@Autowired
 	private UserDao userDao;
 
+    @Autowired
+    protected AuthenticationManager authenticationManager;
+    
 	@InitBinder("tutorForm")
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
@@ -122,6 +128,7 @@ public class TutorRegisterController {
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	if (!result.hasErrors()){
         	tutorFormService.saveFrom(tutorForm);
+                authenticateUserAndSetSession(userDao.findOne(tutorForm.getUserId()),request);
         	model = new ModelAndView(PAGE_SUBMIT);
         }
         else { 
@@ -129,5 +136,16 @@ public class TutorRegisterController {
         }
         return model;
 
+    }
+    
+    private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        request.getSession();
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);    
     }
 }

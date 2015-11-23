@@ -6,6 +6,7 @@ import java.util.List;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
+import org.sample.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -41,5 +42,6 @@ public interface TutorDao extends CrudRepository<Tutor,Long> {
 	public Iterable<Tutor> findByFeeBetween(BigDecimal min,BigDecimal fee);
 
 	public Iterable<Tutor> findByCompletedClassesClassesLike(Classes classCriteria);
-        
+    
+	public Tutor findByStudent(User student);
 }

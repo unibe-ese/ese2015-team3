@@ -38,6 +38,10 @@
             <div class="module">${tutor.bio}</div>
         </div>
     </div>
+    <div>
+    	<div>Did study with this tutor?</div>
+    	<button type="button" onclick="location.href='/tutoris_baernae/voteTutor?tutorUserName=${tutor.student.username}'">Rate him!</button>
+    </div>
     <div class="col-1-3">
         <div class="module classes">
             <div class="col-2-3"><b>Class</b></div>

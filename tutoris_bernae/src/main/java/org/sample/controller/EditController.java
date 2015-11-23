@@ -32,7 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * Allows editing profiles for normal users and tutor. The 
  * edit page automatically knows if the user is a tutor or not and returns fitting editing site.
- * The submit-sites depend on whetever a tutor or a normal user changed his profile informations.
+ * The submit-sites depend on whether a tutor or a normal user changed his profile informations.
  * @author pf15ese
  */
 @Controller
@@ -53,9 +53,7 @@ public class EditController {
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String name = authentication.getName();
-		User user = userDao.findByUsername(name);
+		User user = UserHelper.getUserFromSecurityContext(userDao);
 		if(user.isTutor()) {	
 			return new ModelAndView("redirect:/editTutor");
 		}

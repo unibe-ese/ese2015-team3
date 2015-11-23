@@ -11,8 +11,6 @@ import org.sample.model.User;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.MessageReceiverValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -48,14 +46,14 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInbox", method = RequestMethod.GET)
 	public ModelAndView showMessageInbox() {
 		 ModelAndView model = new ModelAndView("messageInbox");
-		 User user = getUserFromSecurityContext();
+		 User user = UserHelper.getUserFromSecurityContext(userDao);
 		 model.addObject("messages", messageService.getOrderedMessagesList(user));
 		 return model;
 	}
 
 	/**
 	 * Creates a page with one selected message given by the parameter 
-	 * and all other messages that the logged in user recieved
+	 * and all other messages that the logged in user received
 	 * @param messageId Long the id of the message that should be under the "selectedMessage" attribute
 	 * @return ModelAndView with ViewName "messageInbox" and modelattribute "user", the logged in user,
 	 * "selectedMessage" the message given by the messageId and "messages" all his messages
@@ -63,7 +61,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInboxShow", method = RequestMethod.GET)
 	public ModelAndView showSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = UserHelper.getUserFromSecurityContext(userDao);
 		model = createInboxPage(user);
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
@@ -77,7 +75,7 @@ public void initBinder(WebDataBinder binder) {
 	
 	/**
 	 * Creates a page with a message form to answer one selected message given by the parameter 
-	 * and all other messages that the logged in user recieved
+	 * and all other messages that the logged in user received
 	 * @param messageId Long the id of the message that we want to answer to and that 
 	 * should be under the "selectedMessage" attribute
 	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" a prefilled message form
@@ -88,7 +86,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInboxAnswer", method = RequestMethod.GET)
 	public ModelAndView answerSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId, HttpSession session) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = UserHelper.getUserFromSecurityContext(userDao);
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
 			session.setAttribute("answeredMessage", selectedMessage);
@@ -103,7 +101,7 @@ public void initBinder(WebDataBinder binder) {
 	
 	/**
 	 * Creates a page with a message form to answer one selected message given by the parameter 
-	 * and all other messages that the logged in user recieved
+	 * and all other messages that the logged in user received
 	 * @param reciver a String of the username that we want to contact via a message
 	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" a prefilled message form
 	 * suited to the receiver we want to write to, "user", the logged in user,
@@ -113,21 +111,21 @@ public void initBinder(WebDataBinder binder) {
 	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) String receiver,
 										HttpSession session) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = UserHelper.getUserFromSecurityContext(userDao);
 		model = createAnswerPage(user,new MessageForm(receiver),false,session);
 		return model;
 	}
 	
 	/**
 	 * Creates a page with a message form to write a message to anyone.
-	 * Also has all  messages that the logged in user recieved
+	 * Also has all  messages that the logged in user received
 	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" an empty message form
 	 * "user", the logged in user, and "messages" all his messages
 	 */
 	@RequestMapping(value = "/messageNew", method = RequestMethod.GET)
 	public ModelAndView writeNewMessage(HttpSession session) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = UserHelper.getUserFromSecurityContext(userDao);
 		model = createAnswerPage(user,new MessageForm(),false,session);
 		return model;
 	}
@@ -147,7 +145,7 @@ public void initBinder(WebDataBinder binder) {
 	 */
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST)
 	public ModelAndView submitMessage(@Valid MessageForm messageForm, BindingResult result,HttpSession session) {
-		User user = getUserFromSecurityContext();
+		User user = UserHelper.getUserFromSecurityContext(userDao);
     	if (!result.hasErrors()) {
             try {
             	if(session.getAttribute("answeredMessage")!=null)
@@ -181,13 +179,6 @@ public void initBinder(WebDataBinder binder) {
 		model.addObject("messages", messageService.getOrderedMessagesList(user));
 		model.addObject("messageForm", messageForm);
 		return model;
-	}
-	
-	private User getUserFromSecurityContext() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	     String name = authentication.getName();
-		 User user = userDao.findByUsername(name);
-		return user;
 	}
 	
 }

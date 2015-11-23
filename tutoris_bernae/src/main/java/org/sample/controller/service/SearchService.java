@@ -117,4 +117,27 @@ public class SearchService {
         return null;
     }
     
+    /**
+     * Get all search criteria from search form.
+     * 
+     * @param searchForm has all search criteria stored
+     * @return List of all search criteria
+     */
+    public List<String> getSearchCriteria(SearchForm searchForm) {
+        List<String> searchCriteria = new ArrayList<String>();
+        if (getClasseName(searchForm)!= null) searchCriteria.add(getClasseName(searchForm));
+        if (searchForm.getFee()!= null) {
+            String fee = searchForm.getFee().toString();
+            fee += " CHF";
+            searchCriteria.add(fee);
+        }
+        if (searchForm.getStudyCourseId()!= null) {
+            StudyCourse studyCourse = studyCourseDao.findOne(searchForm.getStudyCourseId());
+            if (studyCourse != null){
+                searchCriteria.add(studyCourse.getName());
+            }
+        }
+        
+        return searchCriteria;
+    }
 }

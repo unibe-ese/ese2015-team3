@@ -83,6 +83,7 @@ public class SearchController {
             
         }
         else model = new ModelAndView(PAGE_SEARCH);
+        model.addObject("searchCriteria", searchService.getSearchCriteria(searchForm));
         return model;
     }
 }

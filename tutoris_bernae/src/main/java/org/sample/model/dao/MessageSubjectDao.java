@@ -13,4 +13,10 @@ public interface MessageSubjectDao extends CrudRepository<MessageSubject,Long> {
 
 	Iterable<MessageSubject> findAllByRole(String string);
 
+	MessageSubject findByAction(String actionOfferTutorship);
+
+
+
+	MessageSubject findByMessageSubjectName(String string);
+
 }

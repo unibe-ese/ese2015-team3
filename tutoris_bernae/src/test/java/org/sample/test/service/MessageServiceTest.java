@@ -1,23 +1,31 @@
 package org.sample.test.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.sample.controller.exceptions.InvalidUserException;
-import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.MessageForm;
-import org.sample.controller.pojos.TutorEditForm;
-import org.sample.controller.service.CompletedClassesService;
-import org.sample.controller.service.EditFormService;
+import org.sample.controller.service.MailService;
 import org.sample.controller.service.MessageService;
-import org.sample.model.Classes;
-import org.sample.model.CompletedClasses;
 import org.sample.model.Message;
 import org.sample.model.MessageSubject;
-import org.sample.model.StudyCourse;
-import org.sample.model.Tutor;
 import org.sample.model.User;
-import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.MessageDao;
-import org.sample.model.dao.StudyCourseDao;
-import org.sample.model.dao.TutorDao;
+import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,29 +34,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,11 +53,23 @@ public class MessageServiceTest {
 			MessageDao messageDao = mock(MessageDao.class);
 			return messageDao;
 		}
+		
+		@Bean
+		public MessageSubjectDao messageSubjectDaoMock() {
+			MessageSubjectDao messageSubjectDao = mock(MessageSubjectDao.class);
+			return messageSubjectDao;
+		}
 
 		@Bean
 		public MessageService messageService() {
 			MessageService messageService = new MessageService();
 			return messageService;
+		}
+		
+		@Bean
+		public MailService mailServiceMock() {
+			MailService mailService = mock(MailService.class);
+			return mailService;
 		}
 
 	}
@@ -82,6 +79,12 @@ public class MessageServiceTest {
 	@Qualifier("messageDaoMock")
 	@Autowired
 	private MessageDao messageDao;
+	@Qualifier("messageSubjectDaoMock")
+	@Autowired
+	private MessageSubjectDao messageSubjectDao;
+	@Qualifier("mailServiceMock")
+	@Autowired
+	private MailService mailServiceMock;
 	@Autowired
     private MessageService messageService;
 
@@ -130,7 +133,7 @@ public class MessageServiceTest {
             }
         });
         
-    	messageService.send(messageForm,sender);
+    	messageService.sendMessageFromForm(messageForm,sender);
     }
     
     @Test(expected=InvalidUserException.class)
@@ -148,7 +151,7 @@ public class MessageServiceTest {
                }
            });
        
-    	messageService.send(messageForm,sender);
+    	messageService.sendMessageFromForm(messageForm,sender);
     }
     
     @Test

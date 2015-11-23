@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.sample.controller.exceptions.InvalidUserException;
 
 import org.sample.controller.pojos.TutorForm;
+import org.sample.controller.service.MailService;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
@@ -31,13 +32,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 /**
  * Controls the creation of the homepage
  *
  */
 @Controller
 public class IndexController {
-
     /**
      * Creates the homepage. Users also get here after logging out.
      * @param logout a non required String RequestParam

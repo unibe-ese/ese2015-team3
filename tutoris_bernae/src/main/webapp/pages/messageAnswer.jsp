@@ -14,16 +14,13 @@
 <div class="grid">
 	<div class="col-1-3">
 		<div>
-		<div class="module">
-		<a href="/tutoris_baernae/messageNew"> New </a>  
-		</div>
 
 		<div class="module">
 		<c:forEach items="${messages}" var="messages">
 		<p><c:if test = "${!messages.wasRead}">
 			Unread! 
 			</c:if>
-		${messages.sender.username},${messages.messageSubject},
+		${messages.sender.username},${messages.messageSubject.messageSubjectName},
 		<a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}"> open </a>  
 		</p>
 		</c:forEach>
@@ -35,19 +32,17 @@
 		<form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
     <fieldset>
     <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
+    <form:input path="receiver" type="hidden" value = "${messageForm.receiver}" />
         <div class="control-group<c:if test="${not empty receiverErrors}"> error</c:if>">
-            <label class="control-label" for="field-receiver"> To: </label>
-
-            <div class="controls">
-                <form:input path="receiver" id="field-receiver" tabindex="1" maxlength="45" placeholder="receiver"/>
-                <form:errors path="receiver" cssClass="help-inline" element="span"/>
-            </div>
+            <label class="control-label" for="field-receiver"> To: ${messageForm.receiver}</label>   
         </div>
         <c:set var="messageSubjectErrors"><form:errors path="messageSubject"/></c:set>
         <div class="control-group<c:if test="${not empty messageSubjectErrors}"> error</c:if>">
             <label class="control-label" for="field-messageSubject">Subject</label>
             <div class="controls">
-                <form:input path="messageSubject" id="field-messageSubject" tabindex="2" maxlength="35" placeholder="Subject"/>
+                <form:select path="messageSubject" id="messageSubject">
+		  		<form:options items="${accessibleMessageSubjects}" itemLabel="messageSubjectName" itemValue="id"/>
+		  		</form:select>
                 <form:errors path="messageSubject" cssClass="help-inline" element="span"/>
             </div>
         </div>
@@ -71,7 +66,7 @@
 		<c:if test = "${not empty answeredMessage}">
 		<div> 
 		<div class="module">From:${answeredMessage.sender.username}</div>
-		<div class="module">Subject:${answeredMessage.messageSubject}</div>
+		<div class="module">Subject:${answeredMessage.messageSubject.messageSubjectName}</div>
 	 	<div class="module"><p>${answeredMessage.messageText}<p></div>
 		</c:if>
 		</div>

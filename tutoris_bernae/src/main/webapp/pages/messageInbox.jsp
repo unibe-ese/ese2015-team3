@@ -15,15 +15,11 @@
 	<div class="col-1-3">
 		<div>
 		<div class="module">
-		<a href="/tutoris_baernae/messageNew"> New </a>  
-		</div>
-
-		<div class="module">
 		<c:forEach items="${messages}" var="messages">
 		<p><c:if test = "${!messages.wasRead}">
 			Unread! 
 			</c:if>
-		${messages.sender.username},${messages.messageSubject},
+		${messages.sender.username},${messages.messageSubject.messageSubjectName},
 		<a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}"> open </a>  
 		</p>
 		</c:forEach>
@@ -35,8 +31,9 @@
 		<div>
 		 
 		<div class="module">From:${selectedMessage.sender.username}</div>
-		<div class="module">Subject:${selectedMessage.messageSubject}</div>
-	 	<div class="module"><p>${selectedMessage.messageText}<p></div>
+		<div class="module">Subject:${selectedMessage.messageSubject.messageSubjectName}</div>
+	 	<div class="module"><p>${selectedMessage.messageText}<br>
+	 		<a href="/tutoris_baernae${selectedMessage.messageSubject.actionBaseLink}${selectedMessage.sender.id}"> confirm /tutoris_baernae/${selectedMessage.messageSubject.actionBaseLink}${selectedMessage.sender.id} </a><p></div>
 		<a href="/tutoris_baernae/messageInboxAnswer?messageId=${selectedMessage.id}"> Answer </a>  
 		
 		</c:if>

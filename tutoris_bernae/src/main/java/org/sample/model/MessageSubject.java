@@ -17,14 +17,16 @@ import org.hibernate.annotations.Type;
 
 @Entity
 public class MessageSubject {
-	
+
 	@Id
 	@GeneratedValue
 	private Long id;
 
 	private String messageSubjectName;
 
-	private String messageActionBaseLink;
+	private String action;
+	
+	private String actionBaseLink;
 	
     private String genericEmailMessage;
     
@@ -46,14 +48,6 @@ public class MessageSubject {
 		this.messageSubjectName = messageSubjectName;
 	}
 
-	public String getMessageActionBaseLink() {
-		return messageActionBaseLink;
-	}
-
-	public void setMessageActionBaseLink(String messageActionBaseLink) {
-		this.messageActionBaseLink = messageActionBaseLink;
-	}
-
 	public String getGenericEmailMessage() {
 		return genericEmailMessage;
 	}
@@ -70,13 +64,30 @@ public class MessageSubject {
 		this.role = role;
 	}
 
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public String getActionBaseLink() {
+		return actionBaseLink;
+	}
+
+	public void setActionBaseLink(String actionBaseLink) {
+		this.actionBaseLink = actionBaseLink;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((action == null) ? 0 : action.hashCode());
+		result = prime * result + ((actionBaseLink == null) ? 0 : actionBaseLink.hashCode());
 		result = prime * result + ((genericEmailMessage == null) ? 0 : genericEmailMessage.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((messageActionBaseLink == null) ? 0 : messageActionBaseLink.hashCode());
 		result = prime * result + ((messageSubjectName == null) ? 0 : messageSubjectName.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		return result;
@@ -91,6 +102,16 @@ public class MessageSubject {
 		if (getClass() != obj.getClass())
 			return false;
 		MessageSubject other = (MessageSubject) obj;
+		if (action == null) {
+			if (other.action != null)
+				return false;
+		} else if (!action.equals(other.action))
+			return false;
+		if (actionBaseLink == null) {
+			if (other.actionBaseLink != null)
+				return false;
+		} else if (!actionBaseLink.equals(other.actionBaseLink))
+			return false;
 		if (genericEmailMessage == null) {
 			if (other.genericEmailMessage != null)
 				return false;
@@ -100,11 +121,6 @@ public class MessageSubject {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (messageActionBaseLink == null) {
-			if (other.messageActionBaseLink != null)
-				return false;
-		} else if (!messageActionBaseLink.equals(other.messageActionBaseLink))
 			return false;
 		if (messageSubjectName == null) {
 			if (other.messageSubjectName != null)
@@ -117,8 +133,7 @@ public class MessageSubject {
 		} else if (!role.equals(other.role))
 			return false;
 		return true;
-	}	
-	
-	
+	}
 
+	
 }

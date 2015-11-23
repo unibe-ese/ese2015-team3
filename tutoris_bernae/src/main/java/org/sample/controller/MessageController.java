@@ -49,15 +49,14 @@ public void initBinder(WebDataBinder binder) {
 	binder.addValidators(new MessageReceiverValidator(userDao));
 }
 
-@ModelAttribute("messageSubjectList")
-public List<MessageSubject> getMessageSubjectList()
+@ModelAttribute("accessibleMessageSubjects")
+public List<MessageSubject> getAccessibleMessageSubject()
 {
 	User user = getUserFromSecurityContext();
-	List<MessageSubject> accessibleSubjects = (List<MessageSubject>) messageSubjectDao.findAllByRole("ROLE_USER");
-	if(user.isTutor()) accessibleSubjects.addAll((List<MessageSubject>) messageSubjectDao.findAllByRole("ROLE_TUTOR"));
+	List<MessageSubject> accessibleSubjects = messageService.getAccessibleSubjects(user);
 	return accessibleSubjects;
 }
-	
+
 	/**
 	 * Creates a page with all messages that the logged in user received
 	 * @return ModelAndView with ViewName "messageInbox" and modelattribute "user", the logged in user,
@@ -136,21 +135,7 @@ public List<MessageSubject> getMessageSubjectList()
 		return model;
 	}
 	
-	/**
-	 * Creates a page with a message form to write a message to anyone.
-	 * Also has all  messages that the logged in user recieved
-	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" an empty message form
-	 * "user", the logged in user, and "messages" all his messages
-	 */
-	@RequestMapping(value = "/messageNew", method = RequestMethod.GET)
-	public ModelAndView writeNewMessage(HttpSession session) {
-		ModelAndView model;
-		User user = getUserFromSecurityContext();
-		model = createAnswerPage(user,new MessageForm(),false,session);
-		return model;
-	}
-	
-	
+
 	/**
 	 * Saves (sends) a message and displays a success message back on the messageInbox page. Returns to the
 	 * messageAnswer page if the form is not filled out correctly. Also deletes the sessionattribute "answeredMessaged"
@@ -170,7 +155,7 @@ public List<MessageSubject> getMessageSubjectList()
             try {
             	if(session.getAttribute("answeredMessage")!=null)
             		session.removeAttribute("answeredMessage");
-            	messageService.send(messageForm,user);
+            	messageService.sendMessageFromForm(messageForm,user);
             	ModelAndView model = createInboxPage(user);
             	model.addObject("submitMessage", "message sent!");
             	return model;

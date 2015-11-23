@@ -151,18 +151,6 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	}	
 	
 	@Test
-	public void newMessage() throws Exception
-	{
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
-		mockMvc.perform(get("/messageNew").session(session))
-										.andExpect(status().isOk())
-										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
-										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
-										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
-								
-	}
-	
-	@Test
 	public void messageSubmit() throws Exception
 	{
 		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");

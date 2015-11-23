@@ -70,7 +70,7 @@ public class MessageServiceTransactionTest {
     	messageForm.setReceiver("tutortest");
     	messageForm.setMessageSubject(test);
     	messageForm.setMessageText(".....");
-    	messageService.send(messageForm,sender);
+    	messageService.sendMessageFromForm(messageForm,sender);
     	Message message = messageDao.findOne(messageForm.getId());
         assertEquals(test, message.getMessageSubject());
         assertEquals(".....", message.getMessageText());
@@ -87,7 +87,7 @@ public class MessageServiceTransactionTest {
     	messageForm.setReceiver(null);
     	messageForm.setMessageSubject(test);
     	messageForm.setMessageText(".....");
-    	messageService.send(messageForm,sender);
+    	messageService.sendMessageFromForm(messageForm,sender);
     }
     
     @Test

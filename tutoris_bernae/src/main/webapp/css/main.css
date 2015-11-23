@@ -939,11 +939,11 @@ pre code {
 
 .pre-scrollable {
     max-height: 340px;
-    overflow-y: scroll
+    overflow-y: scroll;
 }
 
 form {
-    margin: 0 0 20px
+    margin: 0 0 20px;
 }
 
 fieldset {

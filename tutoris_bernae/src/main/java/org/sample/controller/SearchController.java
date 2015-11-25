@@ -85,6 +85,7 @@ public class SearchController {
             model.addObject("tutors",tutors);}
         }
         else model = new ModelAndView(PAGE_SEARCH);
+        model.addObject("searchCriteria", searchService.getSearchCriteria(searchForm));
         return model;
     }
 }

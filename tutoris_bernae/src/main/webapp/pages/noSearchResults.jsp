@@ -11,6 +11,9 @@
 
 <h1>Search Results</h1>
 <div>
+    Filters: <c:forEach items="${searchCriteria}" var="searchCriteria"> ${searchCriteria} </c:forEach>
+</div>
+<div>
 No Tutors found :(
 </div>
 <button type="button" class="button btn" onclick="location.href='/tutoris_baernae/findTutor'">Search again</button>

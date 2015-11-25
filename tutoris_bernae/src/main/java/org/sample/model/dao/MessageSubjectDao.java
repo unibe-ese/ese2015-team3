@@ -9,14 +9,8 @@ import org.sample.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MessageSubjectDao extends CrudRepository<MessageSubject,Long> {
-
-
 	Iterable<MessageSubject> findAllByRole(String string);
-
-	MessageSubject findByAction(String actionOfferTutorship);
-
-
-
+	MessageSubject findByAction(String action);
 	MessageSubject findByMessageSubjectName(String string);
 
 }

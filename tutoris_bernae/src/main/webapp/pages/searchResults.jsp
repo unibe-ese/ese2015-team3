@@ -10,7 +10,9 @@
 
 
 <h1>Search Results</h1>
-
+<div>
+    Filters: <c:forEach items="${searchCriteria}" var="searchCriteria">${searchCriteria} </c:forEach>
+</div>
 <table class="sortable">
     <thead>
         <tr>

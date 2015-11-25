@@ -26,11 +26,7 @@ public class TutorShipConfirmationController {
 @Autowired
 private UserDao userDao;
 @Autowired
-private TutorDao tutorDao;
-@Autowired
 private TutorShipService tutorShipService;
-@Autowired
-private MessageSubjectDao messageSubjectDao;
 	
 
 @RequestMapping(value = "/confirmTutorShip", method = RequestMethod.GET)

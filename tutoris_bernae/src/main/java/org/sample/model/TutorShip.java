@@ -18,7 +18,7 @@ public class TutorShip {
 	@GeneratedValue
 	private Long id;
 
-	private Boolean confirmed;
+	private Boolean confirmed = false;
 	
 	@OneToOne
 	private User student;

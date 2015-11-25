@@ -1,9 +1,22 @@
 package org.sample.test.service;
 
 
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.sample.controller.exceptions.InvalidTutorException;
-import org.sample.controller.pojos.RegisterForm;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.CompletedClassesService;
 import org.sample.controller.service.TutorFormService;
@@ -20,26 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import static org.mockito.Mockito.reset;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

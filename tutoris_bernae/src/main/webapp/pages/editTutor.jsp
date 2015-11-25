@@ -27,7 +27,7 @@
             <div class="control-group<c:if test="${not empty firstNameErrors}"> error</c:if>">
                 <label class="control-label" for="field-firstName">First Name</label>
                 <div class="controls">
-                <form:input path="firstName" id="field-firstName" tabindex="2" maxlength="35" value="${user.firstName}"/>
+                <form:input path="firstName" id="field-firstName" tabindex="3" maxlength="35" value="${user.firstName}"/>
                 <form:errors path="firstName" cssClass="help-inline" element="span"/>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div class="control-group<c:if test="${not empty usernameErrors}"> error</c:if>">
                 <label class="control-label" for="field-username">Username</label>
                 <div class="controls">
-                <form:input path="username" id="field-username" tabindex="4" maxlength="35" value="${user.username}"/>
+                <form:input path="username" id="field-username" tabindex="2" maxlength="35" value="${user.username}"/>
                 <form:errors path="username" cssClass="help-inline" element="span"/>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="control-group<c:if test="${not empty lastNameErrors}"> error</c:if>">
                 <label class="control-label" for="field-lastName">Last Name</label>
                 <div class="controls">
-                <form:input path="lastName" id="field-lastName" tabindex="3" maxlength="35" value="${user.lastName}"/>
+                <form:input path="lastName" id="field-lastName" tabindex="4" maxlength="35" value="${user.lastName}"/>
                 <form:errors path="lastName" cssClass="help-inline" element="span"/>
                 </div>
             </div>

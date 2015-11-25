@@ -6,12 +6,12 @@ import javax.mail.internet.MimeMessage;
 import org.sample.model.Message;
 import org.sample.model.User;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 
 /**
  * A simple email sending service. Helps notifying a user if he gets a new message
- * NOTE: for some reason it takes really long to send emails
  * @author pf15ese
  *
  */
@@ -19,11 +19,10 @@ public class MailService {
 
     private JavaMailSender mailSender;
 
-    public void setMailSender(JavaMailSender mailSender) {
+    public void setMailSender(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
     }
     
-
 
     /**
      * Sends a notification via email to the receiver of the message. The notification
@@ -72,5 +71,7 @@ public class MailService {
     	return mimeMessage;
     	
     }
+
+
 
 }

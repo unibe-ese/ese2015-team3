@@ -1,11 +1,13 @@
 package org.sample.test.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -21,11 +23,13 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MailService;
 import org.sample.controller.service.MessageService;
+import org.sample.controller.service.TutorShipService;
 import org.sample.model.Message;
 import org.sample.model.MessageSubject;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.MessageSubjectDao;
+import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -67,9 +71,21 @@ public class MessageServiceTest {
 		}
 		
 		@Bean
+		public TutorShipDao tutorShipDaoMock() {
+			TutorShipDao tutorShipDao = mock(TutorShipDao.class);
+			return tutorShipDao;
+		}
+		
+		@Bean
 		public MailService mailServiceMock() {
 			MailService mailService = mock(MailService.class);
 			return mailService;
+		}
+		
+		@Bean
+		public TutorShipService tutorShipServiceMock() {
+			TutorShipService tutorShipService = mock(TutorShipService.class);
+			return tutorShipService;
 		}
 
 	}
@@ -79,12 +95,18 @@ public class MessageServiceTest {
 	@Qualifier("messageDaoMock")
 	@Autowired
 	private MessageDao messageDao;
+	@Qualifier("tutorShipDaoMock")
+	@Autowired
+	private TutorShipDao tutorShipDao;
+	@Qualifier("mailServiceMock")
+	@Autowired
+	private MailService mailService;
+	@Qualifier("tutorShipServiceMock")
+	@Autowired
+	private TutorShipService tutorShipService;
 	@Qualifier("messageSubjectDaoMock")
 	@Autowired
 	private MessageSubjectDao messageSubjectDao;
-	@Qualifier("mailServiceMock")
-	@Autowired
-	private MailService mailServiceMock;
 	@Autowired
     private MessageService messageService;
 
@@ -101,6 +123,9 @@ public class MessageServiceTest {
 	public void setUpExampleDatas(){
 		receiver = new User();
 		sender = new User();
+		sender.setEmail("mail@mail.mail");
+		sender.setFirstName("FirstName");
+		sender.setLastName("LastName");
 	}
 	
     @Test
@@ -133,8 +158,57 @@ public class MessageServiceTest {
             }
         });
         
-    	messageService.sendMessageFromForm(messageForm,sender);
+        messageService.sendMessageFromForm(messageForm,sender);
+        verify(tutorShipService).addOfferedTutorShip(any(Message.class));
+        verify(mailService).sendMessageNotificationMail(any(Message.class));
+
     }
+    
+    @Test
+    public void sendsTutorShipConfirmMessage() {
+        when(messageDao.save(any(Message.class)))
+        .thenAnswer(new Answer<Message>() {
+            public Message answer(InvocationOnMock invocation) throws Throwable {
+            	Message message = (Message) invocation.getArguments()[0];
+                assertNotNull(message.getMessageText());
+                Date now = new Date();
+                assertTrue(now.compareTo(message.getSendDate())>=0); //now should be after or at the same moment as the text was sended
+                assertEquals(sender,message.getSender());
+                assertEquals(receiver,message.getReceiver());
+                assertEquals(false,message.getWasRead());
+                return message;
+            }
+        });
+    	messageService.sendTutorShipConfirmedMessage(sender, receiver);
+        verify(tutorShipService).addOfferedTutorShip(any(Message.class));
+        verify(mailService).sendMessageNotificationMail(any(Message.class));
+    	
+    }
+    
+    @Test
+    public void sendsContactDetails() {
+        when(messageDao.save(any(Message.class)))
+        .thenAnswer(new Answer<Message>() {
+            public Message answer(InvocationOnMock invocation) throws Throwable {
+            	Message message = (Message) invocation.getArguments()[0];
+                assertTrue(message.getMessageText().contains(sender.getEmail()));
+                assertTrue(message.getMessageText().contains(sender.getFirstName()));
+                assertTrue(message.getMessageText().contains(sender.getLastName()));
+                Date now = new Date();
+                assertTrue(now.compareTo(message.getSendDate())>=0); //now should be after or at the same moment as the text was sended
+                assertEquals(sender,message.getSender());
+                assertEquals(receiver,message.getReceiver());
+                assertEquals(false,message.getWasRead());
+                return message;
+            }
+        });
+    	messageService.sendContactDetails(sender, receiver);
+        verify(tutorShipService).addOfferedTutorShip(any(Message.class));
+        verify(mailService).sendMessageNotificationMail(any(Message.class));
+
+    }
+    
+    
     
     @Test(expected=InvalidUserException.class)
     public void receiverUnexisting() {
@@ -219,6 +293,8 @@ public class MessageServiceTest {
     public void reset_mocks() {
         reset(userDao);
         reset(messageDao);
+        reset(tutorShipService);
+        reset(mailService);
     }
 
 }

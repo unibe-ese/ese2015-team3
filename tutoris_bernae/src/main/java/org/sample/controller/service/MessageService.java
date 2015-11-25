@@ -23,27 +23,33 @@ import javax.annotation.PostConstruct;
  * Offers services to load messages, to send (by saving them to the database) and 
  * to "read" them. Creates generated messages and also automatically sends notification for new messages
  * via mail.
- * Also assures that all messageSubjects needed by this service to autocreate messages are in the database
- * and creates them if not
+ * Also assures that all messageSubjects needed by this service or others to autocreate or process
+ * messages are in the database and creates them if not
  * @author pf15ese
  */
 @Service
 public class MessageService{
 
-    @Autowired UserDao userDao;  
-    @Autowired MessageDao messageDao;
-    @Autowired MessageSubjectDao messageSubjectDao; 
-    @Autowired TutorShipService tutorShipService;
-    @Autowired MailService mailService;
+    @Autowired 
+    private UserDao userDao;  
+    @Autowired 
+    private MessageDao messageDao;
+    @Autowired 
+    private MessageSubjectDao messageSubjectDao; 
+    @Autowired
+    private MailService mailService;
+	@Autowired 
+	private TutorShipService tutorShipService;
+    
 	private MessageSubject contactDetailsSubject;  
 	private MessageSubject confirmedTutorShipSubject;
     
-    private static final String ACTION_OFFER_TUTORSHIP = "OFFER_TUTORSHIP";
+	private static final String ACTION_OFFER_TUTORSHIP = "OFFER_TUTORSHIP";
     
 	/**
      * Compares messages by date to order them from newest to oldest
      */
-   public static Comparator<Message> MessageDateComparator = new Comparator<Message>()
+   public static final Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {
 			return -(m1.getSendDate().compareTo(m2.getSendDate()));
@@ -90,22 +96,23 @@ public class MessageService{
     	messageForm.setId(message.getId());
     	return messageForm;
     }
-    
+
+    /**
+     * "Sends" a message by saving it to the database and setting the send
+     * date to now
+     * @param message SendDate may not be set, will be set to now.
+     * @return the message saved in the database (which is therefore "sent")
+     */
     private Message send(Message message)
     {
+    	assert message.getSendDate() == null;
     	message.setSendDate(new Date());
-    	if(message.getMessageSubject().getAction() != null)
-    		handleMessageAction(message);
+		tutorShipService.addOfferedTutorShip(message);	
     	message = messageDao.save(message);
     	mailService.sendMessageNotificationMail(message);
     	return message;
     }
 
-	private void handleMessageAction(Message message) {
-		if(message.getMessageSubject().getAction().equals(ACTION_OFFER_TUTORSHIP))
-			tutorShipService.createTutorShip(message.getSender().getTutor(), message.getReceiver());
-		
-	}
 
 	/**
 	 * "Reads" a message for a user by returning it and setting the wasRead variabel of
@@ -147,6 +154,7 @@ public class MessageService{
 				.append("This message is auto generated. Do not answer")
 				.toString();
 		acceptanceMessage.setMessageText(messageText);
+		acceptanceMessage.setMessageSubject(confirmedTutorShipSubject);
 		acceptanceMessage.setReceiver(receiver);
 		acceptanceMessage.setSender(sender);
 		return send(acceptanceMessage);
@@ -158,6 +166,11 @@ public class MessageService{
 		return accessibleSubjects;
 	}
 	
+	public void exchangeContactDetails(User user1, User user2) {
+		sendContactDetails(user1, user2);
+		sendContactDetails(user2, user1);
+	}
+	
     private void createNeededMessageSubjects() {
 		if(messageSubjectDao.findByAction(ACTION_OFFER_TUTORSHIP) == null){
 			MessageSubject offerTutorShip = new MessageSubject();
@@ -165,7 +178,6 @@ public class MessageService{
 			offerTutorShip.setRole("ROLE_TUTOR");
 			offerTutorShip.setAction(ACTION_OFFER_TUTORSHIP);
 			offerTutorShip.setGenericEmailMessage("offers you a tutorship");
-			offerTutorShip.setActionBaseLink("/confirmTutorShip?tutorUserId=");
 			messageSubjectDao.save(offerTutorShip);
 		}
 		if(messageSubjectDao.findByMessageSubjectName("Contact Details") == null){
@@ -189,8 +201,6 @@ public class MessageService{
 			confirmedTutorShipSubject = messageSubjectDao.findByMessageSubjectName("Tutorship accepted!");
 		}
 	}
-	public void exchangeContactDetails(User user1, User user2) {
-		sendContactDetails(user1, user2);
-		sendContactDetails(user2, user1);
-	}
+    
+
 }

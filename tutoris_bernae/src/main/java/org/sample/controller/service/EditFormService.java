@@ -54,7 +54,7 @@ public class EditFormService{
 		String username = editForm.getUsername();
 		if(!username.equals(user.getUsername())&&!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
 		user.setUsername(username);
-		user = userDao.save(user);		// it automatically updates user (based on id)
+		userDao.save(user);		// it automatically updates user (based on id)
     	return editForm;
     }
     

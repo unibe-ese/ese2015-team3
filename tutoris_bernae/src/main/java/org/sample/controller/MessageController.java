@@ -5,6 +5,7 @@ import javax.validation.Valid;
 
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
+import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.MessageService;
 import org.sample.model.Message;
 import org.sample.model.User;
@@ -115,7 +116,11 @@ public void initBinder(WebDataBinder binder) {
 										HttpSession session) {
 		ModelAndView model;
 		User user = getUserFromSecurityContext();
-		model = createAnswerPage(user,new MessageForm(receiver),false,session);
+		SearchForm searchedCriterias = (SearchForm) session.getAttribute(SearchController.SESSIONATTRIBUE_FOUNDBYSEARCHFORM);
+		String searchCriteriaSubject = "Discuss tutorship details";
+		if(searchedCriterias != null)
+			searchCriteriaSubject = messageService.createSearchCriteriaSubject(searchedCriterias);
+		model = createAnswerPage(user,new MessageForm(receiver,searchCriteriaSubject),false,session);
 		return model;
 	}
 	

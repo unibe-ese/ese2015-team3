@@ -8,7 +8,10 @@ import java.util.List;
 
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
+import org.sample.controller.pojos.SearchForm;
+import org.sample.model.Classes;
 import org.sample.model.Message;
+import org.sample.model.StudyCourse;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
@@ -160,6 +163,18 @@ public class MessageService{
 	public void exchangeContactDetails(User user1, User user2) {
 		sendContactDetails(user1, user2);
 		sendContactDetails(user2, user1);
+	}
+
+	public String createSearchCriteriaSubject(SearchForm searchedCriterias) {
+		StudyCourse course = searchedCriterias.getStudyCourse();
+		Classes classes = searchedCriterias.getClasses();
+		if(course!=null&&classes!=null)
+			return "I need a tutor in "+course.getName()+" especially for "+classes.getName();
+		else if(course!=null)
+			return "I need a tutor in "+course.getName();
+		else if(classes!=null)
+			return "I need a tutor in "+classes.getName();
+		return "I need a tutor";
 	}
 	
 

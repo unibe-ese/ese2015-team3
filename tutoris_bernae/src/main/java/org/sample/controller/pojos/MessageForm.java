@@ -33,6 +33,11 @@ public class MessageForm {
 		this.receiver = receiver;
 	}
 
+	public MessageForm(String receiver, String subject) {
+		this.receiver = receiver;
+		this.messageSubject = subject;
+	}
+
 	public String getReceiver() {
 		return receiver;
 	}

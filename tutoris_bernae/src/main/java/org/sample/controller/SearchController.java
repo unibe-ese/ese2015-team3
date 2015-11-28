@@ -1,21 +1,25 @@
 package org.sample.controller;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.SearchService;
-import org.sample.model.CompletedClasses;
+import org.sample.model.Classes;
+import org.sample.model.ClassesEditor;
+import org.sample.model.StudyCourse;
+import org.sample.model.StudyCourseEditor;
 import org.sample.model.Tutor;
-import org.sample.model.dao.CompletedClassesDao;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,17 +33,20 @@ public class SearchController {
     public static final String PAGE_SEARCH = "search";
     public static final String PAGE_RESULTS = "searchResults";
     public static final String PAGE_NORESULTS = "noSearchResults";
+    public static final String SESSIONATTRIBUE_FOUNDBYSEARCHFORM = "foundBySearchForm";
     
     @Autowired
     private SearchService searchService;
     @Autowired
-    private TutorDao tutorDao;
-    @Autowired
-    private CompletedClassesDao completedClassesDao;
-    
-
+    private ClassesDao classesDao;
     @Autowired
     private StudyCourseDao studyCourseDao;
+    
+	@InitBinder("searchForm")
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
+		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));
+	}
     
     /**
      * Creates the search page with a search form.
@@ -72,7 +79,7 @@ public class SearchController {
      * "grade" and "tutors"
      */
     @RequestMapping(value = "/submitSearch", method = RequestMethod.POST)
-    public ModelAndView searchResults(@Valid SearchForm searchForm, BindingResult result) {
+    public ModelAndView searchResults(@Valid SearchForm searchForm, BindingResult result,HttpSession session) {
         ModelAndView model;
         
         if(!result.hasErrors()) {
@@ -82,10 +89,12 @@ public class SearchController {
             }
             else{
             model = new ModelAndView(PAGE_RESULTS);
-            model.addObject("tutors",tutors);}
+            model.addObject("tutors",tutors);
+            session.setAttribute(SESSIONATTRIBUE_FOUNDBYSEARCHFORM, searchForm);
+            }
         }
         else model = new ModelAndView(PAGE_SEARCH);
-        model.addObject("searchCriteria", searchService.getSearchCriteria(searchForm));
+        model.addObject("searchForm", searchForm);
         return model;
     }
 }

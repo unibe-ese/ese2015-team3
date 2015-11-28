@@ -1,7 +1,11 @@
 package org.sample.controller.pojos;
 
 import java.math.BigDecimal;
+
 import javax.validation.constraints.Digits;
+
+import org.sample.model.Classes;
+import org.sample.model.StudyCourse;
 
 /**
  *  Search Form stores filter criteria.
@@ -13,8 +17,8 @@ public class SearchForm {
     
     //Standard values to avoid null cluttering in the code
     //0 is not used by the framework as an id, so searching for it will always return nothing
-    private Long studyCourseId = 0L;
-    private Long classesId = 0L;
+    private StudyCourse studyCourse = null;
+    private Classes classes = null;
     
     @Digits(integer=3,fraction=2)
     private BigDecimal fee;
@@ -37,20 +41,20 @@ public class SearchForm {
         this.id = id;
     }
 
-	public Long getStudyCourseId() {
-		return studyCourseId;
+	public StudyCourse getStudyCourse() {
+		return studyCourse;
 	}
 
-	public void setStudyCourseId(Long studyCourseId) {
-		this.studyCourseId = studyCourseId;
+	public void setStudyCourse(StudyCourse studyCourse) {
+		this.studyCourse = studyCourse;
 	}
 
-	public Long getClassesId() {
-		return classesId;
+	public Classes getClasses() {
+		return classes;
 	}
 
-	public void setClassesId(Long classesId) {
-		this.classesId = classesId;
+	public void setClasses(Classes classes) {
+		this.classes = classes;
 	}
         
 }

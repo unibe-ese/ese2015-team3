@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
@@ -33,7 +33,17 @@
                         </div>
                     </div>
                     
-                	<form:input path="messageSubject" type="hidden" value = "${messageForm.messageSubject}" />
+                	<c:set var="messageSubjectErrors"><form:errors path="messageSubject"/></c:set>
+                    <div class="control-group<c:if test="${not empty messageSubjectErrors}"> error</c:if>">
+                            <label class="control-label" for="field-messageSubject">Subject</label>
+                            <div class="controls">
+                            <form:select path="messageSubject" id="messageSubject">
+		  					<form:option value="Discuss tutorship details">Discuss tutorship details</form:option>
+		  					<form:option value="${messageForm.messageSubject}">${messageForm.messageSubject}</form:option>
+		  					</form:select>
+                            <form:errors path="messageSubject" cssClass="help-inline" element="span"/>
+                        </div>
+                    </div>
                     
                     <c:set var="messageTextErrors"><form:errors path="messageText"/></c:set>
                     <div class="control-group<c:if test="${not empty messageTextErrors}"> error</c:if>">

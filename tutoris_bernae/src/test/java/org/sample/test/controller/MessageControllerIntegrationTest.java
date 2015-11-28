@@ -21,9 +21,9 @@ import org.sample.controller.pojos.MessageForm;
 import org.sample.model.Message;
 import org.sample.model.Tutor;
 import org.sample.model.User;
-import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.TutorDao;
+import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private ClassesDao classesDao;
+	private TutorShipDao tutorShipDao;
 
 	
 	private User sender;
@@ -167,7 +167,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	public void tutorShipOfferMessageSubmit() throws Exception
 	{
 		session = createSessionWithUser("sender", "1232w%Dres", "ROLE_TUTOR");
-		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "sender")
+		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "receiver")
 										.param("messageSubject", "test")
 										.param("messageText", "text")
 										.param("offerTutorShip", "true"))
@@ -176,6 +176,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
 										.andExpect(forwardedUrl(completeUrl("messageInbox")));
 		assertNotNull((List<Message>)messageDao.findAllByReceiver(sender));
+		assertNotNull(tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver));
 	}
 	
 	@Test

@@ -4,7 +4,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sample.model.Message;
-import org.sample.model.MessageSubject;
 
 /**
  * Stores a message consisting of a subject, a text and the wished receiver
@@ -13,8 +12,8 @@ public class MessageForm {
 
     @NotEmpty
     private String receiver;
-    @NotNull
-    private MessageSubject messageSubject;
+    @NotEmpty
+    private String messageSubject;
     @NotEmpty
     private String messageText;
     
@@ -42,11 +41,12 @@ public class MessageForm {
 		this.receiver = receiver;
 	}
 
-	public MessageSubject getMessageSubject() {
+
+	public String getMessageSubject() {
 		return messageSubject;
 	}
 
-	public void setMessageSubject(MessageSubject messageSubject) {
+	public void setMessageSubject(String messageSubject) {
 		this.messageSubject = messageSubject;
 	}
 

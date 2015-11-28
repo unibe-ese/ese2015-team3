@@ -1,7 +1,5 @@
 package org.sample.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -9,10 +7,7 @@ import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MessageService;
 import org.sample.model.Message;
-import org.sample.model.MessageSubject;
-import org.sample.model.MessageSubjectEditor;
 import org.sample.model.User;
-import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.MessageReceiverValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,23 +33,13 @@ public class MessageController {
 private UserDao userDao;
 @Autowired
 private MessageService messageService;
-@Autowired
-private MessageSubjectDao messageSubjectDao;
 	
 
 @InitBinder("messageForm")
 public void initBinder(WebDataBinder binder) {
-	binder.registerCustomEditor(MessageSubject.class, new MessageSubjectEditor(messageSubjectDao));
 	binder.addValidators(new MessageReceiverValidator(userDao));
 }
 
-@ModelAttribute("accessibleMessageSubjects")
-public List<MessageSubject> getAccessibleMessageSubject()
-{
-	User user = getUserFromSecurityContext();
-	List<MessageSubject> accessibleSubjects = messageService.getAccessibleSubjects(user);
-	return accessibleSubjects;
-}
 
 	/**
 	 * Creates a page with all messages that the logged in user received
@@ -149,13 +133,35 @@ public List<MessageSubject> getAccessibleMessageSubject()
 	 * the fault, "messageForm" a messageForm and "user", the logged in user, and "messages"
 	 */
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST)
-	public ModelAndView submitMessage(@Valid MessageForm messageForm, BindingResult result,HttpSession session) {
+	public ModelAndView submitMessage(@Valid MessageForm messageForm,BindingResult result,HttpSession session) {
 		User user = getUserFromSecurityContext();
     	if (!result.hasErrors()) {
             try {
             	if(session.getAttribute("answeredMessage")!=null)
             		session.removeAttribute("answeredMessage");
             	messageService.sendMessageFromForm(messageForm,user);
+            	ModelAndView model = createInboxPage(user);
+            	model.addObject("submitMessage", "message sent!");
+            	return model;
+            } catch (InvalidUserException e) {
+            	ModelAndView model = createAnswerPage(user,messageForm,true,session);
+            	model.addObject("submitMessage", e.getMessage());
+            	return model;
+            }
+        } else {
+        	return createAnswerPage(user,messageForm,true,session);
+        }   	
+    }
+	
+	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST, params = {"offerTutorShip"})
+	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,@RequestParam Boolean offerTutorShip,
+									 BindingResult result,HttpSession session) {
+		User user = getUserFromSecurityContext();
+    	if (!result.hasErrors()) {
+            try {
+            	if(session.getAttribute("answeredMessage")!=null)
+            		session.removeAttribute("answeredMessage");
+            	messageService.sendTutorShipOffer(messageForm,user);
             	ModelAndView model = createInboxPage(user);
             	model.addObject("submitMessage", "message sent!");
             	return model;

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +11,9 @@ import org.junit.runner.RunWith;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MessageService;
-import org.sample.model.CompletedClasses;
 import org.sample.model.Message;
-import org.sample.model.MessageSubject;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
-import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,23 +27,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class MessageServiceTransactionTest {	
+	
 	@Autowired
     private MessageService messageService;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private MessageDao messageDao;
-	@Autowired
-	private MessageSubjectDao messageSubjectDao;
 	
 	private User sender;
 	private User receiver;
-	private MessageSubject test;
-	private Message message1;
-	private Message message2;
-	private Message message3;
-	private List<Message> unorderedMessageList;
-	private List<CompletedClasses> completedClassesNew;
 
 	
 	@Before
@@ -60,19 +49,17 @@ public class MessageServiceTransactionTest {
 		receiver.setUsername("tutortest");
 		receiver.setEmail("tutormail@mail.mail");
 		receiver = userDao.save(receiver);
-		test = new MessageSubject();
-		test = messageSubjectDao.save(test);
 	}
 
     @Test
     public void messageFormCorrectDataSavedInDatabase() {
     	MessageForm messageForm = new MessageForm();
     	messageForm.setReceiver("tutortest");
-    	messageForm.setMessageSubject(test);
+    	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	messageService.sendMessageFromForm(messageForm,sender);
     	Message message = messageDao.findOne(messageForm.getId());
-        assertEquals(test, message.getMessageSubject());
+        assertEquals("test", message.getMessageSubject());
         assertEquals(".....", message.getMessageText());
         Date now = new Date();
         assertTrue(now.compareTo(message.getSendDate())>=0); //now should be after or at the same moment as the text was sended
@@ -85,7 +72,7 @@ public class MessageServiceTransactionTest {
     public void receiverUnexisting() {
     	MessageForm messageForm = new MessageForm();
     	messageForm.setReceiver(null);
-    	messageForm.setMessageSubject(test);
+    	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	messageService.sendMessageFromForm(messageForm,sender);
     }
@@ -112,10 +99,5 @@ public class MessageServiceTransactionTest {
     	assertTrue(shouldBeNull==null);
     	assertEquals(false, messageDao.findOne(message.getId()).getWasRead());
     }
-    
-    // makes more sense in a unit test, isn't changed at all through transaction
-    /*@Test
-    public void MessagesCorrectOrdered() {
-    }*/
 
 }

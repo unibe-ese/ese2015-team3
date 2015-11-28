@@ -28,8 +28,7 @@ public class Message {
 	@ManyToOne
 	private User sender;
 
-	@ManyToOne
-	private MessageSubject messageSubject;
+	private String messageSubject;
 
 	@Type(type="text")
 	private String messageText;
@@ -78,11 +77,11 @@ public class Message {
 		this.sender = sender;
 	}
 
-	public MessageSubject getMessageSubject() {
+	public String getMessageSubject() {
 		return messageSubject;
 	}
 
-	public void setMessageSubject(MessageSubject messageSubject) {
+	public void setMessageSubject(String messageSubject) {
 		this.messageSubject = messageSubject;
 	}
 

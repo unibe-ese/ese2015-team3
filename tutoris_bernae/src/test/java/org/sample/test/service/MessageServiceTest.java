@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -25,10 +25,8 @@ import org.sample.controller.service.MailService;
 import org.sample.controller.service.MessageService;
 import org.sample.controller.service.TutorShipService;
 import org.sample.model.Message;
-import org.sample.model.MessageSubject;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
-import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,12 +54,6 @@ public class MessageServiceTest {
 		public MessageDao messageDaoMock() {
 			MessageDao messageDao = mock(MessageDao.class);
 			return messageDao;
-		}
-		
-		@Bean
-		public MessageSubjectDao messageSubjectDaoMock() {
-			MessageSubjectDao messageSubjectDao = mock(MessageSubjectDao.class);
-			return messageSubjectDao;
 		}
 
 		@Bean
@@ -104,9 +96,6 @@ public class MessageServiceTest {
 	@Qualifier("tutorShipServiceMock")
 	@Autowired
 	private TutorShipService tutorShipService;
-	@Qualifier("messageSubjectDaoMock")
-	@Autowired
-	private MessageSubjectDao messageSubjectDao;
 	@Autowired
     private MessageService messageService;
 
@@ -132,8 +121,7 @@ public class MessageServiceTest {
     public void messageFormCorrectDataSaved() {
     	MessageForm messageForm = new MessageForm();
     	messageForm.setReceiver("tutortest");
-    	final MessageSubject test = new MessageSubject();
-    	messageForm.setMessageSubject(test);
+    	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
     	when(userDao.findByUsername(any(String.class)))
@@ -147,7 +135,7 @@ public class MessageServiceTest {
         .thenAnswer(new Answer<Message>() {
             public Message answer(InvocationOnMock invocation) throws Throwable {
             	Message message = (Message) invocation.getArguments()[0];
-                assertEquals(test, message.getMessageSubject());
+                assertEquals("test", message.getMessageSubject());
                 assertEquals(".....", message.getMessageText());
                 Date now = new Date();
                 assertTrue(now.compareTo(message.getSendDate())>=0); //now should be after or at the same moment as the text was sended
@@ -159,6 +147,33 @@ public class MessageServiceTest {
         });
         
         messageService.sendMessageFromForm(messageForm,sender);
+        verify(mailService).sendMessageNotificationMail(any(Message.class));
+
+    }
+    
+    @Test
+    public void offerTutorShipTutorShipServiceCalled() {
+    	MessageForm messageForm = new MessageForm();
+    	messageForm.setReceiver("tutortest");
+    	messageForm.setMessageSubject("test");
+    	messageForm.setMessageText(".....");
+    	
+    	when(userDao.findByUsername(any(String.class)))
+           .thenAnswer(new Answer<User>() {
+               public User answer(InvocationOnMock invocation) throws Throwable {	
+                   return receiver;
+               }
+           });
+ 
+        when(messageDao.save(any(Message.class)))
+        .thenAnswer(new Answer<Message>() {
+            public Message answer(InvocationOnMock invocation) throws Throwable {
+            	Message message = (Message) invocation.getArguments()[0];
+                return message;
+            }
+        });
+        
+        messageService.sendTutorShipOffer(messageForm, sender);
         verify(tutorShipService).addOfferedTutorShip(any(Message.class));
         verify(mailService).sendMessageNotificationMail(any(Message.class));
 
@@ -180,7 +195,6 @@ public class MessageServiceTest {
             }
         });
     	messageService.sendTutorShipConfirmedMessage(sender, receiver);
-        verify(tutorShipService).addOfferedTutorShip(any(Message.class));
         verify(mailService).sendMessageNotificationMail(any(Message.class));
     	
     }
@@ -203,7 +217,6 @@ public class MessageServiceTest {
             }
         });
     	messageService.sendContactDetails(sender, receiver);
-        verify(tutorShipService).addOfferedTutorShip(any(Message.class));
         verify(mailService).sendMessageNotificationMail(any(Message.class));
 
     }
@@ -214,8 +227,7 @@ public class MessageServiceTest {
     public void receiverUnexisting() {
     	MessageForm messageForm = new MessageForm();
     	messageForm.setReceiver(null);
-    	MessageSubject test = new MessageSubject();
-    	messageForm.setMessageSubject(test);
+    	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
     	when(userDao.findByUsername(any(String.class)))

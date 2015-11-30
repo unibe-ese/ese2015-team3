@@ -27,9 +27,11 @@
             <form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
                 <fieldset>
                     <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
-                     <form:input path="receiver" type="hidden" value = "${messageForm.receiver}" />
+                    
                     <div class="control-group<c:if test="${not empty receiverErrors}"> error</c:if>">
-                           <label class="control-label" for="field-receiver"> To: ${messageForm.receiver}</label>   
+                        <label class="control-label" for="field-receiver"> To: ${messageForm.receiver}</label>
+                        <div class="controls">
+                            <form:input path="receiver" type="hidden" value = "${messageForm.receiver}" />
                         </div>
                     </div>
                     

@@ -20,7 +20,7 @@
             <div class="control-group<c:if test="${not empty studyCourseIdErrors}">error</c:if>">
                 <label class="control-label" for="field-studyCourse">Study Course</label>
                 <div class="controls">
-                    <form:select path="studyCourse" required="false">
+                <form:select path="studyCourse" required="false" tabindex="1">
                         <form:option value="0">-- no course selected --</form:option>
                         <form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
                     </form:select>
@@ -42,7 +42,7 @@
             <div class="control-group<c:if test="${not empty classesErrors}">error</c:if>">
                 <label class="control-label" for="field-classes">Class</label>
                 <div class="controls">
-                    <form:select path="classes" required="false">
+                <form:select path="classes" required="false" tabindex="2">
                         <form:option value="0">-- no class selected --</form:option>
                         <form:options items="${classesList}" itemLabel="name" itemValue="id"/>
                     </form:select>
@@ -50,12 +50,44 @@
                 </div>
             </div> 
         </div>
-        
+            
         <div class="form-actions">
             <button type="submit" class="button btn btn-primary">Search</button>
         </div>
             
     </fieldset>
 </form:form>
+
+<%-- SEARCH RESULTS --%>
+
+<c:if test="${not empty noTutor}"><br>
+    <h1>Search Results</h1>
+    ${noTutor}
+</c:if>
+
+<c:if test="${not empty tutors}"><br>
+    <h1>Search Results</h1>
+    <table class="sortable">
+    <thead>
+        <tr>
+            <td>Username</td>
+            <td>Fee</td>
+            <td>Average Grade</td>
+            <td>Rating</td>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach items="${tutors}" var="tutors">
+        <tr>
+            <td><a href="/tutoris_baernae/view?tutorId=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
+            <td>${tutors.fee}</td>
+            <td><c:out value="${tutors.averageGrade}"/></td>
+            <td>***</td>
+        </tr>
+        
+        </c:forEach>
+    </tbody>
+    </table>
+</c:if>
 
 <c:import url="template/footer.jsp" />

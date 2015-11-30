@@ -31,8 +31,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
     public static final String PAGE_SEARCH = "search";
-    public static final String PAGE_RESULTS = "searchResults";
-    public static final String PAGE_NORESULTS = "noSearchResults";
     public static final String SESSIONATTRIBUE_FOUNDBYSEARCHFORM = "foundBySearchForm";
     
     @Autowired
@@ -85,10 +83,11 @@ public class SearchController {
         if(!result.hasErrors()) {
             Set<Tutor> tutors = searchService.findTutorsBySearchCriterias(searchForm);
             if (tutors.isEmpty()){
-                model = new ModelAndView(PAGE_NORESULTS);
+                model = findTutor();
+                model.addObject("noTutor", "no tutors found");
             }
             else{
-            model = new ModelAndView(PAGE_RESULTS);
+            model = findTutor();
             model.addObject("tutors",tutors);
             session.setAttribute(SESSIONATTRIBUE_FOUNDBYSEARCHFORM, searchForm);
             }

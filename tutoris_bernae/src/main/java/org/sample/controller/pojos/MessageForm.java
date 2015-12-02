@@ -20,9 +20,20 @@ public class MessageForm {
     private Long id;
     
     
+	/**
+	 * Creates a MessageForm for answering the selected message, so the reciever is 
+	 * the sender of the selectedMessage and the subject is the "AW:" + the subject of the
+	 * selected message (the AW: isn't added if the subject already contains that)
+	 * @param selectedMessage the message you want to respond to with this
+	 * MessageForm
+	 */
 	public MessageForm(Message selectedMessage) {
 		receiver = selectedMessage.getSender().getUsername();
-		messageSubject = selectedMessage.getMessageSubject();
+		String oldSubject = selectedMessage.getMessageSubject();
+		if(oldSubject.contains("AW:"))
+			messageSubject = oldSubject;
+		else
+			messageSubject = "AW:"+selectedMessage.getMessageSubject();
 	}
 	
 	public MessageForm() {
@@ -70,6 +81,4 @@ public class MessageForm {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 }

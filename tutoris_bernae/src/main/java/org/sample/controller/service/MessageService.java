@@ -137,9 +137,9 @@ public class MessageService{
 		Message contactDetails = new Message();
 	
 		String allContactInformations = new StringBuilder().append("You can contact me as follows: \n")
-				.append("Full name: "+sender.getFirstName()+" "+sender.getLastName()+" \n")
-				.append("Email: "+sender.getEmail()+" \n")
-				.append("This message is auto generated. Do not answer")
+				.append("<br>Full name: "+sender.getFirstName()+" "+sender.getLastName()+" \n")
+				.append("<br>Email: "+sender.getEmail()+" \n")
+				.append("<br>This message is auto generated. Do not answer")
 				.toString();
 		contactDetails.setMessageSubject("Contact Details");
 		contactDetails.setMessageText(allContactInformations);

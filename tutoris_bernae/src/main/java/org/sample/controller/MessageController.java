@@ -139,12 +139,20 @@ public void initBinder(WebDataBinder binder) {
 	 */
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST)
 	public ModelAndView submitMessage(@Valid MessageForm messageForm,BindingResult result,HttpSession session) {
+		return submitAnyMessage(messageForm,false,result,session);
+  	
+    }
+	
+	private ModelAndView submitAnyMessage(MessageForm messageForm, boolean offerTutorShip, BindingResult result, HttpSession session) {
 		User user = getUserFromSecurityContext();
     	if (!result.hasErrors()) {
             try {
             	if(session.getAttribute("answeredMessage")!=null)
             		session.removeAttribute("answeredMessage");
-            	messageService.sendMessageFromForm(messageForm,user);
+            	if(messageForm.getMessageSubject().equals("TutorShip Offer")||offerTutorShip)
+            		messageService.sendTutorShipOffer(messageForm,user);
+            	else
+            		messageService.sendMessageFromForm(messageForm,user);
             	ModelAndView model = createInboxPage(user);
             	model.addObject("submitMessage", "message sent!");
             	return model;
@@ -155,29 +163,15 @@ public void initBinder(WebDataBinder binder) {
             }
         } else {
         	return createAnswerPage(user,messageForm,true,session);
-        }   	
-    }
-	
+        } 
+		
+	}
+
+
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST, params = {"offerTutorShip"})
 	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,@RequestParam Boolean offerTutorShip,
 									 BindingResult result,HttpSession session) {
-		User user = getUserFromSecurityContext();
-    	if (!result.hasErrors()) {
-            try {
-            	if(session.getAttribute("answeredMessage")!=null)
-            		session.removeAttribute("answeredMessage");
-            	messageService.sendTutorShipOffer(messageForm,user);
-            	ModelAndView model = createInboxPage(user);
-            	model.addObject("submitMessage", "message sent!");
-            	return model;
-            } catch (InvalidUserException e) {
-            	ModelAndView model = createAnswerPage(user,messageForm,true,session);
-            	model.addObject("submitMessage", e.getMessage());
-            	return model;
-            }
-        } else {
-        	return createAnswerPage(user,messageForm,true,session);
-        }   	
+		return submitAnyMessage(messageForm, offerTutorShip, result, session);   	
     }
 	
 	private ModelAndView createInboxPage(User user) {

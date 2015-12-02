@@ -42,7 +42,11 @@
                             <form:select path="messageSubject" id="messageSubject">
 		  					<form:option value="Discuss tutorship details">Discuss tutorship details</form:option>
 		  					<form:option value="${messageForm.messageSubject}">${messageForm.messageSubject}</form:option>
+		  					 <sec:authorize access="hasRole('ROLE_TUTOR')">
+		  					<form:option value="TutorShip Offer">TutorShip Offer</form:option>
+		  					</sec:authorize>
 		  					</form:select>
+		  					
                             <form:errors path="messageSubject" cssClass="help-inline" element="span"/>
                         </div>
                     </div>

@@ -23,7 +23,7 @@ public class RegisterFormService{
      * Creates a user with the details given by the RegisterForm, and saves him to the database
      * @param registerForm a RegisterForm, not null
      * @return the given RegisterForm, with the id set to the new Users id
-     * @throws InvalidUserException if the email or the username is already in use by another user
+     * @throws InvalidUserException if the email is already in use by another user
      */
     @Transactional
     public RegisterForm saveFrom(RegisterForm registerForm) throws InvalidUserException{
@@ -31,9 +31,6 @@ public class RegisterFormService{
         User user = new User();
         user.setFirstName(registerForm.getFirstName());
         user.setLastName(registerForm.getLastName());
-        String username = registerForm.getUsername();
-        if(!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
-        user.setUsername(registerForm.getUsername());
         user.setPassword(registerForm.getPassword());
         String email = registerForm.getEmail();
         if(!emailAvailable(email)) throw new InvalidUserException("Your email must be unique");
@@ -47,12 +44,7 @@ public class RegisterFormService{
         return registerForm;
     }
     
-    private boolean usernameAvailable(String username){
-    	if(userDao.findByUsernameLike(username)==null) return true;
-    	return false;
-    }
     private boolean emailAvailable(String email){
-    	if(userDao.findByEmailLike(email)==null) return true;
-    	return false;
+    	return userDao.findByEmailLike(email)==null;
     }
 }

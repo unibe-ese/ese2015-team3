@@ -52,6 +52,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TutorRegisterController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
+        private static final String SESSIONATTRIBUTE_USER="loggedInUser";
 	
     @Autowired
     private StudyCourseDao studyCourseDao;
@@ -81,7 +82,7 @@ public class TutorRegisterController {
     public ModelAndView upgradePage() { 
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String name = authentication.getName();
-		User user = userDao.findByUsername(name);
+		User user = userDao.findByEmailLike(name);
     	TutorForm tutorForm = new TutorForm();
     	tutorForm.setUserId(user.getId());
         return createTutorFormPage(tutorForm);
@@ -122,14 +123,16 @@ public class TutorRegisterController {
      */
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST, params = { "save" })
     public ModelAndView submitTutorForm(@Valid TutorForm tutorForm, BindingResult result,
-            @RequestParam Boolean save,HttpServletRequest request) {
+            @RequestParam Boolean save,HttpServletRequest request, HttpSession session) {
         ModelAndView model;
         tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	if (!result.hasErrors()){
         	tutorFormService.saveFrom(tutorForm);
-                authenticateUserAndSetSession(userDao.findOne(tutorForm.getUserId()),request);
+                User user = userDao.findOne(tutorForm.getUserId());
+                authenticateUserAndSetSession(user,request);
         	model = new ModelAndView(PAGE_SUBMIT);
+                session.setAttribute(SESSIONATTRIBUTE_USER, user);
         }
         else { 
         	model = createTutorFormPage(tutorForm);
@@ -139,7 +142,7 @@ public class TutorRegisterController {
     }
     
     private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
-        String username = user.getUsername();
+        String username = user.getEmail();
         String password = user.getPassword();
         
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);

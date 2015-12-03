@@ -83,7 +83,6 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
-		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("1232w%dfa");
 		newTutorUser.setEmail("tutormail@mail.mail");
 		newTutorUser.setTutor(true);
@@ -130,7 +129,6 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 				.param("tutorId", newTutor.getId().toString())
 				.param("firstName","first")
 				.param("lastName","last")
-				.param("username","TestUser")
 				.param("password","123A#qqq")
 				.param("email","test@mail.de")
 				.param("bio","new Bio")
@@ -141,7 +139,6 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		assertEquals("test@mail.de", newTutorUser.getEmail());
 		assertEquals("last", newTutorUser.getLastName());
 		assertEquals("first", newTutorUser.getFirstName());
-		assertEquals("TestUser", newTutorUser.getUsername());
 		assertEquals("test@mail.de", newTutorUser.getEmail());
 		assertEquals("123A#qqq", newTutorUser.getPassword());
 		assertEquals("new Bio", newTutor.getBio());

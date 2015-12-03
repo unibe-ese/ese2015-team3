@@ -22,6 +22,8 @@ import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -39,29 +41,38 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class IndexController {
+    @Autowired
+    private UserDao userDao;
+    private static final String SESSIONATTRIBUTE_USER="loggedInUser";
+    
     /**
      * Creates the homepage. Users also get here after logging out.
      * @param logout a non required String RequestParam
+     * @param session
      * @return a ModelAndView with ViewName "index", if the user got here by logging out the object "msg"
      * a logout message is added
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView home(@RequestParam(value = "logout", required = false) String logout) {
+    public ModelAndView home(@RequestParam(value = "logout", required = false) String logout, HttpSession session) {
     	ModelAndView model = new ModelAndView("index");
     	 if (logout != null) {
     			model.addObject("message", "You've been logged out successfully.");
+                        session.removeAttribute(SESSIONATTRIBUTE_USER);
     		  }
+         User user = getUserFromSecurityContext();
+         if (user != null) {
+             session.setAttribute(SESSIONATTRIBUTE_USER, user);
+         }
+         
         return model;
     }
-    
 
-    /*
-    @RequestMapping(value = "/security-error", method = RequestMethod.GET)
-    public String securityError(RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("page_error", "You do have have permission to do that!");
-        return "redirect:/";
+    private User getUserFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = userDao.findByEmailLike(name);
+        return user;
     }
-*/
- 
+
 }
   

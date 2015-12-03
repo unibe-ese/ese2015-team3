@@ -26,13 +26,13 @@ public class ProfileControllerIntegrationTest extends ControllerIntegrationTest 
 	public void setUp()
 	{
 		User newUser = new User();
-		newUser.setUsername("test");
+		newUser.setEmail("test@test.ch");
 		newUser.setPassword("123");
 		userDao.save(newUser);
 		Tutor newTutor = new Tutor();
 		tutorDao.save(newTutor);
 		User newTutorUser = new User();
-		newTutorUser.setUsername("tutortest");
+		newTutorUser.setEmail("tutortest@test.ch");
 		newTutorUser.setPassword("123");
 		newTutorUser.setTutor(true);
 		newTutorUser.setTutor(newTutor);
@@ -42,7 +42,7 @@ public class ProfileControllerIntegrationTest extends ControllerIntegrationTest 
 	@Test
 	public void profilePage() throws Exception
 	{
-        MockHttpSession session = createSessionWithUser("test", "123", "ROLE_USER");
+        MockHttpSession session = createSessionWithUser("test@test.ch", "123", "ROLE_USER");
 		mockMvc.perform(get("/profile").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("user", is(User.class)));
@@ -51,7 +51,7 @@ public class ProfileControllerIntegrationTest extends ControllerIntegrationTest 
 	@Test
 	public void tutorProfilePage() throws Exception
 	{
-		MockHttpSession session = createSessionWithUser("tutortest", "123", "ROLE_TUTOR");
+		MockHttpSession session = createSessionWithUser("tutortest@test.ch", "123", "ROLE_TUTOR");
 		mockMvc.perform(get("/profile").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("user", is(User.class)))

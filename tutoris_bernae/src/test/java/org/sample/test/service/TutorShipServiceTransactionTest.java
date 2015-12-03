@@ -43,7 +43,6 @@ public class TutorShipServiceTransactionTest {
 	@Before
 	public void setUpExampleDatas(){
 		sender = new User();
-		sender.setUsername("tutortest");
 		sender.setFirstName("tutortest");
 		sender.setLastName("tutortest");
 		sender.setEmail("tutormail@mail.mail");
@@ -55,7 +54,6 @@ public class TutorShipServiceTransactionTest {
 		senderTutor.setStudent(sender);
 		tutorDao.save(senderTutor);
 		receiver = new User();
-		receiver.setUsername("test");
 		receiver.setFirstName("test");
 		receiver.setLastName("test");
 		receiver.setEmail("mail@mail.mail");

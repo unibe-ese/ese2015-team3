@@ -57,7 +57,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
     	Date before = new Date(now.getTime()-1000);
     	Date beforeBefore = new Date(now.getTime()-10000);
 		sender = new User();
-		sender.setUsername("sender");
+                sender.setEmail("sender@test.ch");
 		sender.setPassword("1232w%Dres");
 		sender = userDao.save(sender);
 		Tutor senderTutor = new Tutor();
@@ -67,7 +67,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		sender.setTutor(true);
 		sender = userDao.save(sender);
 		receiver = new User();
-		receiver.setUsername("receiver");
+		receiver.setEmail("receiver@test.ch");
 		receiver.setPassword("1232w%Dres");
 		receiver = userDao.save(receiver);
     	message1 = new Message();
@@ -99,7 +99,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		unorderedMessageList.add(message1);
 		unorderedMessageList.add(message2);
 		unorderedMessageList.add(message3);
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(get("/messageInbox").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
@@ -110,7 +110,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void selectedMessageInbox() throws Exception
 	{
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(get("/messageInboxShow?messageId="+message1.getId()).session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
@@ -125,7 +125,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		Message foreignMessage = new Message();
 		foreignMessage.setReceiver(sender);
 		messageDao.save(foreignMessage);
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(get("/messageInboxShow?messageId="+foreignMessage.getId()).session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
@@ -137,7 +137,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void answerSelectedMessageInbox() throws Exception
 	{
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(get("/messageInboxAnswer?messageId="+message1.getId()).session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
@@ -231,7 +231,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		unorderedMessageList.add(message2);
 		unorderedMessageList.add(message3);
 		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
-		mockMvc.perform(get("/messageNewTo?receiver="+sender.getUsername()).session(session))
+		mockMvc.perform(get("/messageNewTo?receiver="+sender.getEmail()).session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))

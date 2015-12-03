@@ -32,11 +32,10 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 	public void upgradePage() throws Exception
 	{
 		User newUser = new User();
-		newUser.setUsername("test");
 		newUser.setPassword("123");
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
-		MockHttpSession session = createSessionWithUser("test", "123", "ROLE_USER");
+		MockHttpSession session = createSessionWithUser("mail@mail.mail", "123", "ROLE_USER");
 		mockMvc.perform(get("/upgrade").session(session)).andExpect(status().isOk())
 									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
 									.andExpect(forwardedUrl(completeUrl("tutorregistration")))
@@ -56,7 +55,6 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		mockMvc.perform(post("/submit").param("email", "mail@mail.de")
 									.param("firstName", "first")
 									.param("lastName", "last")
-									.param("username", "user")
 									.param("password", "1Password*"))
 									.andExpect(status().isOk())
 									.andExpect(model().hasNoErrors())
@@ -64,7 +62,6 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		User user = userDao.findByEmailLike("mail@mail.de"); //by email because email is unique
 		assertEquals("first", user.getFirstName());
 		assertEquals("last", user.getLastName());
-		assertEquals("user", user.getUsername());
 		assertEquals("1Password*", user.getPassword());
 	}
 	
@@ -74,7 +71,6 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		mockMvc.perform(post("/submit").param("email", "mail@mail.de")
 									.param("firstName", "first")
 									.param("lastName", "last")
-									.param("username", "user")
 									.param("password", "1Password*")
 									.param("registerastutor","true"))
 									.andExpect(status().isOk())
@@ -85,7 +81,6 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		User user = userDao.findByEmailLike("mail@mail.de"); //by email because email is unique
 		assertEquals("first", user.getFirstName());
 		assertEquals("last", user.getLastName());
-		assertEquals("user", user.getUsername());
 		assertEquals("1Password*", user.getPassword());
 	}
 
@@ -130,14 +125,12 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		RegisterForm registerForm = new RegisterForm();
         registerForm.setFirstName("First");
         registerForm.setLastName("Last");
-        registerForm.setUsername("user");
         registerForm.setEmail("test@test.com");
         registerForm.setPassword("123456");
 		registerFormService.saveFrom(registerForm);
 		mockMvc.perform(post("/submit").param("email", "test@test.com")
 									.param("firstName", "first")
 									.param("lastName", "last")
-									.param("username", "user")
 									.param("password", "1Password*"))
 									.andExpect(status().isOk())
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
@@ -150,14 +143,12 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		mockMvc.perform(post("/submit").param("email", "")
 				.param("firstName", "")
 				.param("lastName", "")
-				.param("username", "")
 				.param("password", ""))
 				.andExpect(status().isOk())
 				.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
 				.andExpect(model().attributeHasFieldErrors("registerForm", "email"))
 				.andExpect(model().attributeHasFieldErrors("registerForm", "firstName"))
 				.andExpect(model().attributeHasFieldErrors("registerForm", "lastName"))
-				.andExpect(model().attributeHasFieldErrors("registerForm", "username"))
 				.andExpect(model().attributeHasFieldErrors("registerForm", "password"));
 	}
 	

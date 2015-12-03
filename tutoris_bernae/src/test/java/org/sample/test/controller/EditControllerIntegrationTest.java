@@ -79,7 +79,6 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	public void setUp()
 	{
 		newUser = new User();
-		newUser.setUsername("test");
 		newUser.setFirstName("first");
 		newUser.setLastName("last");
 		newUser.setPassword("1232w%Dres");
@@ -100,7 +99,6 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attribute("editForm", is(EditForm.class)))
 										.andExpect(forwardedUrl(completeUrl("edit")))
 										// Check that fields are correctly prefilled 
-										.andExpect(model().attribute("editForm", hasProperty("username", Matchers.is("test"))))
 										.andExpect(model().attribute("editForm", hasProperty("firstName", Matchers.is("first"))))
 										.andExpect(model().attribute("editForm", hasProperty("lastName", Matchers.is("last"))))
 										.andExpect(model().attribute("editForm", hasProperty("email", Matchers.is("mail@mail.mail"))))
@@ -115,7 +113,6 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 										.param("userId", newUser.getId().toString())
 										.param("firstName","test")
 										.param("lastName","test")
-										.param("username","test")
 										.param("password","123A#qqq")
 										.param("email","test@mail.de"))
 										.andExpect(status().isOk())
@@ -124,7 +121,6 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 		assertEquals("test@mail.de", newUser.getEmail());
 		assertEquals("test", newUser.getLastName());
 		assertEquals("test", newUser.getFirstName());
-		assertEquals("test", newUser.getUsername());
 		assertEquals("test@mail.de", newUser.getEmail());
 		assertEquals("123A#qqq", newUser.getPassword());
 	}
@@ -137,7 +133,6 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 										.param("userId", newUser.getId().toString())
 										.param("firstName","")
 										.param("lastName","")
-										.param("username","")
 										.param("password","")
 										.param("email",""))
 										.andExpect(status().isOk())
@@ -145,7 +140,6 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attributeHasFieldErrors("editForm", "email"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "firstName"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "lastName"))
-										.andExpect(model().attributeHasFieldErrors("editForm", "username"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "password"));
 
 	}

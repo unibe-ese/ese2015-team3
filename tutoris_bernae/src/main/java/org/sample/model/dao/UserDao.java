@@ -22,27 +22,19 @@ public interface UserDao extends CrudRepository<User,Long> {
 	public User findOne(Long id);
 
 	/**
-	 * Searches the database for a user that contains the username.
-	 * 
-	 * @param username
-	 * @return User that contains the username.
-	 */
-	public User findByUsernameLike(String username);
-
-	/**
 	 * Searches the database for a user that contains the email.
 	 * 
-	 * @param username
+	 * @param email
 	 * @return User that contains the email.
 	 */
 	public User findByEmailLike(String email);
 
 	/**
-	 * Searches the database for a user that corresponds to the username.
+	 * Searches the database for a user that corresponds to the firstName.
 	 * 
-	 * @param username
+	 * @param firstName
 	 * @return User that corresponds to the username.
 	 */
-	public User findByUsername(String username);
+	public User findByFirstNameLike(String firstName);
 
 }

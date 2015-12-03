@@ -4,6 +4,7 @@ import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.service.TutorShipService;
 import org.sample.model.Tutor;
 import org.sample.model.User;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,13 +25,15 @@ public class TutorShipConfirmationController {
 @Autowired
 private UserDao userDao;
 @Autowired
+private TutorDao tutorDao;
+@Autowired
 private TutorShipService tutorShipService;
 	
 
 @RequestMapping(value = "/confirmTutorShip", method = RequestMethod.GET)
 public ModelAndView confirmTutorShip(@RequestParam(value = "tutorUserId", required = true) Long tutorUserId) {
 	User user = getUserFromSecurityContext();
-	Tutor tutor = userDao.findOne(tutorUserId).getTutor();
+	Tutor tutor = tutorDao.findOne(tutorUserId);
 	if(tutor == null)
 		return new ModelAndView("confirmFailed");
 	try{
@@ -46,7 +49,7 @@ public ModelAndView confirmTutorShip(@RequestParam(value = "tutorUserId", requir
 	private User getUserFromSecurityContext() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	     String name = authentication.getName();
-		 User user = userDao.findByUsername(name);
+		 User user = userDao.findByEmailLike(name);
 		return user;
 	}
 	

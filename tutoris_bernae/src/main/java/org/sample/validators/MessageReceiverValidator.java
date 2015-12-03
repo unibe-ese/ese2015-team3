@@ -45,6 +45,6 @@ public class MessageReceiverValidator implements Validator
 	}
 
 	private boolean receiverExists(String receiver) {
-		return !(userDao.findByUsername(receiver) == null);
+		return !(userDao.findByEmailLike(receiver) == null);
 	}
 }

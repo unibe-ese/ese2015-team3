@@ -106,13 +106,11 @@ public class EditFormServiceTest {
         user = new User();
         editForm.setFirstName("First2");
         editForm.setLastName("Last2");
-        editForm.setUsername("user2");
         editForm.setEmail("test@test2.com");
         editForm.setPassword("1234567");
         editForm.setUserId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
 
@@ -123,7 +121,6 @@ public class EditFormServiceTest {
                         User user = (User) invocation.getArguments()[0];
                         assertEquals( "First2",user.getFirstName());
                         assertEquals( "Last2",user.getLastName());
-                        assertEquals( "user2", user.getUsername());
                         assertEquals( "test@test2.com",user.getEmail());
                         assertEquals("1234567",user.getPassword());
                         return user;
@@ -144,7 +141,6 @@ public class EditFormServiceTest {
         completedClassesList.add(completedClasses1);
         editForm.setFirstName("First2");
         editForm.setLastName("Last2");
-        editForm.setUsername("user2");
         editForm.setEmail("test@test2.com");
         editForm.setPassword("1234567");
         editForm.setUserId(0L);
@@ -155,7 +151,6 @@ public class EditFormServiceTest {
         editForm.setTutorId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
         Tutor tutor = new Tutor();
@@ -169,7 +164,6 @@ public class EditFormServiceTest {
                 User user = (User) invocation.getArguments()[0];
                 assertEquals( "First2",user.getFirstName());
                 assertEquals( "Last2",user.getLastName());
-                assertEquals("user2",user.getUsername());
                 assertEquals( "test@test2.com",user.getEmail());
                 assertEquals("1234567",user.getPassword());
                 return user;
@@ -202,13 +196,11 @@ public class EditFormServiceTest {
         otherUser.setEmail("newtest@test.com");
         editForm.setFirstName("First");
         editForm.setLastName("Last");
-        editForm.setUsername("user");
         editForm.setEmail("newtest@test.com");
         editForm.setPassword("123456");
         editForm.setUserId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
        
@@ -223,21 +215,18 @@ public class EditFormServiceTest {
         EditForm editForm = new EditForm();
         user = new User();
         User otherUser = new User();
-        otherUser.setUsername("user");
         editForm.setFirstName("First");
         editForm.setLastName("Last");
-        editForm.setUsername("newuser");
         editForm.setEmail("newtest@test.com");
         editForm.setPassword("123456");
         editForm.setUserId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
        
         when(userDao.findOne(any(Long.class))).thenReturn(user);
-        when(userDao.findByUsernameLike(any(String.class))).thenReturn(otherUser);
+        when(userDao.findByEmailLike(any(String.class))).thenReturn(otherUser);
         
         editFormService.saveFrom(editForm);
     }

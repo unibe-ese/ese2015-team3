@@ -21,7 +21,7 @@ public class MessageForm {
     
     
 	public MessageForm(Message selectedMessage) {
-		receiver = selectedMessage.getSender().getUsername();
+		receiver = selectedMessage.getSender().getEmail();
 		messageSubject = selectedMessage.getMessageSubject();
 	}
 	

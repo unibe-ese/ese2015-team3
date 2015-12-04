@@ -43,10 +43,8 @@ public class SearchService {
     @Transactional
     public Set<Tutor> findTutorsBySearchCriterias(SearchForm searchForm){
     	assert(searchForm!=null);
-    	assert(searchForm.getClassesId()!=null);
-    	assert(searchForm.getStudyCourseId()!=null);
-        StudyCourse courseCriteria = studyCourseDao.findOne(searchForm.getStudyCourseId());
-        Classes classCriteria = classesDao.findOne(searchForm.getClassesId());
+        StudyCourse courseCriteria = searchForm.getStudyCourse();
+        Classes classCriteria = searchForm.getClasses();
         BigDecimal fee = searchForm.getFee();
         List<List<Tutor>> searchResults = new ArrayList<List<Tutor>>();
         //Add the list of results form all criterias that we searched for
@@ -100,24 +98,6 @@ public class SearchService {
     }
     
     /**
-     * Get name of class in the search form.
-     * If class criteria was left empty return null.
-     * 
-     * @param searchForm has class criteria stored
-     * @return name of the class if a criteria was entered, null otherwise
-     */
-    public String getClasseName(SearchForm searchForm) {
-        if (searchForm.getClassesId() != null){
-            Classes classe = classesDao.findOne(searchForm.getClassesId());
-            if (classe != null) {
-                return classe.getName();
-            }
-        }
-
-        return null;
-    }
-    
-    /**
      * Get all search criteria from search form.
      * 
      * @param searchForm has all search criteria stored
@@ -125,17 +105,15 @@ public class SearchService {
      */
     public List<String> getSearchCriteria(SearchForm searchForm) {
         List<String> searchCriteria = new ArrayList<String>();
-        if (getClasseName(searchForm)!= null) searchCriteria.add(getClasseName(searchForm));
+        if (searchForm.getClasses()!= null) 
+        	searchCriteria.add(searchForm.getClasses().getName());
         if (searchForm.getFee()!= null) {
             String fee = searchForm.getFee().toString();
             fee += " CHF";
             searchCriteria.add(fee);
         }
-        if (searchForm.getStudyCourseId()!= null) {
-            StudyCourse studyCourse = studyCourseDao.findOne(searchForm.getStudyCourseId());
-            if (studyCourse != null){
-                searchCriteria.add(studyCourse.getName());
-            }
+        if (searchForm.getStudyCourse()!= null) {
+                searchCriteria.add(searchForm.getStudyCourse().getName());
         }
         
         return searchCriteria;

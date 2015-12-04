@@ -10,11 +10,9 @@ import org.junit.runner.RunWith;
 import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.service.TutorShipService;
 import org.sample.model.Message;
-import org.sample.model.MessageSubject;
 import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
 import org.sample.model.User;
-import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
@@ -38,12 +36,9 @@ public class TutorShipServiceTransactionTest {
 	private UserDao userDao;
 	@Autowired
 	private TutorDao tutorDao;
-	@Autowired
-	private MessageSubjectDao messageSubjectDao;
 	
 	private User sender;
 	private User receiver;
-	private MessageSubject test;
 
 	@Before
 	public void setUpExampleDatas(){
@@ -65,15 +60,13 @@ public class TutorShipServiceTransactionTest {
 		receiver.setLastName("test");
 		receiver.setEmail("mail@mail.mail");
 		receiver = userDao.save(receiver);
-		test = new MessageSubject();
-		test.setAction(TutorShipService.ACTION_OFFER_TUTORSHIP);
-		test = messageSubjectDao.save(test);
+	
 	}
 
     @Test
     public void AddedTutorShipSavedInDatabase() {
     	Message message = new Message();
-    	message.setMessageSubject(test);
+    	message.setMessageSubject("test");
     	message.setReceiver(receiver);
     	message.setSender(sender);
     	tutorShipService.addOfferedTutorShip(message);
@@ -85,7 +78,7 @@ public class TutorShipServiceTransactionTest {
     @Test
     public void FindsExistingTutorShipInDatabase() {
     	Message message = new Message();
-    	message.setMessageSubject(test);
+    	message.setMessageSubject("test");
     	message.setReceiver(receiver);
     	message.setSender(sender);
     	//Two times to possibly provoke an error in the following code (if not working as it should)
@@ -100,7 +93,7 @@ public class TutorShipServiceTransactionTest {
     @Test
     public void AddsCorrectConfirmLinkInMessage() {
     	Message message = new Message();
-    	message.setMessageSubject(test);
+    	message.setMessageSubject("test");
     	message.setReceiver(receiver);
     	message.setSender(sender);
     	tutorShipService.addOfferedTutorShip(message);

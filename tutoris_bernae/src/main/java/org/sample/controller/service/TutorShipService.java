@@ -1,6 +1,7 @@
 package org.sample.controller.service;
 
 import org.sample.controller.exceptions.InvalidTutorShipException;
+import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.model.Message;
 import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
@@ -10,30 +11,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Creates and confirms Tutorships. Uses message with specific
- * Subject () to decide if it needs to create new TutorShips.
+ * Creates and confirms Tutorships. Enhances message with links
+ * to give access to confirm tutorships.
  * @author pf15ese
  *
  */
 @Service
 public class TutorShipService{
 	
-	@Autowired TutorShipDao tutorShipDao;
-	@Autowired MessageService messageService;  
-	public static final String ACTION_OFFER_TUTORSHIP = "OFFER_TUTORSHIP";
+	@Autowired 
+	private TutorShipDao tutorShipDao;
+	@Autowired
+	private MessageService messageService;  
+
 	 
 	/**
-	 * Modifies messages with message action ACTION_OFFER_TUTORSHIP, by
-	 * creating a tutorship and adding a link to confirm this tutorship
-	 * @param message the message which should be modified, does nothing 
-	 * except the messageSubjectAction is ACTION_OFFER_TUTORSHIP, should not be null
+	 * Modifies messages by creating a tutorship between the sender of the message as tutor
+	 * and the receiver as student and adding a link to confirm this tutorship
+	 * If there already exist a tutorship between them, this tutorship is linked again in the message
+	 * @param message the message which should be modified, should not be null
+	 * @throws InvalidUserException if the sender of the message isn't a tutor and should therefore
+	 * not be able to offer a tutorship
 	 */
-	public void addOfferedTutorShip(Message message) {
+	public void addOfferedTutorShip(Message message) throws InvalidUserException{
 		assert(message!=null);
-		assert(message.getMessageSubject()!=null);
-		if (!(ACTION_OFFER_TUTORSHIP).equals(message.getMessageSubject().getAction())) return;
-		
-		TutorShip newTutorShip = createTutorShip(message.getSender().getTutor(), message.getReceiver());
+		Tutor offeringTutor = message.getSender().getTutor();
+		if(offeringTutor==null) 
+				throw new InvalidUserException("The sender of this message cannot offer a tutorship");
+		TutorShip newTutorShip = createTutorShip(offeringTutor, message.getReceiver());
 		message.setMessageText(message.getMessageText()+"<br>"
 				+"<a href=\"/tutoris_baernae/confirmTutorShip?tutorUserId="
 				+newTutorShip.getTutor().getId()+"\"> Click here to confirm this TutorShip </a>");
@@ -42,9 +47,9 @@ public class TutorShipService{
 	/**
 	 * Creates a tutorship between the given tutor and the student
 	 * which can then be confirmed by the student
-	 * (private, because tutorShips are currently created while sending messages, via on send)
-	 * @param tutor the tutor offering the tutorship
-	 * @param student the user which later needs to confirm (accept) the tutorship
+	 * (private, because tutorShips are currently created while sending messages, via on addOfferedTutorShip)
+	 * @param tutor the tutor offering the tutorship, not null
+	 * @param student the user which later needs to confirm (accept) the tutorship, not null
 	 */
 	private TutorShip createTutorShip(Tutor tutor, User student) {
 		TutorShip possibleExistingTutorShip = tutorShipDao.findByTutorAndStudent(tutor, student);

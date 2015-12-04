@@ -1,17 +1,13 @@
 package org.sample.test.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.when;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,17 +19,14 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.exceptions.InvalidUserException;
-import org.sample.controller.pojos.MessageForm;
 import org.sample.controller.service.MailService;
 import org.sample.controller.service.MessageService;
 import org.sample.controller.service.TutorShipService;
 import org.sample.model.Message;
-import org.sample.model.MessageSubject;
 import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
-import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,12 +57,6 @@ public class TutorShipServiceTest {
 		}
 		
 		@Bean
-		public MessageSubjectDao messageSubjectDaoMock() {
-			MessageSubjectDao messageSubjectDao = mock(MessageSubjectDao.class);
-			return messageSubjectDao;
-		}
-
-		@Bean
 		public MessageService messageServiceMock() {
 			MessageService messageService = mock(MessageService.class);
 			return messageService;
@@ -86,7 +73,6 @@ public class TutorShipServiceTest {
 			MailService mailService = mock(MailService.class);
 			return mailService;
 		}
-		
 		
 		@Bean
 		public TutorShipService tutorShipService() {
@@ -134,14 +120,11 @@ public class TutorShipServiceTest {
 	}
     
     @Test
-    public void AddOfferedTutorShipWithActionOfferTutorShip() {
+    public void AddOfferedTutorShip() {
     	Message message = new Message();
-    	MessageSubject offerSubject = new MessageSubject();
-    	offerSubject.setAction(TutorShipService.ACTION_OFFER_TUTORSHIP);
-    	message.setMessageSubject(offerSubject);
+    	message.setMessageSubject("offer TutorShip");
     	message.setSender(sender);
     	message.setReceiver(receiver);
-    	//when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class))).then(null);
     	when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class)))
         .thenAnswer(new Answer<TutorShip>() {
             public TutorShip answer(InvocationOnMock invocation) throws Throwable {	
@@ -163,21 +146,13 @@ public class TutorShipServiceTest {
     	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/confirmTutorShip?tutorUserId="));
     }
     
-    @Test
-    public void AddOfferedTutorMessageWithoutAction() {
+    @Test(expected=InvalidUserException.class)
+    public void NonTutorCannotAddOfferedTutorShip() {
     	Message message = new Message();
-    	MessageSubject offerSubject = new MessageSubject();
-    	message.setMessageSubject(offerSubject);
-    	message.setSender(sender);
-    	message.setReceiver(receiver);
-    	message.setMessageText("");
-    	
+    	message.setMessageSubject("offer TutorShip");
+    	message.setSender(receiver);
+    	message.setReceiver(sender);
     	tutorShipService.addOfferedTutorShip(message);
-    	
-    	verify(tutorShipDao, never()).save(any(TutorShip.class));
-    	verify(tutorShipDao, never()).findByTutorAndStudent(any(Tutor.class), any(User.class));
-    	//assert that it contains a link
-    	assertFalse(message.getMessageText().contains("<a href=\"/tutoris_baernae/confirmTutorShip?tutorUserId="));
     }
     
     @Test

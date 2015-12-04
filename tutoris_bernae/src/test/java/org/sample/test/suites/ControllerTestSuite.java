@@ -8,11 +8,11 @@ import org.sample.test.controller.ProfileControllerIntegrationTest;
 import org.sample.test.controller.RegisterControllerIntegrationTest;
 import org.sample.test.controller.SearchControllerIntegrationTest;
 import org.sample.test.controller.ViewTutorProfileControllerIntegrationTest;
-import org.sample.test.controller.ViewTutorProfileControllerTest;
+
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({EditControllerIntegrationTest.class, ProfileControllerIntegrationTest.class,
 					 RegisterControllerIntegrationTest.class, SearchControllerIntegrationTest.class, 
-					 ViewTutorProfileControllerTest.class, ViewTutorProfileControllerIntegrationTest.class,
+					 ViewTutorProfileControllerIntegrationTest.class,
 					 MessageControllerIntegrationTest.class})
 public class ControllerTestSuite {}

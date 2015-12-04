@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
@@ -18,7 +18,7 @@
                 <a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}">
                     <div class="message-preview">
                         <span class="message-sender"><c:if test="${!messages.wasRead}"><i class="fa fa-exclamation"></i></c:if> ${messages.sender.username}</span>
-                        <span class="message-subject">${messages.messageSubject.messageSubjectName}</span>
+                        <span class="message-subject">${messages.messageSubject}</span>
                     </div>
                 </a>
             </c:forEach>
@@ -27,18 +27,21 @@
             <form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
                 <fieldset>
                     <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
-                     <form:input path="receiver" type="hidden" value = "${messageForm.receiver}" />
+                    
                     <div class="control-group<c:if test="${not empty receiverErrors}"> error</c:if>">
-                           <label class="control-label" for="field-receiver"> To: ${messageForm.receiver}</label>   
+                        <label class="control-label" for="field-receiver"> To: ${messageForm.receiver}</label>
+                        <div class="controls">
+                            <form:input path="receiver" type="hidden" value = "${messageForm.receiver}" />
                         </div>
                     </div>
                     
-                    <c:set var="messageSubjectErrors"><form:errors path="messageSubject"/></c:set>
+                	<c:set var="messageSubjectErrors"><form:errors path="messageSubject"/></c:set>
                     <div class="control-group<c:if test="${not empty messageSubjectErrors}"> error</c:if>">
                             <label class="control-label" for="field-messageSubject">Subject</label>
                             <div class="controls">
                             <form:select path="messageSubject" id="messageSubject">
-		  					<form:options items="${accessibleMessageSubjects}" itemLabel="messageSubjectName" itemValue="id"/>
+		  					<form:option value="Discuss tutorship details">Discuss tutorship details</form:option>
+		  					<form:option value="${messageForm.messageSubject}">${messageForm.messageSubject}</form:option>
 		  					</form:select>
                             <form:errors path="messageSubject" cssClass="help-inline" element="span"/>
                         </div>
@@ -55,6 +58,9 @@
                         
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Send</button>
+                        <sec:authorize access="hasRole('ROLE_TUTOR')">
+   							<button type="submit" name="offerTutorShip" value="true" class="btn btn-primary">Offer TutorShip</button>
+   						</sec:authorize>   
                     </div>
                 </fieldset>
             </form:form>
@@ -62,7 +68,7 @@
         <c:if test = "${not empty answeredMessage}">
         <div class="flex-item">
                 <div class="module bottom-border">From:${answeredMessage.sender.username}</div>
-		<div class="module bottom-border">Subject:${answeredMessage.messageSubject.messageSubjectName}</div>
+		<div class="module bottom-border">Subject:${answeredMessage.messageSubject}</div>
 	 	<div class="module no-border"><p>${answeredMessage.messageText}<p></div>
         </div>
         </c:if>

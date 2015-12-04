@@ -36,7 +36,7 @@ public class MailService {
     public void sendMessageNotificationMail(Message message) {
     	System.out.println("smn calleds");
     	assert(message!=null);
-        String notificationText = new StringBuilder().append(message.getSender().getFirstName()+" "+message.getMessageSubject().getGenericEmailMessage())
+        String notificationText = new StringBuilder().append("From:"+message.getSender().getFirstName()+" concerning:"+message.getMessageSubject())
 					   .append("<br>"+"<a href=\"http://localhost:8080/tutoris_baernae/messageInboxShow?messageId="+message.getId()+"\">Click here to read the message </a>")
 					   .append("<br>"+"This message is auto generated. Do not answer!")
 					   .toString();

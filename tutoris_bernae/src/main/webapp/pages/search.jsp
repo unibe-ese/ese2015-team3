@@ -16,15 +16,15 @@
         <legend>Enter search criteria</legend>
 
         <div class="mc-column">
-            <c:set var="studyCourseIdErrors"><form:errors path="studyCourseId"/></c:set>
+            <c:set var="studyCourseErrors"><form:errors path="studyCourse"/></c:set>
             <div class="control-group<c:if test="${not empty studyCourseIdErrors}">error</c:if>">
-                <label class="control-label" for="field-studyCourseId">Study Course</label>
+                <label class="control-label" for="field-studyCourse">Study Course</label>
                 <div class="controls">
-                    <form:select path="studyCourseId" required="false">
+                <form:select path="studyCourse" required="false" tabindex="1">
                         <form:option value="0">-- no course selected --</form:option>
                         <form:options items="${studyCourseList}" itemValue="id" itemLabel="name"/>
                     </form:select>
-                    <form:errors path="studyCourseId" cssClass="help-inline" element="span"/>
+                    <form:errors path="studyCourse" cssClass="help-inline" element="span"/>
                 </div>
             </div>
             <c:set var="feeErrors"><form:errors path="fee"/></c:set>
@@ -38,24 +38,56 @@
         </div>
         
         <div class="mc-column">
-            <c:set var="classesIdErrors"><form:errors path="classesId"/></c:set>
-            <div class="control-group<c:if test="${not empty classesIdErrors}">error</c:if>">
-                <label class="control-label" for="field-classesId">Class</label>
+            <c:set var="classesErrors"><form:errors path="classes"/></c:set>
+            <div class="control-group<c:if test="${not empty classesErrors}">error</c:if>">
+                <label class="control-label" for="field-classes">Class</label>
                 <div class="controls">
-                    <form:select path="classesId" required="false">
+                <form:select path="classes" required="false" tabindex="2">
                         <form:option value="0">-- no class selected --</form:option>
                         <form:options items="${classesList}" itemLabel="name" itemValue="id"/>
                     </form:select>
-                    <form:errors path="classesId" cssClass="help-inline" element="span"/>
+                    <form:errors path="classes" cssClass="help-inline" element="span"/>
                 </div>
             </div> 
         </div>
-        
+            
         <div class="form-actions">
             <button type="submit" class="button btn btn-primary">Search</button>
         </div>
             
     </fieldset>
 </form:form>
+
+<%-- SEARCH RESULTS --%>
+
+<c:if test="${not empty noTutor}"><br>
+    <h1>Search Results</h1>
+    ${noTutor}
+</c:if>
+
+<c:if test="${not empty tutors}"><br>
+    <h1>Search Results</h1>
+    <table class="sortable">
+    <thead>
+        <tr>
+            <td>Username</td>
+            <td>Fee</td>
+            <td>Average Grade</td>
+            <td>Rating</td>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach items="${tutors}" var="tutors">
+        <tr>
+            <td><a href="/tutoris_baernae/view?tutorId=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
+            <td>${tutors.fee}</td>
+            <td><c:out value="${tutors.averageGrade}"/></td>
+            <td>***</td>
+        </tr>
+        
+        </c:forEach>
+    </tbody>
+    </table>
+</c:if>
 
 <c:import url="template/footer.jsp" />

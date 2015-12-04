@@ -4,8 +4,6 @@ import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.service.TutorShipService;
 import org.sample.model.Tutor;
 import org.sample.model.User;
-import org.sample.model.dao.MessageSubjectDao;
-import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

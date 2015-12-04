@@ -8,16 +8,16 @@ import java.util.List;
 
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
+import org.sample.controller.pojos.SearchForm;
+import org.sample.model.Classes;
 import org.sample.model.Message;
-import org.sample.model.MessageSubject;
+import org.sample.model.StudyCourse;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
-import org.sample.model.dao.MessageSubjectDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.annotation.PostConstruct;
 
 /**
  * Offers services to load messages, to send (by saving them to the database) and 
@@ -34,17 +34,10 @@ public class MessageService{
     private UserDao userDao;  
     @Autowired 
     private MessageDao messageDao;
-    @Autowired 
-    private MessageSubjectDao messageSubjectDao; 
     @Autowired
     private MailService mailService;
 	@Autowired 
 	private TutorShipService tutorShipService;
-    
-	private MessageSubject contactDetailsSubject;  
-	private MessageSubject confirmedTutorShipSubject;
-    
-	private static final String ACTION_OFFER_TUTORSHIP = "OFFER_TUTORSHIP";
     
 	/**
      * Compares messages by date to order them from newest to oldest
@@ -56,12 +49,6 @@ public class MessageService{
 		}
     	
     };
-    
-    @PostConstruct
-    public void intitializeSubject()
-    {
-    	createNeededMessageSubjects();
-    }
     /**
      * Returns all messages the user has received, ordered form newest send date to oldest.
      * @param user from which we want to get all messages
@@ -85,18 +72,31 @@ public class MessageService{
     public MessageForm sendMessageFromForm(MessageForm messageForm, User sender) throws InvalidUserException{
     	assert(messageForm!=null);
     	assert(sender!=null);
-    	Message message = new Message();
+    	Message message = send(getMessageFromForm(messageForm,sender));
+    	messageForm.setId(message.getId());
+    	return messageForm;
+    }
+    
+    public MessageForm sendTutorShipOffer(MessageForm messageForm, User sender)
+    {
+    	Message offerMessage = getMessageFromForm(messageForm,sender);
+    	tutorShipService.addOfferedTutorShip(offerMessage);
+    	offerMessage.setMessageSubject("Tutorship Offer");
+    	offerMessage = send(offerMessage);
+    	messageForm.setId(offerMessage.getId());
+    	return messageForm;
+    }
+    
+    private Message getMessageFromForm(MessageForm messageForm, User sender){
+      	Message message = new Message();
     	User receiver = userDao.findByUsername(messageForm.getReceiver());
     	if(receiver==null) throw new InvalidUserException("The user you want to send a message does not exist");
     	message.setSender(sender);
     	message.setReceiver(receiver);
     	message.setMessageSubject(messageForm.getMessageSubject());
     	message.setMessageText(messageForm.getMessageText());
-    	message = send(message);
-    	messageForm.setId(message.getId());
-    	return messageForm;
+    	return message;
     }
-
     /**
      * "Sends" a message by saving it to the database and setting the send
      * date to now
@@ -107,7 +107,7 @@ public class MessageService{
     {
     	assert message.getSendDate() == null;
     	message.setSendDate(new Date());
-		tutorShipService.addOfferedTutorShip(message);	
+		
     	message = messageDao.save(message);
     	mailService.sendMessageNotificationMail(message);
     	return message;
@@ -135,12 +135,13 @@ public class MessageService{
 	public Message sendContactDetails(User sender, User receiver) {
 		assert(!sender.equals(receiver));
 		Message contactDetails = new Message();
-		contactDetails.setMessageSubject(contactDetailsSubject);
+	
 		String allContactInformations = new StringBuilder().append("You can contact me as follows: \n")
 				.append("Full name: "+sender.getFirstName()+" "+sender.getLastName()+" \n")
 				.append("Email: "+sender.getEmail()+" \n")
 				.append("This message is auto generated. Do not answer")
 				.toString();
+		contactDetails.setMessageSubject("Contact Details");
 		contactDetails.setMessageText(allContactInformations);
 		contactDetails.setReceiver(receiver);
 		contactDetails.setSender(sender);
@@ -149,58 +150,32 @@ public class MessageService{
 	
 	public Message sendTutorShipConfirmedMessage(User sender, User receiver) {
 		Message acceptanceMessage = new Message();
-		acceptanceMessage.setMessageSubject(confirmedTutorShipSubject);
 		String messageText = new StringBuilder().append("Your Tutorship for "+sender.getFirstName()+"was accepted by him!")
 				.append("This message is auto generated. Do not answer")
 				.toString();
 		acceptanceMessage.setMessageText(messageText);
-		acceptanceMessage.setMessageSubject(confirmedTutorShipSubject);
+		acceptanceMessage.setMessageSubject("Tutorship accepted!");
 		acceptanceMessage.setReceiver(receiver);
 		acceptanceMessage.setSender(sender);
 		return send(acceptanceMessage);
-	}
-
-	public List<MessageSubject> getAccessibleSubjects(User user) {
-		List<MessageSubject> accessibleSubjects = (List<MessageSubject>) messageSubjectDao.findAllByRole("ROLE_USER");
-		if(user.isTutor()) accessibleSubjects.addAll((List<MessageSubject>) messageSubjectDao.findAllByRole("ROLE_TUTOR"));
-		return accessibleSubjects;
 	}
 	
 	public void exchangeContactDetails(User user1, User user2) {
 		sendContactDetails(user1, user2);
 		sendContactDetails(user2, user1);
 	}
-	
-    private void createNeededMessageSubjects() {
-		if(messageSubjectDao.findByAction(ACTION_OFFER_TUTORSHIP) == null){
-			MessageSubject offerTutorShip = new MessageSubject();
-			offerTutorShip.setMessageSubjectName("Offer Tutorship");
-			offerTutorShip.setRole("ROLE_TUTOR");
-			offerTutorShip.setAction(ACTION_OFFER_TUTORSHIP);
-			offerTutorShip.setGenericEmailMessage("offers you a tutorship");
-			messageSubjectDao.save(offerTutorShip);
-		}
-		if(messageSubjectDao.findByMessageSubjectName("Contact Details") == null){
-			MessageSubject contactDetails = new MessageSubject();
-			contactDetails.setMessageSubjectName("Contact Details");
-			contactDetails.setRole("ROLE_GENERATED");
-			contactDetails.setGenericEmailMessage("shared his contact details with you");
-			contactDetailsSubject = messageSubjectDao.save(contactDetails);
-		}
-		else{
-			contactDetailsSubject = messageSubjectDao.findByMessageSubjectName("Contact Details");
-		}
-		if(messageSubjectDao.findByMessageSubjectName("Tutorship accepted!") == null){
-			MessageSubject confirmedTutorship = new MessageSubject();
-			confirmedTutorship.setMessageSubjectName("Tutorship accepted!");
-			confirmedTutorship.setRole("ROLE_GENERATED");
-			confirmedTutorship.setGenericEmailMessage("accepted your tutorship offer");
-			confirmedTutorShipSubject = messageSubjectDao.save(confirmedTutorship);
-		}
-		else{
-			confirmedTutorShipSubject = messageSubjectDao.findByMessageSubjectName("Tutorship accepted!");
-		}
+
+	public String createSearchCriteriaSubject(SearchForm searchedCriterias) {
+		StudyCourse course = searchedCriterias.getStudyCourse();
+		Classes classes = searchedCriterias.getClasses();
+		if(course!=null&&classes!=null)
+			return "I need a tutor in "+course.getName()+" especially for "+classes.getName();
+		else if(course!=null)
+			return "I need a tutor in "+course.getName();
+		else if(classes!=null)
+			return "I need a tutor in "+classes.getName();
+		return "I need a tutor";
 	}
-    
+	
 
 }

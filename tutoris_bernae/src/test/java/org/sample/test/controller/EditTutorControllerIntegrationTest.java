@@ -117,15 +117,8 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 	@Test
 	public void editTutorDone() throws Exception
 	{
-        Classes classes = new Classes();
-        classesDao.save(classes);
-		CompletedClasses completedClasses = new CompletedClasses(classes, 4);
-		List<CompletedClasses> completedClassesList = new LinkedList<CompletedClasses>();
-		completedClassesList.add(completedClasses);
 		session = createSessionWithUser("tutortest","123", "ROLE_TUTOR");
 		mockMvc.perform(post("/editTutorSubmit").session(session)
-				//.requestAttr("courseList", new LinkedList<StudyCourse>())
-				//.requestAttr("classesList", completedClassesList)
 				.param("userId", newTutorUser.getId().toString())
 				.param("tutorId", newTutor.getId().toString())
 				.param("firstName","first")
@@ -147,6 +140,58 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		assertEquals("new Bio", newTutor.getBio());
 		assertEquals(new BigDecimal(48), newTutor.getFee());
 		assertEquals("123A#qqq", newTutorUser.getPassword());
+	}
+	
+	@Test
+	public void editTutorWithFormErrors() throws Exception
+	{
+		session = createSessionWithUser("tutortest","123", "ROLE_TUTOR");
+		mockMvc.perform(post("/editTutorSubmit").session(session)
+				.param("userId", newTutorUser.getId().toString())
+				.param("tutorId", newTutor.getId().toString())
+				.param("firstName","")
+				.param("lastName","")
+				.param("username","")
+				.param("password","")
+				.param("email","")
+				.param("bio","")
+				.param("fee","afhk")
+				.param("save","true"))
+				.andExpect(status().isOk())
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "email"))
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "firstName"))
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "lastName"))
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "username"))
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "password"))
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "bio"))
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "fee"))
+				.andExpect(forwardedUrl(completeUrl("editTutor")));
+		
+	}
+	
+	@Test
+	public void cannotChangeEmailToAlreadyUsedOne() throws Exception
+	{
+		User userWithThisEmailAdress = new User();
+		userWithThisEmailAdress.setEmail("test@test.testmail");
+		userDao.save(userWithThisEmailAdress);
+		session = createSessionWithUser("tutortest","123", "ROLE_TUTOR");
+		mockMvc.perform(post("/editTutorSubmit").session(session)
+				.param("userId", newTutorUser.getId().toString())
+				.param("tutorId", newTutor.getId().toString())
+				.param("firstName","first")
+				.param("lastName","last")
+				.param("username","TestUser")
+				.param("password","123A#qqq")
+				.param("email","test@test.testmail")
+				.param("bio","new Bio")
+				.param("fee","48")
+				.param("save","true"))
+				.andExpect(status().isOk())
+				.andExpect(model().attributeHasFieldErrors("tutorEditForm", "email"))
+				.andExpect(model().errorCount(1))
+				.andExpect(forwardedUrl(completeUrl("editTutor")));
+		
 	}
 	
 }

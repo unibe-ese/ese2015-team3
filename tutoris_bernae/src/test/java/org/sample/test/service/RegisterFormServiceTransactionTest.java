@@ -5,6 +5,7 @@ import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.service.RegisterFormService;
 import org.sample.model.User;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ServiceTransactionTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,12 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class RegisterFormServiceTransactionTest {	
+public class RegisterFormServiceTransactionTest extends ServiceTransactionTest{	
 	@Autowired
     private RegisterFormService registerFormService;
 	@Autowired

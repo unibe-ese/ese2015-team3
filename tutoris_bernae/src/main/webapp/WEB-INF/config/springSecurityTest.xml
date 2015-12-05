@@ -32,7 +32,7 @@
 
 	
 	<!-- Select users and user_roles from database -->
-	<authentication-manager>
+	<authentication-manager alias="authenticationManager">
 	  <authentication-provider>
 		<jdbc-user-service data-source-ref="mainDataSource"
 		  users-by-username-query=

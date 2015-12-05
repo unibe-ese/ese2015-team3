@@ -5,7 +5,7 @@ import java.util.List;
 import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 
-public interface ClassCourseList {
+public interface FormWithClassCourseList {
 	public List<StudyCourse> getStudyCourseList();
 
 	public void setStudyCourseList(List<StudyCourse> studyCourseList);

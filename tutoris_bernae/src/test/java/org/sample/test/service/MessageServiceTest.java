@@ -21,9 +21,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.MessageForm;
+import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.MailService;
 import org.sample.controller.service.MessageService;
 import org.sample.controller.service.TutorShipService;
+import org.sample.model.Classes;
 import org.sample.model.Message;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
@@ -299,6 +301,16 @@ public class MessageServiceTest {
         List<Message> shouldBeOrderedMessageList = (List<Message>) messageService.getOrderedMessagesList(receiver);
         assertEquals(orderedMessageList, shouldBeOrderedMessageList);	
 
+    }
+    
+    @Test
+    public void createSearchCriteriaSubjectFromSearchForm(){
+    	Classes math = new Classes();
+		math.setName("MathClass");
+    	SearchForm searchedCriterias = new SearchForm();
+    	searchedCriterias.setClasses(math);
+    	String subject = messageService.createSearchCriteriaSubject(searchedCriterias);
+    	assertTrue(subject.contains("MathClass"));
     }
     
     @After

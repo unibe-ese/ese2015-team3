@@ -15,6 +15,7 @@ import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
+import org.sample.validators.UserEmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +44,11 @@ public class EditController {
 	
 	@Autowired
 	private EditFormService editFormService;
+	
+	@InitBinder("editForm")
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(new UserEmailValidator(userDao));
+	}
 	
 	/**
 	 * Creates a page with an editing form for a normal user or a tutor,

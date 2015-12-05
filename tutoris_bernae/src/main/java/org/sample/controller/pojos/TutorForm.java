@@ -15,7 +15,7 @@ import org.sample.model.StudyCourse;
  * A register form for tutors, stores all needed
  * information to upgrade a user to a tutor.
  */
-public class TutorForm implements ClassCourseList{
+public class TutorForm implements FormWithClassCourseList{
 
     private Long id;
 

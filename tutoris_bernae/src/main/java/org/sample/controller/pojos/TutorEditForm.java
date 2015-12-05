@@ -18,7 +18,7 @@ import org.sample.model.User;
  * An edit form for tutors, stores all changeable
  * values of a user and a tutor profile
  */
-public class TutorEditForm implements ClassCourseList{
+public class TutorEditForm implements FormWithUserDetails,FormWithClassCourseList{
 	@NotEmpty
 	private String firstName;
     @NotEmpty

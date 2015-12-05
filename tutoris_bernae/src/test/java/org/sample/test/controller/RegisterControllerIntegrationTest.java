@@ -21,6 +21,8 @@ import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 public class RegisterControllerIntegrationTest extends ControllerIntegrationTest{
 	@Autowired
@@ -109,6 +111,9 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 	public void submitAndSaveTutorForm() throws Exception
 	{
 		User user = new User();
+		user.setPassword("1");
+		user.setUsername("test");
+		user.setEmail("test");
 		user = userDao.save(user);
 		mockMvc.perform(post("/submitastutor").param("bio", "bio")
 									.param("fee", "22")
@@ -120,28 +125,6 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		assertEquals("bio", tutor.getBio());
 		assertEquals(new BigDecimal(22), tutor.getFee());
 		assertEquals(user, tutor.getStudent());
-	}
-	
-	//Checks if we get an invalidUserException and out of that a page error if we use a username and password
-	//that is already in use
-	@Test
-	public void invalidUserPageError() throws Exception
-	{
-		RegisterForm registerForm = new RegisterForm();
-        registerForm.setFirstName("First");
-        registerForm.setLastName("Last");
-        registerForm.setUsername("user");
-        registerForm.setEmail("test@test.com");
-        registerForm.setPassword("123456");
-		registerFormService.saveFrom(registerForm);
-		mockMvc.perform(post("/submit").param("email", "test@test.com")
-									.param("firstName", "first")
-									.param("lastName", "last")
-									.param("username", "user")
-									.param("password", "1Password*"))
-									.andExpect(status().isOk())
-									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
-									.andExpect(model().attributeExists("page_error"));
 	}
 	
 	@Test
@@ -159,6 +142,22 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 				.andExpect(model().attributeHasFieldErrors("registerForm", "lastName"))
 				.andExpect(model().attributeHasFieldErrors("registerForm", "username"))
 				.andExpect(model().attributeHasFieldErrors("registerForm", "password"));
+	}
+	
+	@Test
+	public void alreadyInUseEmailNotAllowed() throws Exception
+	{
+		User userWithThisEmailAdress = new User();
+		userWithThisEmailAdress.setEmail("test@test.testmail");
+		userDao.save(userWithThisEmailAdress);
+		mockMvc.perform(post("/submit").param("email", userWithThisEmailAdress.getEmail())
+				.param("firstName", "Test")
+				.param("lastName", "Test")
+				.param("username", "test")
+				.param("password", "W*3avsadf"))
+				.andExpect(status().isOk())
+				.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_REGISTER)))
+				.andExpect(model().attributeHasFieldErrors("registerForm", "email"));
 	}
 	
 }

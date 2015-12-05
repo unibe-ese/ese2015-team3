@@ -30,10 +30,10 @@ public class MessageForm {
 	public MessageForm(Message selectedMessage) {
 		receiver = selectedMessage.getSender().getUsername();
 		String oldSubject = selectedMessage.getMessageSubject();
-		if(oldSubject.contains("AW:"))
+		if(oldSubject.contains("AW: "))
 			messageSubject = oldSubject;
 		else
-			messageSubject = "AW:"+selectedMessage.getMessageSubject();
+			messageSubject = "AW: "+selectedMessage.getMessageSubject();
 	}
 	
 	public MessageForm() {

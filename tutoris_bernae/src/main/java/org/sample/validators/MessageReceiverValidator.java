@@ -19,12 +19,11 @@ public class MessageReceiverValidator implements Validator
 {
 	private UserDao userDao;
 	
-	//Spring needs an empty one for whatever reason; Never use this!
-	
+	//Spring needs an empty constructor for whatever reason; Never use this!
 	/**
 	 * DO NOT USE!
 	 * Just there because Spring needs an empty one for yet unknown reason
-	 * Use MessagereceiverValidator(UserDao userDao) instead
+	 * Use MessageReceiverValidator(UserDao userDao) instead OR IT WIIL NOT WORK
 	 */
 	public MessageReceiverValidator() {
 	}

@@ -10,7 +10,7 @@ import org.sample.model.User;
  * A simple edit form, stores all changeable
  * values of a user profile
  */
-public class EditForm {
+public class EditForm implements FormWithUserDetails{
 
     private Long userId;
     @NotEmpty

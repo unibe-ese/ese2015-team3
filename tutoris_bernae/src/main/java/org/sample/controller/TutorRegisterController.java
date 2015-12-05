@@ -128,7 +128,7 @@ public class TutorRegisterController {
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	if (!result.hasErrors()){
         	tutorFormService.saveFrom(tutorForm);
-                authenticateUserAndSetSession(userDao.findOne(tutorForm.getUserId()),request);
+            authenticateUserAndSetSession(userDao.findOne(tutorForm.getUserId()),request);
         	model = new ModelAndView(PAGE_SUBMIT);
         }
         else { 

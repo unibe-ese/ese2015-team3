@@ -130,6 +130,26 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	}
 	
 	@Test
+	public void editUserDoneWithoutChanges() throws Exception
+	{
+		session = createSessionWithUser("test", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(post("/editSubmit").session(session)
+										.param("userId", newUser.getId().toString())
+										.param("firstName",newUser.getFirstName())
+										.param("lastName",newUser.getLastName())
+										.param("username",newUser.getUsername())
+										.param("password",newUser.getPassword())
+										.param("email",newUser.getEmail()))
+										.andExpect(status().isOk())
+										.andExpect(forwardedUrl(completeUrl("editDone")));
+		//Check if new datas are saved correctly
+		assertEquals("mail@mail.mail", newUser.getEmail());
+		assertEquals("last", newUser.getLastName());
+		assertEquals("first", newUser.getFirstName());
+		assertEquals("test", newUser.getUsername());
+		assertEquals("1232w%Dres", newUser.getPassword());
+	}
+	@Test
 	public void editUserEditFormErrors() throws Exception
 	{
 		session = createSessionWithUser("test", "123", "ROLE_USER");
@@ -147,7 +167,25 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attributeHasFieldErrors("editForm", "lastName"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "username"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "password"));
-
+	}
+	
+	@Test
+	public void cannotChangeEmailToAlreadyUsedOne() throws Exception
+	{
+		User userWithThisEmailAdress = new User();
+		userWithThisEmailAdress.setEmail("test@test.testmail");
+		userDao.save(userWithThisEmailAdress);
+		session = createSessionWithUser("test", "123", "ROLE_USER");
+		mockMvc.perform(post("/editSubmit").session(session)
+				.param("userId", newUser.getId().toString())
+				.param("firstName",newUser.getFirstName())
+				.param("lastName",newUser.getLastName())
+				.param("username",newUser.getUsername())
+				.param("password",newUser.getLastName())
+				.param("email","test@test.testmail"))
+										.andExpect(status().isOk())
+										.andExpect(forwardedUrl(completeUrl("edit")))
+										.andExpect(model().attributeHasFieldErrors("editForm", "email"));
 	}
 	
 	@Test

@@ -16,6 +16,7 @@ import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.ClassCourseListValidator;
+import org.sample.validators.UserEmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -58,6 +59,7 @@ public class EditTutorController {
 		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
 		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));
 		binder.addValidators(new ClassCourseListValidator());
+		binder.addValidators(new UserEmailValidator(userDao));
 	}
 	
 	

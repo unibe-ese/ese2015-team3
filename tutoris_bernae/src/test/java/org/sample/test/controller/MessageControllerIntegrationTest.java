@@ -17,10 +17,15 @@ import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.sample.controller.SearchController;
 import org.sample.controller.pojos.MessageForm;
+import org.sample.controller.pojos.SearchForm;
+import org.sample.controller.service.MessageService;
+import org.sample.model.Classes;
 import org.sample.model.Message;
 import org.sample.model.Tutor;
 import org.sample.model.User;
+import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.TutorShipDao;
@@ -50,6 +55,10 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	private List<Message> unorderedMessageList;
 	@Autowired
 	private MessageDao messageDao;
+	@Autowired
+	private MessageService messageService;
+	@Autowired
+	private ClassesDao classesDao;
 	@Before
 	public void setUp()
 	{
@@ -144,7 +153,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
 										.andExpect(forwardedUrl(completeUrl("messageAnswer")))
 		.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender"))))
-		.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is("test"))));
+		.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is("AW: test"))));
 								
 	}	
 	
@@ -236,6 +245,26 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
 										.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender"))))
+										.andExpect(model().attribute("messageForm", hasProperty("messageSubject", is(String.class))))
+										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
+								
+	}
+	
+	@Test
+	public void newMessageToTutorFoundBySearchHasCorrectSubject() throws Exception
+	{
+		Classes math = new Classes();
+		math.setName("MathClass");
+		classesDao.save(math);
+		SearchForm searchForm = new SearchForm();
+		searchForm.setClasses(math);
+		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session.setAttribute(SearchController.SESSIONATTRIBUE_FOUNDBYSEARCHFORM, searchForm);
+		mockMvc.perform(get("/messageNewTo?receiver="+sender.getUsername()).session(session))
+										.andExpect(status().isOk())
+										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
+										.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender"))))
+										.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is(messageService.createSearchCriteriaSubject(searchForm)))))
 										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
 								
 	}

@@ -17,8 +17,6 @@ public class RegisterForm implements FormWithUserDetails {
     private String firstName;
     @NotEmpty
     private String lastName;
-    @NotEmpty
-    private String username;
     
     // password must have 1 uppercase, 1 digit, 1 special character. 8-14 letters
     @Pattern(regexp = "(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,15}$")
@@ -98,22 +96,6 @@ public class RegisterForm implements FormWithUserDetails {
     public void setId(Long id) {
         this.id = id;
     }
-
-	/* (non-Javadoc)
-	 * @see org.sample.controller.pojos.FormWithUserDetails#getUsername()
-	 */
-	@Override
-	public String getUsername() {
-		return username;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.sample.controller.pojos.FormWithUserDetails#setUsername(java.lang.String)
-	 */
-	@Override
-	public void setUsername(String userName) {
-		this.username = userName;
-	}
 
 	/* (non-Javadoc)
 	 * @see org.sample.controller.pojos.FormWithUserDetails#getUserId()

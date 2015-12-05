@@ -29,6 +29,7 @@ import org.sample.model.Classes;
 import org.sample.model.Message;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,13 @@ public class MessageServiceTest {
 			UserDao userDao = mock(UserDao.class);
 			return userDao;
 		}
+		
+		@Bean
+		public TutorDao tutorDaoMock() {
+			TutorDao tutorDao = mock(TutorDao.class);
+			return tutorDao;
+		}
+		
 		@Bean
 		public MessageDao messageDaoMock() {
 			MessageDao messageDao = mock(MessageDao.class);
@@ -86,6 +94,9 @@ public class MessageServiceTest {
 	@Qualifier("userDaoMock")
 	@Autowired
 	private UserDao userDao;
+	@Qualifier("tutorDaoMock")
+	@Autowired
+	private TutorDao tutorDao;
 	@Qualifier("messageDaoMock")
 	@Autowired
 	private MessageDao messageDao;
@@ -122,11 +133,11 @@ public class MessageServiceTest {
     @Test
     public void messageFormCorrectDataSaved() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver("tutortest");
+    	messageForm.setReceiver("tutortest@test.ch");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
-    	when(userDao.findByUsername(any(String.class)))
+    	when(userDao.findByEmailLike(any(String.class)))
            .thenAnswer(new Answer<User>() {
                public User answer(InvocationOnMock invocation) throws Throwable {	
                    return receiver;
@@ -156,11 +167,11 @@ public class MessageServiceTest {
     @Test
     public void offerTutorShipTutorShipServiceCalled() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver("tutortest");
+    	messageForm.setReceiver("tutortest@test.ch");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
-    	when(userDao.findByUsername(any(String.class)))
+    	when(userDao.findByEmailLike(any(String.class)))
            .thenAnswer(new Answer<User>() {
                public User answer(InvocationOnMock invocation) throws Throwable {	
                    return receiver;
@@ -232,7 +243,7 @@ public class MessageServiceTest {
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
-    	when(userDao.findByUsername(any(String.class)))
+    	when(userDao.findByEmailLike(any(String.class)))
            .thenAnswer(new Answer<User>() {
                public User answer(InvocationOnMock invocation) throws Throwable {	
                    return null;

@@ -23,8 +23,6 @@ public class TutorEditForm implements FormWithUserDetails,FormWithClassCourseLis
 	private String firstName;
     @NotEmpty
     private String lastName;
-    @NotEmpty
-    private String username;
     @Pattern(regexp = "(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,15}$")
     private String password;
 
@@ -52,7 +50,6 @@ public class TutorEditForm implements FormWithUserDetails,FormWithClassCourseLis
     	assert(user!=null);
     	assert(tutor!=null);
     	this.userId = user.getId();
-		this.username = user.getUsername();
 		this.email = user.getEmail();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
@@ -96,14 +93,6 @@ public class TutorEditForm implements FormWithUserDetails,FormWithClassCourseLis
     public void setEmail(String email) {
         this.email = email;
     }
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
 
 	public BigDecimal getFee() {
 		return fee;

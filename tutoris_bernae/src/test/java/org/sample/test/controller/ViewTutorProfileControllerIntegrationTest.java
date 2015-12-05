@@ -34,14 +34,12 @@ public class ViewTutorProfileControllerIntegrationTest extends ControllerIntegra
 	public void setUp() throws Exception
 	{
 		newUser = new User();
-		newUser.setUsername("test");
 		newUser.setPassword("123");
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
 		newTutor = new Tutor();
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
-		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("123");
 		newTutorUser.setEmail("tutormail@mail.mail");
 		newTutorUser.setTutor(newTutor);

@@ -38,11 +38,9 @@ public class MessageServiceTransactionTest extends ServiceTransactionTest {
 	@Before
 	public void setUpExampleDatas(){
 		sender = new User();
-		sender.setUsername("test");
 		sender.setEmail("mail@mail.mail");
 		sender = userDao.save(sender);
 		receiver = new User();
-		receiver.setUsername("tutortest");
 		receiver.setEmail("tutormail@mail.mail");
 		receiver = userDao.save(receiver);
 	}
@@ -50,7 +48,7 @@ public class MessageServiceTransactionTest extends ServiceTransactionTest {
     @Test
     public void messageFormCorrectDataSavedInDatabase() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver("tutortest");
+    	messageForm.setReceiver("tutormail@mail.mail");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	messageService.sendMessageFromForm(messageForm,sender);
@@ -67,7 +65,7 @@ public class MessageServiceTransactionTest extends ServiceTransactionTest {
     @Test(expected=InvalidUserException.class) 
     public void receiverUnexisting() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver(null);
+    	messageForm.setReceiver("notexisting");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	messageService.sendMessageFromForm(messageForm,sender);

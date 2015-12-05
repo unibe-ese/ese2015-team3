@@ -22,8 +22,6 @@ public class User {
     private String lastName;
     @Column(unique = true)
     private String email; //should be unique!
-    @Column(unique = true)
-    private String username;
     private String role;
 
 	private String password;
@@ -33,14 +31,6 @@ public class User {
     
     private String profilePicture;
 
-    public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -115,7 +105,6 @@ public class User {
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -157,11 +146,6 @@ public class User {
 			if (other.role != null)
 				return false;
 		} else if (!role.equals(other.role))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}

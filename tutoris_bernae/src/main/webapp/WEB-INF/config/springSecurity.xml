@@ -23,7 +23,7 @@
 		    login-page="/login" 
 		    default-target-url="/" 
 			authentication-failure-url="/login?error" 
-			username-parameter="username"
+			username-parameter="email"
 			password-parameter="password" />
 		<logout logout-success-url="/?logout"  />
 		<!-- enable csrf protection -->
@@ -35,9 +35,9 @@
 	  <authentication-provider>
 		<jdbc-user-service data-source-ref="mainDataSource"
 		  users-by-username-query=
-		    "select username,password, TRUE from user where username=?"
+		    "select email, password, TRUE from user where email = ?"
 		  authorities-by-username-query=
-		    "select username, role from user where username =?" />
+		    "select email, role from user where email = ?" />
 	  </authentication-provider>
 	</authentication-manager>
 

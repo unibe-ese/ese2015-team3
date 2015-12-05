@@ -61,7 +61,7 @@ public class EditController {
 	public ModelAndView viewEditProfile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String name = authentication.getName();
-		User user = userDao.findByUsername(name);
+		User user = userDao.findByEmailLike(name);
 		if(user.getTutor()!=null) {	
 			return new ModelAndView("redirect:/editTutor");
 		}

@@ -70,7 +70,7 @@
     <table class="sortable">
     <thead>
         <tr>
-            <td>Username</td>
+            <td>Name</td>
             <td>Fee</td>
             <td>Average Grade</td>
             <td>Rating</td>
@@ -79,7 +79,7 @@
     <tbody>
         <c:forEach items="${tutors}" var="tutors">
         <tr>
-            <td><a href="/tutoris_baernae/view?tutorId=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
+            <td><a href="/tutoris_baernae/view?tutorId=${tutors.id}"><c:out value="${tutors.student.firstName}"></c:out></a></td>
             <td>${tutors.fee}</td>
             <td><c:out value="${tutors.averageGrade}"/></td>
             <td>***</td>

@@ -17,7 +17,7 @@
             <c:forEach items="${messages}" var="messages">
                 <a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}">
                     <div class="message-preview">
-                        <span class="message-sender"><c:if test="${!messages.wasRead}"><i class="fa fa-exclamation"></i></c:if> ${messages.sender.username}</span>
+                        <span class="message-sender"><c:if test="${!messages.wasRead}"><i class="fa fa-exclamation"></i></c:if> ${messages.sender.firstName}</span>
                         <span class="message-subject">${messages.messageSubject}</span>
                     </div>
                 </a>
@@ -29,7 +29,7 @@
                     <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
                     
                     <div class="control-group<c:if test="${not empty receiverErrors}"> error</c:if>">
-                        <label class="control-label" for="field-receiver"> To: ${messageForm.receiver}</label>
+                        <label class="control-label" for="field-receiver"> To: ${messageReceiver}</label>
                         <div class="controls">
                             <form:input path="receiver" type="hidden" value = "${messageForm.receiver}" />
                         </div>
@@ -55,25 +55,25 @@
                     <div class="control-group<c:if test="${not empty messageTextErrors}"> error</c:if>">
                             <label class="control-label" for="field-messageText">Message</label>
                             <div class="controls">
-                            <form:textarea path="messageText" type = "text" id="field-messageText" tabindex="3" maxlength="35" placeholder="Text"/>
+                            <form:textarea path="messageText" type="text" id="field-messageText" tabindex="1" placeholder="Text" autofocus="true"/>
                             <form:errors path="messageText" cssClass="help-inline" element="span"/>
                         </div>
                     </div>
                         
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" tabindex="4" class="btn btn-primary">Send</button>
                         <sec:authorize access="hasRole('ROLE_TUTOR')">
-   							<button type="submit" name="offerTutorShip" value="true" class="btn btn-primary">Offer TutorShip</button>
-   						</sec:authorize>   
+                            <button type="submit" tabindex="2" name="offerTutorShip" value="true" class="btn btn-primary">Offer TutorShip</button>
+   			</sec:authorize>   
                     </div>
                 </fieldset>
             </form:form>
         </div>
         <c:if test = "${not empty answeredMessage}">
         <div class="flex-item">
-                <div class="module bottom-border">From:${answeredMessage.sender.username}</div>
-		<div class="module bottom-border">Subject:${answeredMessage.messageSubject}</div>
-	 	<div class="module no-border"><p>${answeredMessage.messageText}<p></div>
+                <div class="module bottom-border">From: ${answeredMessage.sender.firstName}</div>
+		<div class="module bottom-border">Subject: ${answeredMessage.messageSubject}</div>
+                <div class="module no-border"><p><pre>${answeredMessage.messageText}</pre><p></div>
         </div>
         </c:if>
     </div>

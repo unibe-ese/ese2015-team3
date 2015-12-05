@@ -39,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class RegisterController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
+        private static final String SESSIONATTRIBUTE_USER="loggedInUser";
 	
     @Autowired
     private StudyCourseDao studyCourseDao;
@@ -98,7 +99,9 @@ public class RegisterController {
                 	tutorForm.setUserId(registerForm.getId());
                     return createTutorFormPage(tutorForm);
                 }
-                authenticateUserAndSetSession(userDao.findOne(registerForm.getId()),request);
+                User user = userDao.findOne(registerForm.getId());
+                authenticateUserAndSetSession(user,request);
+                session.setAttribute(SESSIONATTRIBUTE_USER, user);
                 model = new ModelAndView(PAGE_SUBMIT);
             } catch (InvalidUserException e) {
                 model = new ModelAndView(PAGE_REGISTER);
@@ -120,9 +123,8 @@ public class RegisterController {
     }
     
     private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
-        String username = user.getUsername();
+        String username = user.getEmail();
         String password = user.getPassword();
-        
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         request.getSession();
         token.setDetails(new WebAuthenticationDetails(request));

@@ -14,7 +14,7 @@
 
      	<div id="login-box">
 
-		<h1>Login with Username and Password</h1>
+		<h1>Login with Email and Password</h1>
 
 		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
@@ -29,10 +29,10 @@
 		<table>
 
 			<div class="control-group">
-            <label class="control-label" for="field-username">Username</label>
+            <label class="control-label" for="field-email">Email</label>
             <div class="controls">
-                <input path="username"type="text" name="username" id="field-username" tabindex="1" maxlength="35" placeholder="Username"/>
-                <errors path="username" cssClass="help-inline" element="span"/>
+                <input path="email"type="text" name="email" id="field-email" tabindex="1" maxlength="35" placeholder="Email"/>
+                <errors path="email" cssClass="help-inline" element="span"/>
             </div>
         </div>
         			<div class="control-group">

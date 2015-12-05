@@ -21,10 +21,6 @@ public interface FormWithUserDetails {
 	String getEmail();
 
 	void setEmail(String email);
-
-	String getUsername();
-
-	void setUsername(String userName);
 	
 	/**
 	 * @return the Id of the user in the database treated by this form

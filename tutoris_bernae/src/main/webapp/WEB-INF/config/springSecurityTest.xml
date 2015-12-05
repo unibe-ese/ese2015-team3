@@ -18,27 +18,23 @@
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
 		
-		<form-login 
+			<form-login 
 		    login-page="/login" 
 		    default-target-url="/" 
 			authentication-failure-url="/login?error" 
-			username-parameter="username"
+			username-parameter="email"
 			password-parameter="password" />
 		<logout logout-success-url="/?logout"  />
-		<!-- we do not enable csrf protection because don't work with it or get really complicated -->
-		<!-- but we don't really need to test it because the framework is responsible for it, and thus we can assume it works  -->
 	</http>
-	
-
 	
 	<!-- Select users and user_roles from database -->
 	<authentication-manager alias="authenticationManager">
 	  <authentication-provider>
 		<jdbc-user-service data-source-ref="mainDataSource"
 		  users-by-username-query=
-		    "select username,password, TRUE from user where username=?"
+		    "select email, password, TRUE from user where email = ?"
 		  authorities-by-username-query=
-		    "select username, role from user where username =?" />
+		    "select email, role from user where email = ?" />
 	  </authentication-provider>
 	</authentication-manager>
 

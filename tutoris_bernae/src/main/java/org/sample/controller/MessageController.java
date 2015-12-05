@@ -106,21 +106,22 @@ public void initBinder(WebDataBinder binder) {
 	/**
 	 * Creates a page with a message form to answer one selected message given by the parameter 
 	 * and all other messages that the logged in user recieved
-	 * @param reciver a String of the username that we want to contact via a message
+	 * @param receiver a String of the email that we want to contact via a message
 	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" a prefilled message form
 	 * suited to the receiver we want to write to, "user", the logged in user,
 	 * and "messages" all his messages
 	 */
 	@RequestMapping(value = "/messageNewTo", method = RequestMethod.GET)
-	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) String receiver,
+	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) Long receiver,
 										HttpSession session) {
 		ModelAndView model;
+                String receiverMail = userDao.findOne(receiver).getEmail();
 		User user = getUserFromSecurityContext();
 		SearchForm searchedCriterias = (SearchForm) session.getAttribute(SearchController.SESSIONATTRIBUE_FOUNDBYSEARCHFORM);
 		String searchCriteriaSubject = "Discuss tutorship details";
 		if(searchedCriterias != null)
 			searchCriteriaSubject = messageService.createSearchCriteriaSubject(searchedCriterias);
-		model = createAnswerPage(user,new MessageForm(receiver,searchCriteriaSubject),false,session);
+		model = createAnswerPage(user,new MessageForm(receiverMail,searchCriteriaSubject),false,session);
 		return model;
 	}
 	
@@ -188,14 +189,15 @@ public void initBinder(WebDataBinder binder) {
 		model = new ModelAndView("messageAnswer");
 		model.addObject("messages", messageService.getOrderedMessagesList(user));
 		model.addObject("messageForm", messageForm);
+                model.addObject("messageReceiver", messageService.getMessageReceiverFirstName(messageForm.getReceiver()));
 		return model;
 	}
 	
-	private User getUserFromSecurityContext() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	     String name = authentication.getName();
-		 User user = userDao.findByUsername(name);
-		return user;
-	}
+    private User getUserFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = userDao.findByEmailLike(name);
+        return user;
+    }
 	
 }

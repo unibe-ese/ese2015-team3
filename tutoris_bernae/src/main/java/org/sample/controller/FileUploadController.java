@@ -43,7 +43,7 @@ public class FileUploadController {
 		if (file != null) {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		    String name = authentication.getName();
-			User user = userDao.findByUsername(name);
+			User user = userDao.findByEmailLike(name);
 			String currentProfilePictureName = user.getProfilePicture();
 			
 			fileName = file.getOriginalFilename();

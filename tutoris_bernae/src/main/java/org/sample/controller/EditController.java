@@ -62,7 +62,7 @@ public class EditController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String name = authentication.getName();
 		User user = userDao.findByUsername(name);
-		if(user.isTutor()) {	
+		if(user.getTutor()!=null) {	
 			return new ModelAndView("redirect:/editTutor");
 		}
 		else {

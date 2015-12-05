@@ -79,7 +79,6 @@ public class EditFormServiceTransactionTest extends ServiceTransactionTest{
 		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("123");
 		newTutorUser.setEmail("tutormail@mail.mail");
-		newTutorUser.setTutor(true);
 		newTutorUser.setTutor(newTutor);
 		newTutorUser = userDao.save(newTutorUser);
 		
@@ -101,8 +100,6 @@ public class EditFormServiceTransactionTest extends ServiceTransactionTest{
         assertEquals("user",user.getUsername());
         assertEquals("test@test.com",user.getEmail());
         assertEquals("123456",user.getPassword());
-        assertEquals(false,user.isTutor());
-        assertEquals(false,user.isTimetableActive());
     }
     
     // TODO: test changed courses list as well
@@ -134,8 +131,6 @@ public class EditFormServiceTransactionTest extends ServiceTransactionTest{
         assertEquals("newuser",user.getUsername());
         assertEquals("newtutortest@tutortest.com",user.getEmail());
         assertEquals("123456",user.getPassword());
-        assertEquals(true,user.isTutor());
-        assertEquals(false,user.isTimetableActive());
         Tutor tutor = tutorDao.findOne(tutorEditForm.getTutorId());
         assertEquals("newBio",tutor.getBio());
         assertEquals(new BigDecimal(20),tutor.getFee());

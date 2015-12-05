@@ -7,8 +7,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml"
-		,"file:src/main/webapp/WEB-INF/config/springSecurity.xml"})
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml",
+								   "file:src/main/webapp/WEB-INF/config/springDataTest.xml",
+								   "file:src/main/webapp/WEB-INF/config/springSecurity.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class ServiceTransactionTest {

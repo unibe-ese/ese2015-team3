@@ -86,7 +86,6 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("1232w%dfa");
 		newTutorUser.setEmail("tutormail@mail.mail");
-		newTutorUser.setTutor(true);
 		newTutorUser.setTutor(newTutor);
 		
 		newTutorUser.setTutor(newTutor);

@@ -43,7 +43,6 @@ public class TutorFormService {
 		tutor.setStudent(user);
 		tutor = tutorDao.save(tutor);
 		user.setTutor(tutor);
-		user.setTutor(true);
 		user.setRole("ROLE_TUTOR");
 		userDao.save(user);
 		tutorForm.setId(tutor.getId());

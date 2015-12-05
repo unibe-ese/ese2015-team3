@@ -44,7 +44,6 @@ public class ViewTutorProfileControllerIntegrationTest extends ControllerIntegra
 		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("123");
 		newTutorUser.setEmail("tutormail@mail.mail");
-		newTutorUser.setTutor(true);
 		newTutorUser.setTutor(newTutor);
 		newTutorUser.setTutor(newTutor);
 		newTutorUser = userDao.save(newTutorUser);

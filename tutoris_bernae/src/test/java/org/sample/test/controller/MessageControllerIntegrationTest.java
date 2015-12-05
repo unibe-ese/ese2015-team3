@@ -73,7 +73,6 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		senderTutor.setStudent(sender);
 		tutorDao.save(senderTutor);
 		sender.setTutor(senderTutor);
-		sender.setTutor(true);
 		sender = userDao.save(sender);
 		receiver = new User();
 		receiver.setUsername("receiver");

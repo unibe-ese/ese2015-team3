@@ -34,7 +34,6 @@ public class ProfileControllerIntegrationTest extends ControllerIntegrationTest 
 		User newTutorUser = new User();
 		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("123");
-		newTutorUser.setTutor(true);
 		newTutorUser.setTutor(newTutor);
 		userDao.save(newTutorUser);
 	}

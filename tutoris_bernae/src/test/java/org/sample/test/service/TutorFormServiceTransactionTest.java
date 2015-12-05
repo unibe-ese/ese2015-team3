@@ -72,7 +72,6 @@ public class TutorFormServiceTransactionTest extends ServiceTransactionTest{
         assertEquals(new BigDecimal(5),tutor.getAverageGrade());
         assertEquals("newBio",tutor.getBio());
         assertEquals(user, tutor.getStudent());
-        assertEquals(true, user.isTutor());
         assertEquals(tutor, tutor.getStudent().getTutor());
     }
     

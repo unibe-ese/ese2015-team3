@@ -46,7 +46,6 @@ public class TutorShipServiceTransactionTest extends ServiceTransactionTest {
 		Tutor senderTutor = new Tutor();
 		tutorDao.save(senderTutor);
 		sender.setTutor(senderTutor);
-		sender.setTutor(true);
 		sender = userDao.save(sender);
 		senderTutor.setStudent(sender);
 		tutorDao.save(senderTutor);

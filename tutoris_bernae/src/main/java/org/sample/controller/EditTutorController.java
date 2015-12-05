@@ -75,7 +75,7 @@ public class EditTutorController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String name = authentication.getName();
 		User user = userDao.findByUsername(name);
-		if(user.isTutor()) {	
+		if(user.getTutor()!=null) {	
 			return createTutorEditFormPage(new TutorEditForm(user, user.getTutor()));
 		}
 		else {

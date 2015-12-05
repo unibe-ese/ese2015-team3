@@ -41,7 +41,7 @@ private UserDao userDao;
 	     String name = authentication.getName();
 		 User user = userDao.findByUsername(name);
 		 model.addObject("user", user);
-		 if(user.isTutor())
+		 if(user.getTutor()!=null)
 			 model.addObject("tutor", user.getTutor());	 
 		 return model;
 	}

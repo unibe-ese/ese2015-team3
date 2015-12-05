@@ -111,7 +111,6 @@ public class TutorFormServiceTest {
             public User answer(InvocationOnMock invocation) throws Throwable {
             	User user = (User) invocation.getArguments()[0];
                 assertEquals("ROLE_TUTOR", user.getRole());
-                assertEquals(true, user.isTutor());
                 return user;
             }
         });

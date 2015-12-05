@@ -170,8 +170,8 @@ public void initBinder(WebDataBinder binder) {
 
 	
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST, params = {"offerTutorShip"})
-	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,@RequestParam Boolean offerTutorShip,
-									 BindingResult result,HttpSession session) {
+	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,BindingResult result, @RequestParam(required=false) Boolean offerTutorShip,
+									 HttpSession session) {
 		return submitAnyMessage(messageForm, offerTutorShip, result, session);   	
     }
 	

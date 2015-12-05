@@ -37,7 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author pf15ese
  */
 @Controller
-public class EditController {
+public class EditController extends UserOnlyPageController {
     
 	@Autowired
 	private UserDao userDao;
@@ -82,15 +82,15 @@ public class EditController {
      * again a new ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm
      */
     @RequestMapping(value = "/editSubmit", method = RequestMethod.POST)
-    public ModelAndView editUserProfile(@Valid EditForm editForm, BindingResult result) {
+    public ModelAndView editUserProfile(@Valid EditForm editForm, BindingResult result,HttpServletRequest request) {
     	ModelAndView model;    	
     	if (!result.hasErrors()) {
             try {
-            	
             	editFormService.saveFrom(editForm);
+            	User user = userDao.findOne(editForm.getUserId());
+            	authenticateUserAndSetSession(user,request);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {
-            	
             	model = new ModelAndView("edit");
             	model.addObject("editForm", editForm);
             	model.addObject("page_error", e.getMessage());

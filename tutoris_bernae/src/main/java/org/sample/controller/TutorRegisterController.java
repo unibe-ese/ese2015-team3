@@ -49,7 +49,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  *
  */
 @Controller
-public class TutorRegisterController {
+public class TutorRegisterController extends UserOnlyPageController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
         private static final String SESSIONATTRIBUTE_USER="loggedInUser";
@@ -62,9 +62,6 @@ public class TutorRegisterController {
 	private TutorFormService tutorFormService;
 	@Autowired
 	private UserDao userDao;
-
-    @Autowired
-    protected AuthenticationManager authenticationManager;
     
 	@InitBinder("tutorForm")
 	public void initBinder(WebDataBinder binder) {
@@ -141,14 +138,4 @@ public class TutorRegisterController {
 
     }
     
-    private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
-        String username = user.getEmail();
-        String password = user.getPassword();
-        
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        request.getSession();
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);    
-    }
 }

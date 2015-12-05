@@ -39,7 +39,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author pf15ese
  */
 @Controller
-public class EditTutorController {
+public class EditTutorController extends UserOnlyPageController{
 
     @Autowired
     private ClassesDao classesDao;
@@ -131,6 +131,8 @@ public class EditTutorController {
     	if (!result.hasErrors()) {
             try {
             	editFormService.saveFrom(tutorEditForm);
+            	User user = userDao.findOne(tutorEditForm.getUserId());
+            	authenticateUserAndSetSession(user,request);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {
             	model = createTutorEditFormPage(tutorEditForm);

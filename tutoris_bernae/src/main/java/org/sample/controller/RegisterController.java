@@ -36,7 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-public class RegisterController {
+public class RegisterController extends UserOnlyPageController{
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
         private static final String SESSIONATTRIBUTE_USER="loggedInUser";
@@ -51,10 +51,6 @@ public class RegisterController {
 	private TutorFormService tutorFormService;
 	@Autowired
 	private UserDao userDao;
-
-    @Autowired
-    @Qualifier("authenticationManager")
-    protected AuthenticationManager authenticationManager;
     
 	@InitBinder("registerForm")
 	public void initBinder(WebDataBinder binder) {
@@ -122,13 +118,4 @@ public class RegisterController {
         return model;
     }
     
-    private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
-        String username = user.getEmail();
-        String password = user.getPassword();
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        request.getSession();
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);    
-    }
 }

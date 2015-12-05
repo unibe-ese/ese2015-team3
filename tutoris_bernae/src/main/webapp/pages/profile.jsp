@@ -17,53 +17,6 @@
 
 <h1>Profile</h1>
 
-<<<<<<< HEAD
-<div class="grid">
-    <fieldset>   
-    <div class="col-2-3">
-        <div class="col-1-3">
-        	<div class="col-1-1">
-				<img id="profile_picture" src="/tutoris_baernae/img/profile_pics/${user.profilePicture}" alt="profile_pic" />
-			</div>
-			<c:if test="${isUserPrincipal}">
-				<div class="col-2-2">
-					<a href="/tutoris_baernae/fileupload" class="button">Edit profile picture</a></br>
-				</div>
-			</c:if>
-		</div>
-        <div class="col-2-3">
-            <div>
-                <div class="col-1-3">Username:</div>
-                <div class="col-2-3">${user.username}</div>
-            </div>
-            <div>
-                <div class="col-1-3">First Name:</div>
-                <div class="col-2-3">${user.firstName}</div>
-            </div>
-            <div>
-                <div class="col-1-3">Last Name:</div>
-                <div class="col-2-3">${user.lastName}</div>
-            </div>
-            
-            
-            <sec:authorize access="hasRole('ROLE_TUTOR')">
-            <div>
-                <div class="col-1-3">Fee:</div>
-                <div class="col-2-3">${tutor.fee}</div>
-            </div>
-            <c:if test="${tutor.averageGrade} != null">
-            <div>
-                <div class="col-1-3">Average Grade:</div>
-                <div class="col-2-3">${tutor.averageGrade}</div>
-            </div>
-            </c:if>
-            <div>
-                <div class="col-1-3">Tutorships via this page:</div>
-                <div class="col-2-3">${tutor.confirmedTutorShips}</div>
-            </div>
-            </sec:authorize>
-        </div>
-=======
 <div class="container-flex no-border">
     <div class="col-1-4 no-border">
         <img id="profile_picture" src="/tutoris_baernae/img/profile_pics/${user.profilePicture}" alt="profile_pic" />   
@@ -71,7 +24,6 @@
             <a href="/tutoris_baernae/fileupload" class="button">Edit profile picture</a><br>
             <a href="/tutoris_baernae/edit" class="button">Edit profile</a>
         </c:if>
->>>>>>> 3c1a1a63db6c4ca9cd424a93d55dc28cba838dcc
     </div>
     <div class="col-1-8 no-border">
         First Name: <br>
@@ -81,7 +33,10 @@
         </c:if>
         <sec:authorize access="hasRole('ROLE_TUTOR')">
             Fee: <br>
+            <c:if test="${not empty tutor.averageGrade} != null">
             Average Grade: <br>
+            </c:if>
+            Tutorships:
         </sec:authorize>
     </div>
     <div class="flex-item no-border">
@@ -92,7 +47,10 @@
         </c:if>
         <sec:authorize access="hasRole('ROLE_TUTOR')">
             ${tutor.fee} CHF <br>
+            <c:if test="${not empty tutor.averageGrade}">
             ${tutor.averageGrade}<br>
+            </c:if>
+            ${tutor.confirmedTutorShips}
         </sec:authorize>
     </div>
         

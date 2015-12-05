@@ -42,7 +42,7 @@ public class MessageService{
 	/**
      * Compares messages by date to order them from newest to oldest
      */
-   public static final Comparator<Message> MessageDateComparator = new Comparator<Message>()
+   private static final Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {
 			return -(m1.getSendDate().compareTo(m2.getSendDate()));
@@ -178,10 +178,10 @@ public class MessageService{
 	}
 	
 
-        public String getMessageReceiverFirstName(String mail){
-            User receiver = userDao.findByEmailLike(mail);
-            if (receiver != null)
-                return receiver.getFirstName();
-            return null;
-        }
+	public String getMessageReceiverFirstName(String mail){
+		User receiver = userDao.findByEmailLike(mail);
+		if (receiver != null)
+			return receiver.getFirstName();
+		return null;
+	}
 }

@@ -1,5 +1,6 @@
 package org.sample.test.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -109,6 +110,17 @@ public class TutorShipServiceTransactionTest extends ServiceTransactionTest {
     	TutorShip newTutorShip = tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
     	assertNotNull(newTutorShip);
     	assertTrue(newTutorShip.getConfirmed());
+    }
+    
+    @Test
+    public void increasesConfirmedTutorShipsForTutorInDatabase() throws InvalidTutorShipException {
+    	TutorShip tutorShip = new TutorShip();
+    	tutorShip.setStudent(receiver);
+    	tutorShip.setTutor(sender.getTutor());
+    	tutorShipDao.save(tutorShip);
+    	tutorShipService.confirmTutorShip(sender.getTutor(), receiver);
+    	tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
+    	assertEquals(sender.getTutor().getConfirmedTutorShips() , new Integer(1));
     }
 
 }

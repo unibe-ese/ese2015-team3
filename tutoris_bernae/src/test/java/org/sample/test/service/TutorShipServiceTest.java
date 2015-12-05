@@ -27,6 +27,7 @@ import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,13 @@ public class TutorShipServiceTest {
 			UserDao userDao = mock(UserDao.class);
 			return userDao;
 		}
+
+		@Bean
+		public TutorDao tutorDaoMock() {
+			TutorDao tutorDao = mock(TutorDao.class);
+			return tutorDao;
+		}
+		
 		@Bean
 		public MessageDao messageDaoMock() {
 			MessageDao messageDao = mock(MessageDao.class);
@@ -84,6 +92,9 @@ public class TutorShipServiceTest {
 	@Qualifier("userDaoMock")
 	@Autowired
 	private UserDao userDao;
+	@Qualifier("tutorDaoMock")
+	@Autowired
+	private TutorDao tutorDao;
 	@Qualifier("tutorShipDaoMock")
 	@Autowired
 	private TutorShipDao tutorShipDao;
@@ -156,7 +167,7 @@ public class TutorShipServiceTest {
     }
     
     @Test
-    public void confirmTutorShip() throws InvalidTutorShipException {
+    public void canConfirmTutorShip() throws InvalidTutorShipException {
     	final TutorShip tutorShip = new TutorShip();
     	tutorShip.setStudent(receiver);
     	tutorShip.setTutor(senderTutor);
@@ -170,6 +181,25 @@ public class TutorShipServiceTest {
     	tutorShipService.confirmTutorShip(senderTutor, receiver);
     	
     	assertTrue(tutorShip.getConfirmed());
+    }
+    
+    @Test
+    public void increasesConfirmedTutorShipsForTutor() throws InvalidTutorShipException {
+    	final TutorShip tutorShip = new TutorShip();
+    	assertEquals(senderTutor.getConfirmedTutorShips() , new Integer(0));
+    	tutorShip.setStudent(receiver);
+    	tutorShip.setTutor(senderTutor);
+    	when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class)))
+        .thenAnswer(new Answer<TutorShip>() {
+            public TutorShip answer(InvocationOnMock invocation) throws Throwable {	
+                return tutorShip;
+            }
+        });
+    	
+    	tutorShipService.confirmTutorShip(senderTutor, receiver);
+    	
+    	assertEquals(senderTutor.getConfirmedTutorShips() , new Integer(1));
+    	verify(tutorDao).save(any(Tutor.class));
     }
     
     @Test
@@ -220,6 +250,7 @@ public class TutorShipServiceTest {
     @After
     public void reset_mocks() {
     	reset(tutorShipDao);
+    	reset(tutorDao);
     	reset(messageService);
     }
 

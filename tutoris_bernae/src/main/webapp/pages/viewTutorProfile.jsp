@@ -19,9 +19,15 @@
                 <div class="col-1-3">Username:</div>
                 <div class="col-2-3">${tutor.student.username}</div>
             </div>
+            <c:if test="${tutor.averageGrade} != null">
             <div>
                 <div class="col-1-3">Average Grade:</div>
                 <div class="col-2-3">${tutor.averageGrade}</div>
+            </div>
+            </c:if>
+            <div>
+                <div class="col-1-3">Tutorships via this page:</div>
+                <div class="col-2-3">${tutor.confirmedTutorShips}</div>
             </div>
             <div>
                 <div class="col-1-3">Fee:</div>

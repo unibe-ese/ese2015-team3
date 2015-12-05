@@ -34,6 +34,8 @@ public class Tutor {
     
     private BigDecimal averageGrade;
     
+    private Integer confirmedTutorShips = 0;
+    
     @Type(type="text")
     private String bio;
     
@@ -98,6 +100,14 @@ public class Tutor {
 
 	public void setAverageGrade(BigDecimal averageGrade) {
 		this.averageGrade = averageGrade;
+	}
+
+	public Integer getConfirmedTutorShips() {
+		return confirmedTutorShips;
+	}
+
+	public void setConfirmedTutorShips(Integer confirmedTutorShips) {
+		this.confirmedTutorShips = confirmedTutorShips;
 	}
 
 	@Override

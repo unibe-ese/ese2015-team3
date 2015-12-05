@@ -43,21 +43,22 @@
                 <div class="col-1-3">Last Name:</div>
                 <div class="col-2-3">${user.lastName}</div>
             </div>
-            <c:if test="${tutor.averageGrade} != null">
-            <div>
-                <div class="col-1-3">Average Grade:</div>
-                <div class="col-2-3">${tutor.averageGrade}</div>
-            </div>
-            </c:if>
+            
             
             <sec:authorize access="hasRole('ROLE_TUTOR')">
             <div>
                 <div class="col-1-3">Fee:</div>
                 <div class="col-2-3">${tutor.fee}</div>
             </div>
+            <c:if test="${tutor.averageGrade} != null">
             <div>
                 <div class="col-1-3">Average Grade:</div>
                 <div class="col-2-3">${tutor.averageGrade}</div>
+            </div>
+            </c:if>
+            <div>
+                <div class="col-1-3">Tutorships via this page:</div>
+                <div class="col-2-3">${tutor.confirmedTutorShips}</div>
             </div>
             </sec:authorize>
         </div>

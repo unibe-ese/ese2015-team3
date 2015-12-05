@@ -6,6 +6,7 @@ import org.sample.model.Message;
 import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
 import org.sample.model.User;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.TutorShipDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class TutorShipService{
 	
 	@Autowired 
 	private TutorShipDao tutorShipDao;
+	@Autowired 
+	private TutorDao tutorDao;
 	@Autowired
 	private MessageService messageService;  
 
@@ -79,6 +82,8 @@ public class TutorShipService{
 		messageService.sendTutorShipConfirmedMessage(student, tutor.getStudent());
 		messageService.exchangeContactDetails(tutor.getStudent(), student);
 		tutorShipDao.save(confirmedTutorShip);
+		tutor.setConfirmedTutorShips(tutor.getConfirmedTutorShips()+1);
+		tutorDao.save(tutor);
 	}
 
 }

@@ -62,7 +62,6 @@ public class EditFormServiceTransactionTest {
 	@Before
 	public void setUpExampleDatas(){
 		newUser = new User();
-		newUser.setUsername("test");
 		newUser.setFirstName("First");
 		newUser.setLastName("Last");
 		newUser.setPassword("123");
@@ -78,7 +77,6 @@ public class EditFormServiceTransactionTest {
 		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
-		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("123");
 		newTutorUser.setEmail("tutormail@mail.mail");
 		newTutorUser.setTutor(true);
@@ -88,7 +86,6 @@ public class EditFormServiceTransactionTest {
 		editForm = new EditForm();
         editForm.setFirstName("First2");
         editForm.setLastName("Last2");
-        editForm.setUsername("user");
         editForm.setEmail("test@test.com");
         editForm.setPassword("123456");
         editForm.setUserId(newUser.getId());
@@ -100,7 +97,6 @@ public class EditFormServiceTransactionTest {
         User user = userDao.findOne(editForm.getUserId());
         assertEquals("First2",user.getFirstName());
         assertEquals("Last2",user.getLastName());
-        assertEquals("user",user.getUsername());
         assertEquals("test@test.com",user.getEmail());
         assertEquals("123456",user.getPassword());
         assertEquals(false,user.isTutor());
@@ -118,7 +114,6 @@ public class EditFormServiceTransactionTest {
         tutorEditForm = new TutorEditForm();
         tutorEditForm.setFirstName("newTutorTest");
         tutorEditForm.setLastName("newLast");
-        tutorEditForm.setUsername("newuser");
         tutorEditForm.setEmail("newtutortest@tutortest.com");
         tutorEditForm.setPassword("123456");
         tutorEditForm.setUserId(newTutorUser.getId());
@@ -133,7 +128,6 @@ public class EditFormServiceTransactionTest {
         User user = userDao.findOne(tutorEditForm.getUserId());
         assertEquals("newTutorTest",user.getFirstName());
         assertEquals("newLast",user.getLastName());
-        assertEquals("newuser",user.getUsername());
         assertEquals("newtutortest@tutortest.com",user.getEmail());
         assertEquals("123456",user.getPassword());
         assertEquals(true,user.isTutor());
@@ -151,14 +145,14 @@ public class EditFormServiceTransactionTest {
         editFormService.saveFrom(editForm);
     }
     
-    
-    @Test(expected=InvalidUserException.class) 
-    public void AssertUsernameUniqueness() {
-		editForm.setUsername("tutortest"); //Will throw an exception because the tutoruser already uses this mail
-        editFormService.saveFrom(editForm);
-
-    }
-    
+//    
+//    @Test(expected=InvalidUserException.class) 
+//    public void AssertUsernameUniqueness() {
+//		editForm.setUsername("tutortest"); //Will throw an exception because the tutoruser already uses this mail
+//        editFormService.saveFrom(editForm);
+//
+//    }
+//    
     //Checks if two collections of completed classes are equals, except the id of the classes.
     //Use this if comparing a saved (in the database) collection of completedClasses and and unsaved.
     public boolean CompletedClassesCollectionEqualsWithoutId(Collection<CompletedClasses> expected, Collection<CompletedClasses> given)

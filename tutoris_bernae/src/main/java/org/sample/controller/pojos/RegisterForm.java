@@ -16,8 +16,6 @@ public class RegisterForm {
     private String firstName;
     @NotEmpty
     private String lastName;
-    @NotEmpty
-    private String username;
     
     // password must have 1 uppercase, 1 digit, 1 special character. 8-14 letters
     @Pattern(regexp = "(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,15}$")
@@ -65,13 +63,5 @@ public class RegisterForm {
     public void setId(Long id) {
         this.id = id;
     }
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String userName) {
-		this.username = userName;
-	}
 
 }

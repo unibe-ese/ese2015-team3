@@ -34,7 +34,6 @@ public class RegisterFormServiceTransactionTest {
         
         registerForm.setFirstName("First");
         registerForm.setLastName("Last");
-        registerForm.setUsername("user");
         registerForm.setEmail("test@test.com");
         registerForm.setPassword("123456");
 	}
@@ -49,7 +48,6 @@ public class RegisterFormServiceTransactionTest {
         User user = userDao.findOne(registerForm.getId());
         assertEquals("First",user.getFirstName());
         assertEquals("Last",user.getLastName());
-        assertEquals("user",user.getUsername());
         assertEquals("test@test.com",user.getEmail());
         assertEquals("123456",user.getPassword());
         assertEquals(false,user.isTutor());
@@ -61,21 +59,20 @@ public class RegisterFormServiceTransactionTest {
 
         registerFormService.saveFrom(registerForm);
         //We will check username uniqueness in another test, so we have to choose another username to assure only emails are the same
-        registerForm.setUsername("usr");
         
         registerFormService.saveFrom(registerForm);
     }
-    
-    @Test(expected=InvalidUserException.class) 
-    public void AssertUsernameUniqueness() {
-        registerFormService.saveFrom(registerForm);
-        //We will check email uniqueness in another test
-        registerForm.setEmail("mail@mail.c");
-        
-        registerFormService.saveFrom(registerForm);
-    }
-
-   
+//    
+//    @Test(expected=InvalidUserException.class) 
+//    public void AssertUsernameUniqueness() {
+//        registerFormService.saveFrom(registerForm);
+//        //We will check email uniqueness in another test
+//        registerForm.setEmail("mail@mail.c");
+//        
+//        registerFormService.saveFrom(registerForm);
+//    }
+//
+//   
 
 
 }

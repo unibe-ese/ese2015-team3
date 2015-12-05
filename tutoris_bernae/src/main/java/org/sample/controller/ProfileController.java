@@ -26,7 +26,7 @@ public class ProfileController {
 
 @Autowired
 private UserDao userDao;
-	
+private static final String SESSIONATTRIBUTE_USER="loggedInUser";	
 	/**
 	 * Creates a page with all user informations of the current logged in user. If the user is also a tutor
 	 * all tutor informations are added to the page as well
@@ -35,14 +35,21 @@ private UserDao userDao;
 	 * informations
 	 */
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public ModelAndView showProfile() {
+	public ModelAndView showProfile(HttpSession session) {
 		 ModelAndView model = new ModelAndView("profile");
-		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	     String name = authentication.getName();
-		 User user = userDao.findByUsername(name);
+	
+		 User user = getUserFromSecurityContext();
+                 session.setAttribute(SESSIONATTRIBUTE_USER, user);
 		 model.addObject("user", user);
 		 if(user.isTutor())
 			 model.addObject("tutor", user.getTutor());	 
 		 return model;
 	}
+   
+    private User getUserFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = userDao.findByEmailLike(name);
+        return user;
+    }
 }

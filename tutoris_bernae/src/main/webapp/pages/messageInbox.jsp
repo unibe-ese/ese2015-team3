@@ -17,7 +17,7 @@
             <c:forEach items="${messages}" var="messages">
                 <a href="/tutoris_baernae/messageInboxShow?messageId=${messages.id}">
                     <div class="message-preview">
-                        <span class="message-sender"><c:if test="${!messages.wasRead}"><i class="fa fa-exclamation"></i></c:if> ${messages.sender.username}</span>
+                        <span class="message-sender"><c:if test="${!messages.wasRead}"><i class="fa fa-exclamation"></i></c:if> ${messages.sender.firstName}</span>
                         <span class="message-subject">${messages.messageSubject}</span>
                     </div>
                 </a>
@@ -25,10 +25,10 @@
         </div>
         <div class="col-2-3 module no-pad">
             <c:if test = "${not empty selectedMessage}">
-		<div class="module bottom-border">From:${selectedMessage.sender.username}</div>
-		<div class="module bottom-border">Subject:${selectedMessage.messageSubject}</div>
-	 	<div class="module no-border messagetext"><p>${selectedMessage.messageText}<p></div>
-                <button type="button" onclick="location.href='/tutoris_baernae/messageInboxAnswer?messageId=${selectedMessage.id}'" class="button btn btn-primary">Answer</button>
+		<div class="module bottom-border">From: ${selectedMessage.sender.firstName}</div>
+		<div class="module bottom-border">Subject: ${selectedMessage.messageSubject}</div>
+                <div class="module no-border messagetext"><p><pre>${selectedMessage.messageText}</pre><p></div>
+                <a href="/tutoris_baernae/messageInboxAnswer?messageId=${selectedMessage.id}" class="button">Answer</a>
             </c:if>
             <c:if test="${empty selectedMessage}">
                 <div class="module no-border">No message selected</div>

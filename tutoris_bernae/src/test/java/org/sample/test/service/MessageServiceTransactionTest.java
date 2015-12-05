@@ -42,11 +42,9 @@ public class MessageServiceTransactionTest {
 	@Before
 	public void setUpExampleDatas(){
 		sender = new User();
-		sender.setUsername("test");
 		sender.setEmail("mail@mail.mail");
 		sender = userDao.save(sender);
 		receiver = new User();
-		receiver.setUsername("tutortest");
 		receiver.setEmail("tutormail@mail.mail");
 		receiver = userDao.save(receiver);
 	}
@@ -54,7 +52,7 @@ public class MessageServiceTransactionTest {
     @Test
     public void messageFormCorrectDataSavedInDatabase() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver("tutortest");
+    	messageForm.setReceiver("tutormail@mail.mail");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	messageService.sendMessageFromForm(messageForm,sender);

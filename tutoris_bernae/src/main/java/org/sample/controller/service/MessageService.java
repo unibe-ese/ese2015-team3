@@ -64,7 +64,7 @@ public class MessageService{
     /**
      * Sends the message by saving it to the database.
      * @param messageForm a valid messageForm, not null
-     * @param Userthe sender of the message, not null
+     * @param User the sender of the message, not null
      * @throws InvalidUserException if the receiver doesn't exist/couldn't be found by the
      * string receiver given in the messageForm
      */
@@ -89,7 +89,7 @@ public class MessageService{
     
     private Message getMessageFromForm(MessageForm messageForm, User sender){
       	Message message = new Message();
-    	User receiver = userDao.findByUsername(messageForm.getReceiver());
+    	User receiver = userDao.findByEmailLike(messageForm.getReceiver());
     	if(receiver==null) throw new InvalidUserException("The user you want to send a message does not exist");
     	message.setSender(sender);
     	message.setReceiver(receiver);
@@ -150,7 +150,7 @@ public class MessageService{
 	
 	public Message sendTutorShipConfirmedMessage(User sender, User receiver) {
 		Message acceptanceMessage = new Message();
-		String messageText = new StringBuilder().append("Your Tutorship for "+sender.getFirstName()+"was accepted by him!")
+		String messageText = new StringBuilder().append("Your Tutorship for "+sender.getFirstName()+" was accepted by him!\n")
 				.append("This message is auto generated. Do not answer")
 				.toString();
 		acceptanceMessage.setMessageText(messageText);
@@ -178,4 +178,10 @@ public class MessageService{
 	}
 	
 
+        public String getMessageReceiverFirstName(String mail){
+            User receiver = userDao.findByEmailLike(mail);
+            if (receiver != null)
+                return receiver.getFirstName();
+            return null;
+        }
 }

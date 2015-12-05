@@ -56,7 +56,7 @@
                                                         <%-- AUTHORIZED --%>			
                                                         <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" var="loggedIn">
                                                                     <li class="current">
-                                                                    <h1><a href="#"><c:if test="${loggedIn}"><i class="fa fa-user"></i> : ${pageContext.request.userPrincipal.name    }</a></h1></c:if>
+                                                                        <h1><a href="#"><c:if test="${loggedIn}"><i class="fa fa-user"></i> : ${sessionScope.loggedInUser.firstName}</a></h1></c:if>
                                                                     <ul>
                                                                         <li>
                                                                             <a href="/tutoris_baernae/profile"><i class="fa fa-user"></i> View Profile</a>

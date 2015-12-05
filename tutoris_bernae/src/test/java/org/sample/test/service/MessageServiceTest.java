@@ -120,11 +120,11 @@ public class MessageServiceTest {
     @Test
     public void messageFormCorrectDataSaved() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver("tutortest");
+    	messageForm.setReceiver("tutortest@test.ch");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
-    	when(userDao.findByUsername(any(String.class)))
+    	when(userDao.findByEmailLike(any(String.class)))
            .thenAnswer(new Answer<User>() {
                public User answer(InvocationOnMock invocation) throws Throwable {	
                    return receiver;
@@ -154,11 +154,11 @@ public class MessageServiceTest {
     @Test
     public void offerTutorShipTutorShipServiceCalled() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver("tutortest");
+    	messageForm.setReceiver("tutortest@test.ch");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
-    	when(userDao.findByUsername(any(String.class)))
+    	when(userDao.findByEmailLike(any(String.class)))
            .thenAnswer(new Answer<User>() {
                public User answer(InvocationOnMock invocation) throws Throwable {	
                    return receiver;
@@ -230,7 +230,7 @@ public class MessageServiceTest {
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	
-    	when(userDao.findByUsername(any(String.class)))
+    	when(userDao.findByEmailLike(any(String.class)))
            .thenAnswer(new Answer<User>() {
                public User answer(InvocationOnMock invocation) throws Throwable {	
                    return null;

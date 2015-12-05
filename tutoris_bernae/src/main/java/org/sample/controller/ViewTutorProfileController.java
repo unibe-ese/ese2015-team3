@@ -1,9 +1,14 @@
 
 package org.sample.controller;
 
+import javax.servlet.http.HttpSession;
 import org.sample.model.Tutor;
+import org.sample.model.User;
 import org.sample.model.dao.TutorDao;
+import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +26,10 @@ public class ViewTutorProfileController {
 
 	@Autowired
 	private TutorDao tutorDao;
-
+        @Autowired
+        private UserDao userDao;
+        
+        private static final String SESSIONATTRIBUTE_USER="loggedInUser";
 	/**
 	 * Creates the profile page for the tutor given by the tutorId, completely without the tutors user
 	 * details
@@ -30,14 +38,16 @@ public class ViewTutorProfileController {
 	 * or if no tutor with this id exist or no id was given a ModelAndView with ViewName "notutorfound"
 	 */
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
-	public ModelAndView viewEditProfile(@RequestParam(value = "tutorId", required = false) Long tutorId) {
+	public ModelAndView viewEditProfile(@RequestParam(value = "tutorId", required = false) Long tutorId, HttpSession session) {
 		ModelAndView model;
 		if(tutorId==null) return new ModelAndView("notutorfound");
 		
 		Tutor tutor = tutorDao.findOne(tutorId);
+                
 		if(tutor != null) {
 			model = new ModelAndView("viewTutorProfile");
 			model.addObject("tutor", tutor);
+                        session.setAttribute(SESSIONATTRIBUTE_USER, getUserFromSecurityContext());
 			return model;
 		}
 			
@@ -46,5 +56,12 @@ public class ViewTutorProfileController {
 			return model;
 		}
 	}
+        
+    private User getUserFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = userDao.findByEmailLike(name);
+        return user;
+    }
 
 }

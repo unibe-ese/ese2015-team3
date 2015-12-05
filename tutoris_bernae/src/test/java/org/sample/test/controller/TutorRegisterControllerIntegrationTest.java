@@ -32,11 +32,10 @@ public class TutorRegisterControllerIntegrationTest extends ControllerIntegratio
 	public void upgradePage() throws Exception
 	{
 		User newUser = new User();
-		newUser.setUsername("test");
 		newUser.setPassword("123");
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
-		MockHttpSession session = createSessionWithUser("test", "123", "ROLE_USER");
+		MockHttpSession session = createSessionWithUser("mail@mail.mail", "123", "ROLE_USER");
 		mockMvc.perform(get("/upgrade").session(session)).andExpect(status().isOk())
 									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
 									.andExpect(forwardedUrl(completeUrl("tutorregistration")))

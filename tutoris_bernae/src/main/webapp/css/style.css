@@ -1050,12 +1050,6 @@
   border: solid 1px #c3c3c3;
 }
 
-.no-pad{padding: 0;}
-.bottom-border{border: none; border-bottom: solid 1px #c3c3c3;}
-.no-border{border: none;}
-.classes{
-    height: 11em;
-}
 
 /* Opt-in outside padding */
 .grid-pad {
@@ -1069,6 +1063,7 @@
     display: flex;
     flex-flow: row wrap;
     align-items: stretch;    
+    alig-content:stetch;
 }
 
 .container-flex a{
@@ -1110,3 +1105,10 @@
     background: #c3c3c3;
     font-weight: bold;
 }
+
+.no-pad{padding: 0;}
+
+.bottom-border{border: none; border-bottom: solid 1px #c3c3c3;}
+
+.no-border{border: none;}
+

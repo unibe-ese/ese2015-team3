@@ -78,6 +78,13 @@
 	        <div>Biography:</div>
 	        <div class="module">${tutor.bio}</div>
 	    </div>
+	    ${tutor.feedbacks}
+	    add your feedback! (if you were a student of this tutor)
+	    <form name="rate">
+			<input type="text" name="vote" placeholder="Vote"/>
+			<input type="text" name="feedback" placeholder="Comment"/>
+			<a href="/voteTutor" class="button">vote</a>
+		</form>
     </sec:authorize>
 	<c:if test="${isUserPrincipal}">
 	    <div class="col-3-1">

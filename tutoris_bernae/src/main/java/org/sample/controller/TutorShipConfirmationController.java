@@ -1,5 +1,7 @@
 package org.sample.controller;
 
+import java.util.List;
+
 import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.service.TutorShipService;
 import org.sample.model.Tutor;
@@ -35,6 +37,9 @@ public ModelAndView confirmTutorShip(@RequestParam(value = "tutorUserId", requir
 		return new ModelAndView("confirmFailed");
 	try{
 		tutorShipService.confirmTutorShip(tutor, user);
+		List<User> canBeRatedBy = tutor.getCanBeRatedBy();
+		canBeRatedBy.add(user);
+		tutor.setCanBeRatedBy(canBeRatedBy);
 		return new ModelAndView("confirmed");
 	}
 	catch(InvalidTutorShipException e){

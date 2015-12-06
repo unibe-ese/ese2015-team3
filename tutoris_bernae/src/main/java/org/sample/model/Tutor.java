@@ -1,6 +1,7 @@
 package org.sample.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -43,7 +44,15 @@ public class Tutor {
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<CompletedClasses> completedClasses;
 
-    
+	@ManyToMany
+	private List<User> canBeRatedBy;
+
+	private int nRatings = 0;
+   
+	private Double rating;
+	
+	private String feedbacks;
+
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +108,30 @@ public class Tutor {
 	public void setAverageGrade(BigDecimal averageGrade) {
 		this.averageGrade = averageGrade;
 	}
+	
+	public List<User> getCanBeRatedBy() {
+		return canBeRatedBy;
+	}
+
+	public void setCanBeRatedBy(List<User> canBeRatedBy) {
+		this.canBeRatedBy = canBeRatedBy;
+	}
+
+	public int getNRatings() {
+		return nRatings;
+	}
+
+	public void setNRatings(int nRatings) {
+		this.nRatings = nRatings;
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
 
 	@Override
 	public int hashCode() {
@@ -142,4 +175,14 @@ public class Tutor {
 			return false;
 		return true;
 	}
+
+	public String getFeedbacks() {
+		return feedbacks;
+	}
+
+	public void setFeedbacks(String feedbacks) {
+		this.feedbacks = feedbacks;
+	}
+
+
 }

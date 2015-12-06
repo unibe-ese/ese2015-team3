@@ -6,8 +6,8 @@
 
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
-<h1>${message}</h1>
-<h1>${page_error}</h1>
+<h1>This tutorship could not be confirmed</h1>
+<br>Reason: ${page_error}
 
 
 <c:import url="template/footer.jsp" />

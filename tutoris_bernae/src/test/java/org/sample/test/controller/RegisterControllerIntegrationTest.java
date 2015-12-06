@@ -29,20 +29,6 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 	private RegisterFormService registerFormService;
 	@Autowired
 	private UserDao userDao;
-
-	@Test
-	public void upgradePage() throws Exception
-	{
-		User newUser = new User();
-		newUser.setPassword("123");
-		newUser.setEmail("mail@mail.mail");
-		newUser = userDao.save(newUser);
-		MockHttpSession session = createSessionWithUser("mail@mail.mail", "123", "ROLE_USER");
-		mockMvc.perform(get("/upgrade").session(session)).andExpect(status().isOk())
-									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
-									.andExpect(forwardedUrl(completeUrl("tutorregistration")))
-									.andExpect(model().hasNoErrors());
-	}
 	
 	@Test
 	public void registerPage() throws Exception
@@ -60,6 +46,7 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 									.param("password", "1Password*"))
 									.andExpect(status().isOk())
 									.andExpect(model().hasNoErrors())
+									.andExpect(model().attributeExists("message"))
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_SUBMIT)));
 		User user = userDao.findByEmailLike("mail@mail.de"); //by email because email is unique
 		assertEquals("first", user.getFirstName());
@@ -87,40 +74,7 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 	}
 
 	//TODO find out how to correctly add class and course list as parameters
-	@Test
-	public void wrongFieldsOnsubmitandsaveTutorForm() throws Exception
-	{
-		mockMvc.perform(post("/submitastutor").param("bio", "")
-									.param("fee", "")
-									.param("userId", "0")
-									.param("save","true"))
-									.andExpect(status().isOk())
-									.andExpect(model().attributeHasFieldErrors("tutorForm", "bio"))
-									.andExpect(model().attributeHasFieldErrors("tutorForm", "fee"))
-									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
-									.andExpect(forwardedUrl(completeUrl("tutorregistration")));		
-	}
-	
-	//TODO find out how to correctly add class and course list as parameters
-	@Test
-	public void submitAndSaveTutorForm() throws Exception
-	{
-		User user = new User();
-		user.setPassword("1");
-		user.setEmail("test");
-		user = userDao.save(user);
-		mockMvc.perform(post("/submitastutor").param("bio", "bio")
-									.param("fee", "22")
-									.param("userId", user.getId().toString())
-									.param("save","true"))
-									.andExpect(status().isOk())
-									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_SUBMIT)));
-		Tutor tutor = user.getTutor();
-		assertEquals("bio", tutor.getBio());
-		assertEquals(new BigDecimal(22), tutor.getFee());
-		assertEquals(user, tutor.getStudent());
-	}
-	
+
 	@Test
 	public void wrongFieldsRegisterForm() throws Exception
 	{

@@ -12,7 +12,7 @@
 
 <div class="container-flex no-border">
     <div class="col-1-4 no-border">
-        <img id="profile_picture" src="/tutoris_baernae/img/profile_pics/${user.profilePicture}" alt="profile_pic" />   
+        <img id="profile_picture" src="/tutoris_baernae/img/profile_pics/${tutor.student.profilePicture}" alt="profile_pic" />   
     </div>
     <div class="col-1-8 no-border">
         First Name: <br>

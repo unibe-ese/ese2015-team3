@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.TutorFormService;
 import org.sample.model.Classes;
@@ -106,10 +107,17 @@ public class TutorRegisterController extends PageController {
         tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	if (!result.hasErrors()){
-    		tutorFormService.saveFrom(tutorForm);
-    		User user = userDao.findOne(tutorForm.getUserId());
-    		authenticateUserAndSetSession(user,request);
-    		model = new ModelAndView(PAGE_SUBMIT);
+    		try{
+    			tutorFormService.saveFrom(tutorForm);
+    			User user = userDao.findOne(tutorForm.getUserId());
+    			authenticateUserAndSetSession(user,request);
+    			model = new ModelAndView(PAGE_SUBMIT);
+    			model.addObject("message", "Tutor registration complete!");
+    		}
+    		catch(InvalidUserException e){
+    			model = new ModelAndView(PAGE_SUBMIT);
+    			model.addObject("page_error", "You are already a tutor!");
+    		}
     	}
     	else { 
     		model = createTutorFormPage(tutorForm);

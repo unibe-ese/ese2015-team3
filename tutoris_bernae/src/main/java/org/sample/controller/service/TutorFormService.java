@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
@@ -28,13 +29,15 @@ public class TutorFormService {
      * Creates a tutor out of a TutorForm and save him to the database, and also
      * updates the user belonging to that tutor.
      * @param tutorForm a TutorForm, not null
+     * @throws InvalidUserException if the user is already a tutor
      */
     @Transactional
-	public void saveFrom(TutorForm tutorForm) {
+	public void saveFrom(TutorForm tutorForm) throws InvalidUserException{
     	assert (tutorForm!=null);
     	assert (tutorForm.getUserId()!=null);
+    	User user = userDao.findOne(tutorForm.getUserId());
+    	if(user.getTutor()!= null) throw new InvalidUserException("This user is already a tutor");
 		Tutor tutor = new Tutor();
-		User user = userDao.findOne(tutorForm.getUserId());
 		tutor.setCompletedClasses(new HashSet<CompletedClasses>(tutorForm.getClassList()));
 		tutor.setAverageGrade(completedClassesService.calculateAverageGrade(tutorForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(tutorForm.getStudyCourseList()));

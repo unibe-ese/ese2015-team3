@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.controller.service.TutorFormService;
 import org.sample.model.Classes;
@@ -23,10 +23,6 @@ import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ServiceTransactionTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 public class TutorFormServiceTransactionTest extends ServiceTransactionTest{
 	
@@ -41,12 +37,9 @@ public class TutorFormServiceTransactionTest extends ServiceTransactionTest{
 
     @Test
     public void CorrectDataSavedToDataBase() {
-
-
     	TutorForm tutorForm = new TutorForm();
     	User user = new User();
     	user.setEmail("mail@mail.m");
-    	user.setEmail("test");
     	user = userDao.save(user);
     	Classes classes1 = new Classes();
     	CompletedClasses completedClasses1 = new CompletedClasses(classes1, 5);
@@ -73,6 +66,28 @@ public class TutorFormServiceTransactionTest extends ServiceTransactionTest{
         assertEquals("newBio",tutor.getBio());
         assertEquals(user, tutor.getStudent());
         assertEquals(tutor, tutor.getStudent().getTutor());
+    }
+    
+    @Test(expected = InvalidUserException.class)
+    public void tutorsCannotUpgradeToTutorAgain(){
+    	User user = new User();
+    	user.setEmail("mail@mail.m");
+    	user = userDao.save(user);
+    	Tutor tutor = new Tutor();
+    	tutorDao.save(tutor);
+    	user.setTutor(tutor);
+    	user = userDao.save(user);
+       	Classes classes1 = new Classes();
+    	CompletedClasses completedClasses1 = new CompletedClasses(classes1, 5);
+    	LinkedList<CompletedClasses> completedClassesList = new LinkedList<CompletedClasses>();
+    	completedClassesList.add(completedClasses1);
+    	TutorForm tutorForm = new TutorForm();
+    	tutorForm.setUserId(user.getId());
+    	tutorForm.setClassList(completedClassesList);
+    	tutorForm.setStudyCourseList(new LinkedList<StudyCourse>());
+    	tutorForm.setBio("newBio");
+    	tutorForm.setFee(new BigDecimal(20.50));
+    	tutorFormService.saveFrom(tutorForm);
     }
     
     //Checks if two collections of completed classes are equals, except the id of the classes.

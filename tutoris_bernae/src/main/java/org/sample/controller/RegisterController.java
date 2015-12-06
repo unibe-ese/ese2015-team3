@@ -95,6 +95,7 @@ public class RegisterController extends PageController{
                     return createTutorFormPage(tutorForm);
                 }
                 model = new ModelAndView(PAGE_SUBMIT);
+                model.addObject("message", "Registration completed!");
             } catch (InvalidUserException e) {
                 model = new ModelAndView(PAGE_REGISTER);
                 model.addObject("page_error", e.getMessage());

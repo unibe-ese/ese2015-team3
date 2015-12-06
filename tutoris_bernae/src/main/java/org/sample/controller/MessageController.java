@@ -25,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Allows the user to see the messages he received and writing new ones
- * @author pf15ese
  */
 @Controller
 public class MessageController extends PageController{
@@ -142,13 +141,32 @@ public void initBinder(WebDataBinder binder) {
   	
     }
 	
+	/**
+	 * Saves (sends) a message with a tutorship offer consisting of the message text and a link for the receiver 
+	 * to accept the offer. Displays a success message back on the messageInbox page. Returns to the
+	 * messageAnswer page if the form is not filled out correctly. Also deletes the sessionattribute "answeredMessaged"
+	 * if the message could be sent. 
+	 * @param messageForm a Valid MessageForm
+	 * @param result
+	 * @param session
+	 * @return a new ModelAndView with ViewName "messageInbox", a modelattribute "submitMessage", a success message
+	 * "user", the logged in user, and "messages" all his messages. Or if the form was not filled correctly
+	 * a ModelAndView with ViewName "messageAnswer", and the modelattributes "submitMessage", a message with informations about 
+	 * the fault, "messageForm" a messageForm and "user", the logged in user, and "messages"
+	 */
+	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST, params = {"offerTutorShip"})
+	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,BindingResult result, @RequestParam(required=false) Boolean offerTutorShip,
+									 HttpSession session) {
+		return submitAnyMessage(messageForm, offerTutorShip, result, session);   	
+    }
+	
 	private ModelAndView submitAnyMessage(MessageForm messageForm, boolean offerTutorShip, BindingResult result, HttpSession session) {
 		User user = getCurrentUser();
     	if (!result.hasErrors()) {
             try {
             	if(session.getAttribute("answeredMessage")!=null)
             		session.removeAttribute("answeredMessage");
-            	if(messageForm.getMessageSubject().equals("TutorShip Offer")||offerTutorShip)
+            	if(offerTutorShip)
             		messageService.sendTutorShipOffer(messageForm,user);
             	else
             		messageService.sendMessageFromForm(messageForm,user);
@@ -165,13 +183,6 @@ public void initBinder(WebDataBinder binder) {
         } 
 		
 	}
-
-	
-	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST, params = {"offerTutorShip"})
-	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,BindingResult result, @RequestParam(required=false) Boolean offerTutorShip,
-									 HttpSession session) {
-		return submitAnyMessage(messageForm, offerTutorShip, result, session);   	
-    }
 	
 	private ModelAndView createInboxPage(User user) {
 		ModelAndView model;

@@ -41,14 +41,19 @@ private TutorShipService tutorShipService;
 public ModelAndView confirmTutorShip(@RequestParam(value = "tutorUserId", required = true) Long tutorUserId) {
 	User user = getCurrentUser();
 	Tutor tutor = tutorDao.findOne(tutorUserId);
-	if(tutor == null)
-		return new ModelAndView("confirmFailed");
+	if(tutor == null){
+		ModelAndView model = new ModelAndView("confirmFailed");
+		model.addObject("page_error", "no tutorship found");
+		return model;
+	}
 	try{
 		tutorShipService.confirmTutorShip(tutor, user);
 		return new ModelAndView("confirmed");
 	}
 	catch(InvalidTutorShipException e){
-		return new ModelAndView("confirmFailed");
+		ModelAndView model = new ModelAndView("confirmFailed");
+		model.addObject("page_error", e.getMessage());
+		return model;
 	}
 
 }

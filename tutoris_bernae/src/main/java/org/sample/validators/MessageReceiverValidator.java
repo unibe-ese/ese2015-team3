@@ -12,7 +12,6 @@ import org.springframework.validation.Validator;
 /**
  * Validates receiver in messageForms by checking if they exists in the database or not.
  * Also supports message for convenience but does nothing with them
- * @author pf15ese
  */
 @Component
 public class MessageReceiverValidator implements Validator

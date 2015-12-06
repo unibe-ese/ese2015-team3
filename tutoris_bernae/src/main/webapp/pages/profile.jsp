@@ -33,7 +33,7 @@
         </c:if>
         <sec:authorize access="hasRole('ROLE_TUTOR')">
             Fee: <br>
-            <c:if test="${not empty tutor.averageGrade} != null">
+            <c:if test="${not empty tutor.averageGrade}">
             Average Grade: <br>
             </c:if>
             Tutorships:

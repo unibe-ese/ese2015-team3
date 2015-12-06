@@ -29,7 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  */
 @Controller
-public class SearchController {
+public class SearchController extends PageController{
     public static final String PAGE_SEARCH = "search";
     public static final String SESSIONATTRIBUE_FOUNDBYSEARCHFORM = "foundBySearchForm";
     

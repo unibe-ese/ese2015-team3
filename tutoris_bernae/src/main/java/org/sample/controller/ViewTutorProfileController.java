@@ -18,23 +18,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controls the creation of the profile page for viewing other tutors, without their user details.
- * @author pf15ese
- *
  */
 @Controller
-public class ViewTutorProfileController {
+public class ViewTutorProfileController extends PageController{
 
 	@Autowired
 	private TutorDao tutorDao;
-        @Autowired
-        private UserDao userDao;
-        
-        private static final String SESSIONATTRIBUTE_USER="loggedInUser";
+
 	/**
 	 * Creates the profile page for the tutor given by the tutorId, completely without the tutors user
 	 * details
 	 * @param tutorId the id of the tutor i want to see, not required
-	 * @return a ModelAndView with ViewNam "viewTutorProfile" and the object "tutor", the tutor given by the id, 
+	 * @return a ModelAndView with ViewName "viewTutorProfile" and the object "tutor", the tutor given by the id, 
 	 * or if no tutor with this id exist or no id was given a ModelAndView with ViewName "notutorfound"
 	 */
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
@@ -47,7 +42,6 @@ public class ViewTutorProfileController {
 		if(tutor != null) {
 			model = new ModelAndView("viewTutorProfile");
 			model.addObject("tutor", tutor);
-                        session.setAttribute(SESSIONATTRIBUTE_USER, getUserFromSecurityContext());
 			return model;
 		}
 			
@@ -57,11 +51,6 @@ public class ViewTutorProfileController {
 		}
 	}
         
-    private User getUserFromSecurityContext() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = userDao.findByEmailLike(name);
-        return user;
-    }
+
 
 }

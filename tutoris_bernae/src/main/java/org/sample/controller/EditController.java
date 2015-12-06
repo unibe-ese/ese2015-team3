@@ -31,13 +31,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Allows editing profiles for normal users and tutor. The 
- * edit page automatically knows if the user is a tutor or not and returns fitting editing site.
- * The submit-sites depend on whetever a tutor or a normal user changed his profile informations.
- * @author pf15ese
+ * Allows editing profiles for normal users. Tutors are automatically redirected to
+ * the correct page.
  */
 @Controller
-public class EditController extends UserOnlyPageController {
+public class EditController extends PageController {
     
 	@Autowired
 	private UserDao userDao;
@@ -51,17 +49,14 @@ public class EditController extends UserOnlyPageController {
 	}
 	
 	/**
-	 * Creates a page with an editing form for a normal user or a tutor,
-	 * depending on the logged in profile
-	 * @return ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", a new TutorEditForm if the calling user
-	 * is a tutor, or ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm if the calling user
-	 * is a normal user
+	 * Creates a page with an editing form for a normal user depending on the logged in profile,
+	 * and redirects tutors.
+	 * @return ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm if the calling user
+	 * is a user, or the user gets redirected to "/editTutor" if he is a tutor
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String name = authentication.getName();
-		User user = userDao.findByEmailLike(name);
+		User user = getCurrentUser();
 		if(user.getTutor()!=null) {	
 			return new ModelAndView("redirect:/editTutor");
 		}

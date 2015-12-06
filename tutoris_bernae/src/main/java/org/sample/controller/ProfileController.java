@@ -22,11 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
  * @author pf15ese
  */
 @Controller
-public class ProfileController {
+public class ProfileController extends PageController{
 
-@Autowired
-private UserDao userDao;
-private static final String SESSIONATTRIBUTE_USER="loggedInUser";	
+
 	/**
 	 * Creates a page with all user informations of the current logged in user. If the user is also a tutor
 	 * all tutor informations are added to the page as well
@@ -38,18 +36,11 @@ private static final String SESSIONATTRIBUTE_USER="loggedInUser";
 	public ModelAndView showProfile(HttpSession session) {
 		 ModelAndView model = new ModelAndView("profile");
 	
-		 User user = getUserFromSecurityContext();
-                 session.setAttribute(SESSIONATTRIBUTE_USER, user);
+		 User user = getCurrentUser();
 		 model.addObject("user", user);
 		 if(user.getTutor()!=null)
 			 model.addObject("tutor", user.getTutor());	 
 		 return model;
 	}
-   
-    private User getUserFromSecurityContext() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = userDao.findByEmailLike(name);
-        return user;
-    }
+
 }

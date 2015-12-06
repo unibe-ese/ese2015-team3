@@ -33,13 +33,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Allows editing profiles for normal users and tutor. The 
- * edit page automatically knows if the user is a tutor or not and returns fitting editing site.
- * The submit-sites depend on whetever a tutor or a normal user changed his profile informations.
- * @author pf15ese
+ * Allows editing profiles for tutors. The edit page automatically knows if the user is a tutor.
+ * If not he gets redirected to the correct edit Page.
  */
 @Controller
-public class EditTutorController extends UserOnlyPageController{
+public class EditTutorController extends PageController{
 
     @Autowired
     private ClassesDao classesDao;
@@ -63,17 +61,14 @@ public class EditTutorController extends UserOnlyPageController{
 	
 	
 	/**
-	 * Creates a page with an editing form for a normal user or a tutor,
-	 * depending on the logged in profile
+	 * Creates a page with an editing form for a  a tutor, depending on the logged in profile,
+	 * or redirects if the user isn't a tutor
 	 * @return ModelAndView with ViewName "editTutor" and ModelAttribute "tutorEditForm", a new TutorEditForm if the calling user
-	 * is a tutor, or ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm if the calling user
-	 * is a normal user
+	 * is a tutor, or redirects to "/edit" if the user isn't a tutor
 	 */
 	@RequestMapping(value = "/editTutor", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String name = authentication.getName();
-		User user = userDao.findByEmailLike(name);
+		User user = getCurrentUser();
 		if(user.getTutor()!=null) {	
 			return createTutorEditFormPage(new TutorEditForm(user, user.getTutor()));
 		}
@@ -139,11 +134,6 @@ public class EditTutorController extends UserOnlyPageController{
             	return model;
             }
         } else {
-        	for(ObjectError o : result.getAllErrors())
-        	{
-        		System.out.println(o);
-        	}
-        	
         	model = createTutorEditFormPage(tutorEditForm);
         }   	
     	return model;

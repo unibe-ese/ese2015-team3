@@ -8,12 +8,13 @@ import org.sample.test.controller.MessageControllerIntegrationTest;
 import org.sample.test.controller.ProfileControllerIntegrationTest;
 import org.sample.test.controller.RegisterControllerIntegrationTest;
 import org.sample.test.controller.SearchControllerIntegrationTest;
+import org.sample.test.controller.TutorRegisterControllerIntegrationTest;
 import org.sample.test.controller.ViewTutorProfileControllerIntegrationTest;
 
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({EditControllerIntegrationTest.class, ProfileControllerIntegrationTest.class,
 					 RegisterControllerIntegrationTest.class, SearchControllerIntegrationTest.class, 
-					 ViewTutorProfileControllerIntegrationTest.class,
+					 ViewTutorProfileControllerIntegrationTest.class, TutorRegisterControllerIntegrationTest.class,
 					 MessageControllerIntegrationTest.class, EditTutorControllerIntegrationTest.class})
 public class ControllerTestSuite {}

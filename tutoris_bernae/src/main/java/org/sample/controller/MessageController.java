@@ -28,10 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
  * @author pf15ese
  */
 @Controller
-public class MessageController {
+public class MessageController extends PageController{
 
-@Autowired
-private UserDao userDao;
 @Autowired
 private MessageService messageService;
 	
@@ -50,7 +48,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInbox", method = RequestMethod.GET)
 	public ModelAndView showMessageInbox() {
 		 ModelAndView model = new ModelAndView("messageInbox");
-		 User user = getUserFromSecurityContext();
+		 User user = getCurrentUser();
 		 model.addObject("messages", messageService.getOrderedMessagesList(user));
 		 return model;
 	}
@@ -65,7 +63,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInboxShow", method = RequestMethod.GET)
 	public ModelAndView showSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = getCurrentUser();
 		model = createInboxPage(user);
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
@@ -90,7 +88,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInboxAnswer", method = RequestMethod.GET)
 	public ModelAndView answerSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId, HttpSession session) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = getCurrentUser();
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
 			session.setAttribute("answeredMessage", selectedMessage);
@@ -116,7 +114,7 @@ public void initBinder(WebDataBinder binder) {
 										HttpSession session) {
 		ModelAndView model;
         String receiverMail = userDao.findOne(receiver).getEmail();
-		User user = getUserFromSecurityContext();
+		User user = getCurrentUser();
 		SearchForm searchedCriterias = (SearchForm) session.getAttribute(SearchController.SESSIONATTRIBUE_FOUNDBYSEARCHFORM);
 		String searchCriteriaSubject = "Discuss tutorship details";
 		if(searchedCriterias != null)
@@ -145,7 +143,7 @@ public void initBinder(WebDataBinder binder) {
     }
 	
 	private ModelAndView submitAnyMessage(MessageForm messageForm, boolean offerTutorShip, BindingResult result, HttpSession session) {
-		User user = getUserFromSecurityContext();
+		User user = getCurrentUser();
     	if (!result.hasErrors()) {
             try {
             	if(session.getAttribute("answeredMessage")!=null)
@@ -192,12 +190,5 @@ public void initBinder(WebDataBinder binder) {
                 model.addObject("messageReceiver", messageService.getMessageReceiverFirstName(messageForm.getReceiver()));
 		return model;
 	}
-	
-    private User getUserFromSecurityContext() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = userDao.findByEmailLike(name);
-        return user;
-    }
 	
 }

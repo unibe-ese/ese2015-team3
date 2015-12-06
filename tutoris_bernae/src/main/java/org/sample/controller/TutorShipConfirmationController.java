@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Allows the user to see the messages he received and writing new ones
- * @author pf15ese
+ * Creates the pages for confirming tutorships
  */
 @Controller
-public class TutorShipConfirmationController {
+public class TutorShipConfirmationController extends PageController{
 
 @Autowired
 private UserDao userDao;
@@ -30,9 +29,17 @@ private TutorDao tutorDao;
 private TutorShipService tutorShipService;
 	
 
+/**
+ * Creates the tutorship confirmed if a tutorship between the currently logged in user
+ * and the user given by the tutorUserId exist and can be confirmed
+ *  or a confirm failed page otherwise
+ * @param tutorUserId the user id of the tutor you want to have a tutorship 
+ * @return a ModelAndView with ViewName "confirmed" if the tutorship could be confirmed
+ * or a a ModelAndView with ViewName "confirmFailed" otherwise
+ */
 @RequestMapping(value = "/confirmTutorShip", method = RequestMethod.GET)
 public ModelAndView confirmTutorShip(@RequestParam(value = "tutorUserId", required = true) Long tutorUserId) {
-	User user = getUserFromSecurityContext();
+	User user = getCurrentUser();
 	Tutor tutor = tutorDao.findOne(tutorUserId);
 	if(tutor == null)
 		return new ModelAndView("confirmFailed");
@@ -45,12 +52,5 @@ public ModelAndView confirmTutorShip(@RequestParam(value = "tutorUserId", requir
 	}
 
 }
-	
-	private User getUserFromSecurityContext() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	     String name = authentication.getName();
-		 User user = userDao.findByEmailLike(name);
-		return user;
-	}
 	
 }

@@ -36,11 +36,10 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-public class RegisterController extends UserOnlyPageController{
+public class RegisterController extends PageController{
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
-    private static final String SESSIONATTRIBUTE_USER="loggedInUser";
-	
+
     @Autowired
     private StudyCourseDao studyCourseDao;
     @Autowired
@@ -88,14 +87,13 @@ public class RegisterController extends UserOnlyPageController{
         if (!result.hasErrors()) {
             try { 
                 registerForm = registerFormService.saveFrom(registerForm);
+                User user = userDao.findOne(registerForm.getId());
+                authenticateUserAndSetSession(user,request);
                 if (registerastutor != null) {
                 	TutorForm tutorForm = new TutorForm();
                 	tutorForm.setUserId(registerForm.getId());
                     return createTutorFormPage(tutorForm);
                 }
-                User user = userDao.findOne(registerForm.getId());
-                authenticateUserAndSetSession(user,request);
-                session.setAttribute(SESSIONATTRIBUTE_USER, user);
                 model = new ModelAndView(PAGE_SUBMIT);
             } catch (InvalidUserException e) {
                 model = new ModelAndView(PAGE_REGISTER);

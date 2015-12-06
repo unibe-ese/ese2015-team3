@@ -1,6 +1,9 @@
 package org.sample.model;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -45,7 +48,9 @@ public class Tutor {
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<CompletedClasses> completedClasses;
 
-    
+	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+	private Set<Rating> comments = new HashSet<Rating>();
+
 	public Long getId() {
 		return id;
 	}
@@ -110,6 +115,14 @@ public class Tutor {
 		this.confirmedTutorShips = confirmedTutorShips;
 	}
 
+	public Set<Rating> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Rating> comments) {
+		this.comments = comments;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -152,4 +165,5 @@ public class Tutor {
 			return false;
 		return true;
 	}
+
 }

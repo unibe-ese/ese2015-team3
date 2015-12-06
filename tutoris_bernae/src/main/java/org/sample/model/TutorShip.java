@@ -20,6 +20,8 @@ public class TutorShip {
 
 	private Boolean confirmed = false;
 	
+	private Boolean rated = false;
+	
 	@OneToOne
 	private User student;
 	
@@ -65,6 +67,14 @@ public class TutorShip {
 
 	public void setTutor(Tutor tutor) {
 		this.tutor = tutor;
+	}
+
+	public Boolean getRated() {
+		return rated;
+	}
+
+	public void setRated(Boolean rated) {
+		this.rated = rated;
 	}
 
 }

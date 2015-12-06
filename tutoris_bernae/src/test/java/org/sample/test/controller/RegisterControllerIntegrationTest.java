@@ -8,25 +8,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.math.BigDecimal;
-
 import org.junit.Test;
 import org.sample.controller.RegisterController;
 import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
-import org.sample.controller.service.RegisterFormService;
-import org.sample.model.Tutor;
 import org.sample.model.User;
 import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
 public class RegisterControllerIntegrationTest extends ControllerIntegrationTest{
-	@Autowired
-	private RegisterFormService registerFormService;
 	@Autowired
 	private UserDao userDao;
 	

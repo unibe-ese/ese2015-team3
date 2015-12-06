@@ -64,15 +64,10 @@ import static org.hamcrest.Matchers.*;
 
 public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	@Autowired
-	private TutorDao tutorDao;
-	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private ClassesDao classesDao;
-	
+
 	private User newUser;
-	private User newTutorUser;
-	private Tutor newTutor;
+
 	
 	MockHttpSession session;
 	@Before

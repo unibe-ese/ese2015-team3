@@ -66,7 +66,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
     	Date before = new Date(now.getTime()-1000);
     	Date beforeBefore = new Date(now.getTime()-10000);
 		sender = new User();
-                sender.setEmail("sender@test.ch");
+        sender.setEmail("sender@test.ch");
 		sender.setPassword("1232w%Dres");
 		sender = userDao.save(sender);
 		Tutor senderTutor = new Tutor();
@@ -151,7 +151,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
 										.andExpect(forwardedUrl(completeUrl("messageAnswer")))
-		.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender"))))
+		.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender@test.ch"))))
 		.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is("AW: test"))));
 								
 	}	
@@ -159,12 +159,11 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void messageSubmit() throws Exception
 	{
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
-		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "sender")
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "sender@test.ch")
 										.param("messageSubject", "test")
 										.param("messageText", "text"))
 										.andExpect(status().isOk())
-										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
 										.andExpect(model().attribute("submitMessage", Matchers.is("message sent!")))
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
 										.andExpect(forwardedUrl(completeUrl("messageInbox")));
@@ -174,8 +173,8 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void tutorShipOfferMessageSubmit() throws Exception
 	{
-		session = createSessionWithUser("sender", "1232w%Dres", "ROLE_TUTOR");
-		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "receiver")
+		session = createSessionWithUser("sender@test.ch", "1232w%Dres", "ROLE_TUTOR");
+		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "receiver@test.ch")
 										.param("messageSubject", "test")
 										.param("messageText", "text")
 										.param("offerTutorShip", "true"))
@@ -190,8 +189,8 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void nonTutorsCannotOfferTutorShip() throws Exception
 	{
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
-		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "sender")
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "sender@test.ch")
 										.param("messageSubject", "test")
 										.param("messageText", "text")
 										.param("offerTutorShip", "true"))
@@ -204,7 +203,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	public void messageSubmitWithFieldErrors() throws Exception
 	{
 
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "")
 										.param("messageSubject", "")
 										.param("messageText", ""))
@@ -221,7 +220,7 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 	public void messageSubmitToUnexistingreceiver() throws Exception
 	{
 
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(post("/messageSubmit").session(session).param("receiver", "ShouldNotExist")
 										.param("messageSubject", "test")
 										.param("messageText", "abaac"))
@@ -238,12 +237,12 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		unorderedMessageList.add(message1);
 		unorderedMessageList.add(message2);
 		unorderedMessageList.add(message3);
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
-		mockMvc.perform(get("/messageNewTo?receiver="+sender.getEmail()).session(session))
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(get("/messageNewTo?receiver="+sender.getId()).session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messages", Matchers.is(unorderedMessageList)))
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
-										.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender"))))
+										.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender@test.ch"))))
 										.andExpect(model().attribute("messageForm", hasProperty("messageSubject", is(String.class))))
 										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
 								
@@ -257,12 +256,12 @@ public class MessageControllerIntegrationTest extends ControllerIntegrationTest{
 		classesDao.save(math);
 		SearchForm searchForm = new SearchForm();
 		searchForm.setClasses(math);
-		session = createSessionWithUser("receiver", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("receiver@test.ch", "1232w%Dres", "ROLE_USER");
 		session.setAttribute(SearchController.SESSIONATTRIBUE_FOUNDBYSEARCHFORM, searchForm);
-		mockMvc.perform(get("/messageNewTo?receiver="+sender.getEmail()).session(session))
+		mockMvc.perform(get("/messageNewTo?receiver="+sender.getId()).session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("messageForm", is(MessageForm.class)))
-										.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender"))))
+										.andExpect(model().attribute("messageForm", hasProperty("receiver", Matchers.is("sender@test.ch"))))
 										.andExpect(model().attribute("messageForm", hasProperty("messageSubject", Matchers.is(messageService.createSearchCriteriaSubject(searchForm)))))
 										.andExpect(forwardedUrl(completeUrl("messageAnswer")));
 								

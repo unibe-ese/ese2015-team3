@@ -39,7 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class RegisterController extends UserOnlyPageController{
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
-        private static final String SESSIONATTRIBUTE_USER="loggedInUser";
+    private static final String SESSIONATTRIBUTE_USER="loggedInUser";
 	
     @Autowired
     private StudyCourseDao studyCourseDao;
@@ -47,8 +47,6 @@ public class RegisterController extends UserOnlyPageController{
     private ClassesDao classesDao;
 	@Autowired
 	private RegisterFormService registerFormService;
-	@Autowired
-	private TutorFormService tutorFormService;
 	@Autowired
 	private UserDao userDao;
     

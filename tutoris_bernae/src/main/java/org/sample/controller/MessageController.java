@@ -115,7 +115,7 @@ public void initBinder(WebDataBinder binder) {
 	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) Long receiver,
 										HttpSession session) {
 		ModelAndView model;
-                String receiverMail = userDao.findOne(receiver).getEmail();
+        String receiverMail = userDao.findOne(receiver).getEmail();
 		User user = getUserFromSecurityContext();
 		SearchForm searchedCriterias = (SearchForm) session.getAttribute(SearchController.SESSIONATTRIBUE_FOUNDBYSEARCHFORM);
 		String searchCriteriaSubject = "Discuss tutorship details";

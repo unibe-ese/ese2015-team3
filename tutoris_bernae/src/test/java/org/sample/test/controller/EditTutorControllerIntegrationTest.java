@@ -67,10 +67,7 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 	private TutorDao tutorDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private ClassesDao classesDao;
-	
-	private User newUser;
+
 	private User newTutorUser;
 	private Tutor newTutor;
 	
@@ -84,10 +81,10 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
 		newTutorUser.setPassword("1232w%dfa");
+		newTutorUser.setFirstName("1232w%dfa");
 		newTutorUser.setEmail("tutormail@mail.mail");
 		newTutorUser.setTutor(newTutor);
-		
-		newTutorUser.setTutor(newTutor);
+		newTutorUser.setRole("ROLE_TUTOR");
 		newTutorUser = userDao.save(newTutorUser);
 	}
 	
@@ -98,7 +95,7 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 	@Test
 	public void editTutorProfilePage() throws Exception
 	{
-		session = createSessionWithUser("tutormail@mail.mail", "123", "ROLE_TUTOR");
+		session = createSessionWithUser("tutormail@mail.mail", "1232w%dfa", "ROLE_TUTOR");
 		mockMvc.perform(get("/editTutor").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("tutorEditForm", is(TutorEditForm.class)))
@@ -115,7 +112,7 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 	@Test
 	public void editTutorDone() throws Exception
 	{
-		session = createSessionWithUser("tutormail@mail.mail","123", "ROLE_TUTOR");
+		session = createSessionWithUser("tutormail@mail.mail","1232w%dfa", "ROLE_TUTOR");
 		mockMvc.perform(post("/editTutorSubmit").session(session)
 				.param("userId", newTutorUser.getId().toString())
 				.param("tutorId", newTutor.getId().toString())
@@ -135,13 +132,12 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		assertEquals("123A#qqq", newTutorUser.getPassword());
 		assertEquals("new Bio", newTutor.getBio());
 		assertEquals(new BigDecimal(48), newTutor.getFee());
-		assertEquals("123A#qqq", newTutorUser.getPassword());
 	}
 	
 	@Test
 	public void editTutorWithFormErrors() throws Exception
 	{
-		session = createSessionWithUser("tutormail@mail.mail","123", "ROLE_TUTOR");
+		session = createSessionWithUser("tutormail@mail.mail","1232w%dfa", "ROLE_TUTOR");
 		mockMvc.perform(post("/editTutorSubmit").session(session)
 				.param("userId", newTutorUser.getId().toString())
 				.param("tutorId", newTutor.getId().toString())
@@ -170,7 +166,7 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		User userWithThisEmailAdress = new User();
 		userWithThisEmailAdress.setEmail("test@test.testmail");
 		userDao.save(userWithThisEmailAdress);
-		session = createSessionWithUser("tutormail@mail.mail","123", "ROLE_TUTOR");
+		session = createSessionWithUser("tutormail@mail.mail","1232w%dfa", "ROLE_TUTOR");
 		mockMvc.perform(post("/editTutorSubmit").session(session)
 				.param("userId", newTutorUser.getId().toString())
 				.param("tutorId", newTutor.getId().toString())

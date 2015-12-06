@@ -52,8 +52,7 @@ public class EditTutorController extends UserOnlyPageController{
 	
 	@Autowired
 	private EditFormService editFormService;
-	
-	
+		
 	@InitBinder("tutorEditForm")
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
@@ -131,7 +130,7 @@ public class EditTutorController extends UserOnlyPageController{
     	if (!result.hasErrors()) {
             try {
             	editFormService.saveFrom(tutorEditForm);
-            	User user = userDao.findOne(tutorEditForm.getUserId());
+            	User user = userDao.findByEmailLike(tutorEditForm.getEmail());
             	authenticateUserAndSetSession(user,request);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {

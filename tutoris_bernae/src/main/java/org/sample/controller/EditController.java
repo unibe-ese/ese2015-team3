@@ -82,12 +82,12 @@ public class EditController extends UserOnlyPageController {
      * again a new ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm
      */
     @RequestMapping(value = "/editSubmit", method = RequestMethod.POST)
-    public ModelAndView editUserProfile(@Valid EditForm editForm, BindingResult result,HttpServletRequest request) {
+    public ModelAndView editUserProfile(HttpServletRequest request, @Valid EditForm editForm, BindingResult result) {
     	ModelAndView model;    	
     	if (!result.hasErrors()) {
             try {
             	editFormService.saveFrom(editForm);
-            	User user = userDao.findOne(editForm.getUserId());
+            	User user = userDao.findByEmailLike(editForm.getEmail());
             	authenticateUserAndSetSession(user,request);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {

@@ -22,6 +22,8 @@ public abstract class UserOnlyPageController {
     protected void authenticateUserAndSetSession(User user, HttpServletRequest request) {
         String username = user.getEmail();
         String password = user.getPassword();
+        System.out.println(user.getEmail());
+        System.out.println(user.getPassword());
         
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         request.getSession();

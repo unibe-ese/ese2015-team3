@@ -81,8 +81,23 @@ public class Tutor {
 		return completedClasses;
 	}
 
+	/**
+	 * Sets the completedClasses and also automatically calculates the new average grade of them.
+	 * @param completedClasses a set of all completed classes of this tutor
+	 */
 	public void setCompletedClasses(Set<CompletedClasses> completedClasses) {
 		this.completedClasses = completedClasses;
+		BigDecimal newAverageGrade = new BigDecimal(0);
+		int gradeCount = 0;
+		for (CompletedClasses c : completedClasses){
+			BigDecimal nextGrade = c.getGrade();
+			if (nextGrade == null) continue;
+			newAverageGrade = newAverageGrade.add(nextGrade);
+			gradeCount++;
+		}
+		if(gradeCount==0) averageGrade = null;
+		else
+			averageGrade = newAverageGrade.divide(new BigDecimal(gradeCount));
 	}
 
 	public BigDecimal getFee() {
@@ -103,10 +118,6 @@ public class Tutor {
 
 	public BigDecimal getAverageGrade() {
 		return averageGrade;
-	}
-
-	public void setAverageGrade(BigDecimal averageGrade) {
-		this.averageGrade = averageGrade;
 	}
 
 	public Integer getConfirmedTutorShips() {

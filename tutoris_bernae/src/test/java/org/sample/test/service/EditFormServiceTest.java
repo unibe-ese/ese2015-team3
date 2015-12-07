@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.After;
@@ -21,7 +20,6 @@ import org.mockito.stubbing.Answer;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
-import org.sample.controller.service.CompletedClassesService;
 import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
 import org.sample.model.CompletedClasses;
@@ -39,7 +37,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import static org.hamcrest.CoreMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -74,15 +71,8 @@ public class EditFormServiceTest {
 			EditFormService editFormService = new EditFormService();
 			return editFormService;
 		}
-		@Bean
-		public CompletedClassesService completedClassesServiceMock() {
-			CompletedClassesService completedClassesServiceMock = mock(CompletedClassesService.class);
-			return completedClassesServiceMock;
-		}
+
     }
-	@Qualifier("completedClassesServiceMock")
-	@Autowired
-	private CompletedClassesService completedClassesServiceMock;
 	@Autowired
     private EditFormService editFormService;
 	@Qualifier("userDaoMock")

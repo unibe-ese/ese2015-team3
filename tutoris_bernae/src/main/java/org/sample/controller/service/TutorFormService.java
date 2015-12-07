@@ -23,7 +23,6 @@ import org.springframework.validation.ObjectError;
 public class TutorFormService {
 	@Autowired TutorDao tutorDao;
 	@Autowired UserDao userDao;
-	@Autowired CompletedClassesService completedClassesService;
 	
 	/**
      * Creates a tutor out of a TutorForm and save him to the database, and also
@@ -39,7 +38,6 @@ public class TutorFormService {
     	if(user.getTutor()!= null) throw new InvalidUserException("This user is already a tutor");
 		Tutor tutor = new Tutor();
 		tutor.setCompletedClasses(new HashSet<CompletedClasses>(tutorForm.getClassList()));
-		tutor.setAverageGrade(completedClassesService.calculateAverageGrade(tutorForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(tutorForm.getStudyCourseList()));
 		tutor.setBio(tutorForm.getBio());
 		tutor.setFee(tutorForm.getFee());

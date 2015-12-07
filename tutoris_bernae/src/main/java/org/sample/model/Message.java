@@ -18,6 +18,8 @@ import org.hibernate.annotations.Type;
 @Entity
 public class Message {
 	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -135,7 +137,4 @@ public class Message {
 			return false;
 		return true;
 	}
-	
-	
-
 }

@@ -26,6 +26,7 @@ import org.hibernate.annotations.Type;
 @Entity
 public class Tutor {
 
+	private static final long serialVersionUID = 1L;
 	
     @Id
     @GeneratedValue

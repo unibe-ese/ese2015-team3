@@ -12,6 +12,8 @@ import org.sample.controller.pojos.SearchForm;
 import org.sample.model.Classes;
 import org.sample.model.Message;
 import org.sample.model.StudyCourse;
+import org.sample.model.Tutor;
+import org.sample.model.TutorShip;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
@@ -183,5 +185,16 @@ public class MessageService{
 		if (receiver != null)
 			return receiver.getFirstName();
 		return null;
+	}
+
+	public void sendRatingReminder(Tutor tutor, User student) {
+		Message reminder = new Message();
+		reminder.setMessageText("Don't forget to rate your tutor:"+"<br>"
+				+"<a href=\"/tutoris_baernae/rate?tutorId="
+				+tutor.getId()+"\"><u> Click here to rate your tutor </u></a>");
+		reminder.setMessageSubject("Rate "+tutor.getStudent().getFirstName());
+		reminder.setSender(tutor.getStudent());
+		reminder.setReceiver(student);
+		send(reminder);	
 	}
 }

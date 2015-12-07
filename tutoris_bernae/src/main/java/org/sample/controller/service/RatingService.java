@@ -29,10 +29,23 @@ public class RatingService {
 	@Autowired
 	private TutorShipDao tutorShipDao;
 	
+	/**
+	 * True if the user is able to rate the tutor, so if there 
+	 * is an unrated, confirmed tutorship between them
+	 * @param ratedTutorId the id of the tutor that should get rated
+	 * @param commentator the user who wants to rate the tutor
+	 * @return true if there is a confirmed tutorship between the user and the tutor which is unrated
+	 */
+	public boolean canRateTutor(Long ratedTutorId, User commentator){
+		Tutor ratedTutor = tutorDao.findOne(ratedTutorId);
+		TutorShip ratedTutorShip = tutorShipDao.findByTutorAndStudent(ratedTutor, commentator);
+		return (ratedTutorShip!=null)&&(!ratedTutorShip.getRated())&&(!ratedTutorShip.getConfirmed());
+	}
+	
 	public RatingForm createRatingForm(Long ratedTutorId, User commentator) throws InvalidTutorShipException{
 		Tutor ratedTutor = tutorDao.findOne(ratedTutorId);
     	TutorShip ratedTutorShip = tutorShipDao.findByTutorAndStudent(ratedTutor, commentator);
-    	if(ratedTutorShip==null) throw new InvalidTutorShipException("There exists no tutorship between you and this tutor");
+    	if(ratedTutorShip==null||!ratedTutorShip.getConfirmed()) throw new InvalidTutorShipException("There exists no confirmed tutorship between you and this tutor");
     	if(ratedTutorShip.getRated()) throw new InvalidTutorShipException("This tutorship is already rated");
     	RatingForm ratingForm = new RatingForm();
 		ratingForm.setRatedTutorId(ratedTutorId);
@@ -42,23 +55,24 @@ public class RatingService {
      * Creates a tutor out of a TutorForm and save him to the database, and also
      * updates the user belonging to that tutor.
      * @param tutorForm a TutorForm, not null
-	 * @throws InvalidTutorShipException 
+	 * @throws InvalidTutorShipException if there is no confirmed, unrated tutorship
+	 * between the commentator and the tutor given by the ratingform
      */
     @Transactional
 	public void saveFrom(RatingForm ratingForm, User commentator) throws InvalidTutorShipException{
     	assert commentator!=null;
     	Tutor ratedTutor = tutorDao.findOne(ratingForm.getRatedTutorId());
     	TutorShip ratedTutorShip = tutorShipDao.findByTutorAndStudent(ratedTutor, commentator);
-    	if(ratedTutorShip==null) throw new InvalidTutorShipException("There exists no tutorship between this student and tutor");
+    	if(ratedTutorShip==null||!ratedTutorShip.getConfirmed()) throw new InvalidTutorShipException("There exists no confirmed tutorship between this student and tutor");
     	if(ratedTutorShip.getRated()) throw new InvalidTutorShipException("This tutorship is already rated");
     	Rating rating = new Rating();
     	rating.setCommentator(commentator);
     	rating.setFeedback(ratingForm.getFeedback());
     	rating.setRating(ratingForm.getRating());
     	rating = ratingDao.save(rating);
-    	Set<Rating> existingRatings = ratedTutor.getComments();
+    	Set<Rating> existingRatings = ratedTutor.getRatings();
     	existingRatings.add(rating);
-    	ratedTutor.setComments(existingRatings);
+    	ratedTutor.setRatings(existingRatings);
     	tutorDao.save(ratedTutor);
     	ratedTutorShip.setRated(true);
     	tutorShipDao.save(ratedTutorShip);

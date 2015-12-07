@@ -20,14 +20,23 @@
         <c:if test="${not empty tutor.averageGrade}">
         Average Grade: <br>
         </c:if>
+        <c:if test="${not empty tutor.ratings}">
+        Rating: <br>
+        </c:if>
         Tutorships:
         <a href="/tutoris_baernae/messageNewTo?receiver=${tutor.student.id}" class="button" ><i class="fa fa-send"></i> Contact</a>
+        <c:if test="${not empty canRate}">
+        <a href="/tutoris_baernae/rate?tutorId=${tutor.id}" class="button" ></i> Rate</a>
+        </c:if>
     </div>
     <div class="flex-item no-border">
         ${tutor.student.firstName}<br>
         ${tutor.fee} CHF <br>
         <c:if test="${not empty tutor.averageGrade}">
         ${tutor.averageGrade}<br>
+        </c:if>
+        <c:if test="${not empty tutor.ratings}">
+        ${tutor.averageRating}<br>
         </c:if>
         ${tutor.confirmedTutorShips}
     </div>
@@ -45,9 +54,15 @@
     </div>
     <div class="col-1-2">
         Feedback:
+
     </div>
     <div class="flex-item module"><pre>${tutor.bio}</pre></div>
-    <div class="module" style="margin-left: 1em; width: 50%;">TODO</div>
+    <div class="module" style="margin-left: 1em; width: 50%;">
+        <c:forEach items="${tutor.ratings}" var="rating">
+            <div class="col-2-3">${rating.commentator.firstName}: ${rating.feedback}</div>
+            <div class="col-1-3">${rating.rating}</div>
+        </c:forEach>
+    </div>
 </div>
 
 	<c:if test="${page_error != null }">

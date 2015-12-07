@@ -37,6 +37,8 @@ public class Tutor {
     
     private BigDecimal averageGrade;
     
+    private BigDecimal averageRating;
+    
     private Integer confirmedTutorShips = 0;
     
     @Type(type="text")
@@ -49,7 +51,7 @@ public class Tutor {
     private Set<CompletedClasses> completedClasses;
 
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-	private Set<Rating> comments = new HashSet<Rating>();
+	private Set<Rating> ratings = new HashSet<Rating>();
 
 	public Long getId() {
 		return id;
@@ -115,14 +117,34 @@ public class Tutor {
 		this.confirmedTutorShips = confirmedTutorShips;
 	}
 
-	public Set<Rating> getComments() {
-		return comments;
+	public Set<Rating> getRatings() {
+		return ratings;
 	}
 
-	public void setComments(Set<Rating> comments) {
-		this.comments = comments;
+	/**
+	 * Sets the rating and also automatically calculates the new average.
+	 * @param ratings a set of all ratings of this tutor
+	 */
+	public void setRatings(Set<Rating> ratings) {
+		this.ratings = ratings;
+		BigDecimal newAverageRating = new BigDecimal(0);
+		int ratingCount = 0;
+		for (Rating r : ratings){
+			BigDecimal nextRating = r.getRating();
+			if (nextRating == null) continue;
+			newAverageRating = newAverageRating.add(nextRating);
+			ratingCount++;
+		}
+		if(ratingCount==0) averageRating = null;
+		else
+			averageRating = newAverageRating.divide(new BigDecimal(ratingCount));
 	}
 
+	public BigDecimal getAverageRating(){
+		return averageRating;
+		
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

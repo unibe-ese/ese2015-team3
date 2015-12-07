@@ -36,6 +36,9 @@
             <c:if test="${not empty tutor.averageGrade}">
             Average Grade: <br>
             </c:if>
+            <c:if test="${not empty tutor.ratings}">
+        	Average Rating:<br>
+        	</c:if>
             Tutorships:
         </sec:authorize>
     </div>
@@ -50,6 +53,9 @@
             <c:if test="${not empty tutor.averageGrade}">
             ${tutor.averageGrade}<br>
             </c:if>
+            <c:if test="${not empty tutor.ratings}">
+        	${tutor.averageRating}<br>
+        	</c:if>
             ${tutor.confirmedTutorShips}
         </sec:authorize>
     </div>
@@ -63,7 +69,6 @@
             <div class="col-1-3">${completedClasses.grade}</div>
         </c:forEach>
     </div>
-<<<<<<< HEAD
     <div class="col-1-2">
         Biography: 
     </div>
@@ -71,32 +76,12 @@
         Feedback:
     </div>
     <div class="flex-item module"><pre>${tutor.bio}</pre></div>
-    <div class="module" style="margin-left: 1em; width: 50%;">TODO</div>
-=======
-            
-    <sec:authorize access="hasRole('ROLE_TUTOR')">        
-	    <div class="col-1-3">
-	        <div class="module classes">
-	            <div class="col-2-3"><b>Class</b></div>
-	            <div class=" col-1-3"><b>Grade</b></div>
-	        <c:forEach items="${tutor.completedClasses}" var="completedClasses">
-	            <div class="col-2-3">${completedClasses.classes.name}</div>
-	            <div class="col-1-3">${completedClasses.grade}</div>
-	        </c:forEach>
-	        </div>
-	    </div>
-	    <div class="col-2-3">
-	        <div>Biography:</div>
-	        <div class="module">${tutor.bio}</div>
-	    </div>
-	    ${tutor.feedbacks}
-	    add your feedback! (if you were a student of this tutor)
-	    <form name="rate">
-			<input type="text" name="vote" placeholder="Vote"/>
-			<input type="text" name="feedback" placeholder="Comment"/>
-			<a href="/voteTutor" class="button">vote</a>
-		</form>
->>>>>>> origin/tutorRating2
+    <div class="module" style="margin-left: 1em; width: 50%;">
+    	<c:forEach items="${tutor.ratings}" var="rating">
+            <div class="col-2-3">${rating.commentator.firstName}: ${rating.feedback}</div>
+            <div class="col-1-3">${rating.rating}</div>
+        </c:forEach>
+    </div>
     </sec:authorize>
 </div>
 

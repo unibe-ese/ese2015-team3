@@ -54,7 +54,7 @@ public class RatingServiceTransactionTest extends ServiceTransactionTest{
         
         ratingService.saveFrom(ratingForm, user);
         
-        Rating savedRating = tutor.getComments().iterator().next();
+        Rating savedRating = tutor.getRatings().iterator().next();
         assertEquals("Feedback",savedRating.getFeedback());
         assertEquals(user,savedRating.getCommentator());
         assertEquals(new BigDecimal(1),savedRating.getRating());
@@ -69,7 +69,7 @@ public class RatingServiceTransactionTest extends ServiceTransactionTest{
         
         ratingService.saveFrom(ratingForm, user);
         
-        Rating savedRating = tutor.getComments().iterator().next();
+        Rating savedRating = tutor.getRatings().iterator().next();
         assertEquals("Feedback",savedRating.getFeedback());
         assertEquals(user,savedRating.getCommentator());
         assertEquals(new BigDecimal(1),savedRating.getRating());
@@ -90,7 +90,7 @@ public class RatingServiceTransactionTest extends ServiceTransactionTest{
         
         ratingService.saveFrom(ratingForm, user);
         
-        Rating savedRating = tutor.getComments().iterator().next();
+        Rating savedRating = tutor.getRatings().iterator().next();
         assertEquals("Feedback",savedRating.getFeedback());
         assertEquals(user,savedRating.getCommentator());
         assertEquals(new BigDecimal(1),savedRating.getRating());

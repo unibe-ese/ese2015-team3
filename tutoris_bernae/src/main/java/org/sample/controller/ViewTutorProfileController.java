@@ -2,6 +2,8 @@
 package org.sample.controller;
 
 import javax.servlet.http.HttpSession;
+
+import org.sample.controller.service.RatingService;
 import org.sample.model.Tutor;
 import org.sample.model.User;
 import org.sample.model.dao.TutorDao;
@@ -24,13 +26,16 @@ public class ViewTutorProfileController extends PageController{
 
 	@Autowired
 	private TutorDao tutorDao;
+	@Autowired
+	private RatingService ratingService;
 
 	/**
 	 * Creates the profile page for the tutor given by the tutorId, completely without the tutors user
 	 * details
 	 * @param tutorId the id of the tutor i want to see, not required
 	 * @return a ModelAndView with ViewName "viewTutorProfile" and the object "tutor", the tutor given by the id, 
-	 * or if no tutor with this id exist or no id was given a ModelAndView with ViewName "notutorfound"
+	 * and also with "canRate) if the user is able to rate the tutor.
+	 * If no tutor with this id exist or no id was given a ModelAndView with ViewName "notutorfound" is returned
 	 */
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile(@RequestParam(value = "tutorId", required = false) Long tutorId, HttpSession session) {
@@ -42,9 +47,9 @@ public class ViewTutorProfileController extends PageController{
 		if(tutor != null) {
 			model = new ModelAndView("viewTutorProfile");
 			model.addObject("tutor", tutor);
+			if(ratingService.canRateTutor(tutorId, getCurrentUser())) model.addObject("canRate","true");
 			return model;
 		}
-			
 		else {
 			model = new ModelAndView("notutorfound");
 			return model;

@@ -13,7 +13,7 @@
         <div class="mc-column">
             <c:set var="ratingErrors"><form:errors path="rating"/></c:set>
             <div class="control-group<c:if test="${not empty ratingErrors}"> error</c:if>">
-                <label class="control-label" for="field-rating">Rating</label>
+                <label class="control-label" for="field-rating">Rating (from 1 to 5)</label>
                 <div class="controls">
                 <form:input type="number" value = "${ratingForm.rating}" path="rating" id="field-rating" tabindex="1" max="5" min="1" placeholder="rating" autofocus="true"/>
                 <form:errors path="rating" cssClass="help-inline" element="span"/>

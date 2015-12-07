@@ -27,7 +27,7 @@
             <c:if test = "${not empty selectedMessage}">
 		<div class="module bottom-border">From: ${selectedMessage.sender.firstName}</div>
 		<div class="module bottom-border">Subject: ${selectedMessage.messageSubject}</div>
-                <div class="module no-border messagetext"><p><pre>${selectedMessage.messageText}</pre><p></div>
+                <div class="module no-border"><p><pre>${selectedMessage.messageText}</pre><p></div>
                 <a href="/tutoris_baernae/messageInboxAnswer?messageId=${selectedMessage.id}" class="button">Answer</a>
             </c:if>
             <c:if test="${empty selectedMessage}">

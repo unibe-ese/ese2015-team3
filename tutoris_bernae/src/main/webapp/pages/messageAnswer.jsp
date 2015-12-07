@@ -23,7 +23,7 @@
                 </a>
             </c:forEach>
         </div>
-        <div class="flex-item-2">
+        <div class="flex-item" style="width:50%;">
             <form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
                 <fieldset>
                     <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
@@ -70,10 +70,10 @@
             </form:form>
         </div>
         <c:if test = "${not empty answeredMessage}">
-        <div class="flex-item">
-                <div class="module bottom-border">From: ${answeredMessage.sender.firstName}</div>
-		<div class="module bottom-border">Subject: ${answeredMessage.messageSubject}</div>
-                <div class="module no-border"><p><pre>${answeredMessage.messageText}</pre><p></div>
+        <div class="col-1-4 module no-pad">
+            <div class="module bottom-border">From: ${answeredMessage.sender.firstName}</div>
+            <div class="module message-subject bottom-border">Subject: ${answeredMessage.messageSubject}</div>
+            <div class="module no-border"><p><pre>${answeredMessage.messageText}</pre><p></div>
         </div>
         </c:if>
     </div>

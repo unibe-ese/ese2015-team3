@@ -1048,6 +1048,7 @@
   padding: 0.5em 1em 0.5em 1em;
   background: white;
   border: solid 1px #c3c3c3;
+  overflow: auto;
 }
 
 
@@ -1083,14 +1084,28 @@
 }
 
 .flex-item {
-    flex: 1;
+    flex: 1 1 auto;
     border: solid 1px #c3c3c3;
 }
 
+.message-anwser{max-width: 30%;}
+.message-subject{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .flex-item-2 {
-    flex: 2;
+    flex: 2 1 auto;
     border: solid 1px #c3c3c3;
 
+}
+
+.message-preview{
+    height: 5em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .message-sender {

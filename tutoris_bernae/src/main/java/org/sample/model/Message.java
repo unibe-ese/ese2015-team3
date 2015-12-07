@@ -1,6 +1,7 @@
 package org.sample.model;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,12 +12,18 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.Type;
 
 /**
- * A message sent from one user to another TODO (add fields to doc)
- * @author pf15ese
+ * A message sent from one user to another.
+ * {@code id} automatically generated unique identifier
+ * {@code receiver} relationship to user that receives the message.
+ * {@code sender} relationship to user that sends the message.
+ * {@code messageText} can contain several lines of text.
+ * 
+ * @version 1.0
+ * @author ESE Team 3
  */
 
 @Entity
-public class Message {
+public class Message implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

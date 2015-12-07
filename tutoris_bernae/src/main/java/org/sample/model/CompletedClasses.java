@@ -15,14 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * Models the classes that a tutor can register.
- * @author G.Corsini
+ * Entitiy for classes that a tutor has completed.
+ * {@code id} automatically generated unique identifier
+ * {@code classes} relationship to classes as only existing classes can be completed.
+ *
+ * @version 1.0
+ * @author ESE Team 3
  *
  */
 @Entity
 public class CompletedClasses {
 
-	//Currently not in use but could be required for more granular searches.
 	@Id
 	@GeneratedValue
 	private Long id;

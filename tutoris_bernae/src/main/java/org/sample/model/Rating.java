@@ -12,8 +12,13 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.Type;
 
 /**
- * A message sent from one user to another TODO (add fields to doc)
- * @author pf15ese
+ * A rating given by a user to a tutor.
+ * {@code id} automatically generated unique identifier
+ * {@code commentator} relationship to user that commits the rating.
+ * {@code feedback} can contain several lines of text.
+ * 
+ * @version 1.0
+ * @author ESE Team 3
  */
 @Entity
 public class Rating {

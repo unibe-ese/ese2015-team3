@@ -1,5 +1,6 @@
 package org.sample.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ import org.hibernate.annotations.Type;
  *
  */
 @Entity
-public class Tutor {
+public class Tutor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

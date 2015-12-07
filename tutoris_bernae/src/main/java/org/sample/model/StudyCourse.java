@@ -7,9 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Models the courses that a tutor can register.
- * @author G.Corsini
+ * Entity for courses that a tutor can register.
+ * {@code id} automatically generated unique identifier
  *
+ * @version 1.2
+ * @author ESE Team 3
  */
 @Entity
 public class StudyCourse implements Serializable {

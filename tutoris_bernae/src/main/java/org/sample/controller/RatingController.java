@@ -49,7 +49,7 @@ public class RatingController extends PageController {
 	public ModelAndView ratingPage(@Valid RatingForm ratingForm, BindingResult result){
 		if (!result.hasErrors()){
     		try{
-    			ratingService.saveFrom(ratingForm, getCurrentUser());
+    			ratingService.saveRating(ratingForm, getCurrentUser());
     			return new ModelAndView("ratedSuccessfull");	
     		}
     		catch(InvalidTutorShipException e){

@@ -42,11 +42,7 @@
                             <form:select path="messageSubject" id="messageSubject">
 		  					<form:option value="Discuss tutorship details">Discuss tutorship details</form:option>
 		  					<form:option value="${messageForm.messageSubject}">${messageForm.messageSubject}</form:option>
-		  					 <sec:authorize access="hasRole('ROLE_TUTOR')">
-		  					<form:option value="TutorShip Offer">TutorShip Offer</form:option>
-		  					</sec:authorize>
 		  					</form:select>
-		  					
                             <form:errors path="messageSubject" cssClass="help-inline" element="span"/>
                         </div>
                     </div>
@@ -63,7 +59,7 @@
                     <div class="form-actions">
                         <button type="submit" tabindex="4" class="btn btn-primary">Send</button>
                         <sec:authorize access="hasRole('ROLE_TUTOR')">
-                            <button type="submit" tabindex="2" name="offerTutorShip" value="true" class="btn btn-primary">Offer TutorShip</button>
+                            <button type="submit" tabindex="2" name="offerTutorShip" value="true" class="btn btn-primary">Offer Tutorship</button>
    						</sec:authorize>   
                     </div>
                 </fieldset>

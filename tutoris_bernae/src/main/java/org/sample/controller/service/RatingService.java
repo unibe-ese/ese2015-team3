@@ -115,6 +115,4 @@ public class RatingService {
     	if(ratedTutorShip.getRated()) throw new InvalidTutorShipException("This tutorship is already rated");
     }
 
-
-
 }

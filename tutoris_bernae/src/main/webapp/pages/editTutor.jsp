@@ -140,5 +140,5 @@
            
     </fieldset>
 </form:form>
-
+<a href="/tutoris_baernae/fileupload" class="button">Edit profile picture</a><br>
 <c:import url="template/footer.jsp" />

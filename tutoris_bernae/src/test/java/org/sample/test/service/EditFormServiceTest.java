@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.After;
@@ -21,7 +20,6 @@ import org.mockito.stubbing.Answer;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
-import org.sample.controller.service.CompletedClassesService;
 import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
 import org.sample.model.CompletedClasses;
@@ -39,7 +37,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import static org.hamcrest.CoreMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -74,15 +71,8 @@ public class EditFormServiceTest {
 			EditFormService editFormService = new EditFormService();
 			return editFormService;
 		}
-		@Bean
-		public CompletedClassesService completedClassesServiceMock() {
-			CompletedClassesService completedClassesServiceMock = mock(CompletedClassesService.class);
-			return completedClassesServiceMock;
-		}
+
     }
-	@Qualifier("completedClassesServiceMock")
-	@Autowired
-	private CompletedClassesService completedClassesServiceMock;
 	@Autowired
     private EditFormService editFormService;
 	@Qualifier("userDaoMock")
@@ -106,13 +96,11 @@ public class EditFormServiceTest {
         user = new User();
         editForm.setFirstName("First2");
         editForm.setLastName("Last2");
-        editForm.setUsername("user2");
         editForm.setEmail("test@test2.com");
         editForm.setPassword("1234567");
         editForm.setUserId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
 
@@ -123,7 +111,6 @@ public class EditFormServiceTest {
                         User user = (User) invocation.getArguments()[0];
                         assertEquals( "First2",user.getFirstName());
                         assertEquals( "Last2",user.getLastName());
-                        assertEquals( "user2", user.getUsername());
                         assertEquals( "test@test2.com",user.getEmail());
                         assertEquals("1234567",user.getPassword());
                         return user;
@@ -144,7 +131,6 @@ public class EditFormServiceTest {
         completedClassesList.add(completedClasses1);
         editForm.setFirstName("First2");
         editForm.setLastName("Last2");
-        editForm.setUsername("user2");
         editForm.setEmail("test@test2.com");
         editForm.setPassword("1234567");
         editForm.setUserId(0L);
@@ -155,7 +141,6 @@ public class EditFormServiceTest {
         editForm.setTutorId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
         Tutor tutor = new Tutor();
@@ -169,7 +154,6 @@ public class EditFormServiceTest {
                 User user = (User) invocation.getArguments()[0];
                 assertEquals( "First2",user.getFirstName());
                 assertEquals( "Last2",user.getLastName());
-                assertEquals("user2",user.getUsername());
                 assertEquals( "test@test2.com",user.getEmail());
                 assertEquals("1234567",user.getPassword());
                 return user;
@@ -202,13 +186,11 @@ public class EditFormServiceTest {
         otherUser.setEmail("newtest@test.com");
         editForm.setFirstName("First");
         editForm.setLastName("Last");
-        editForm.setUsername("user");
         editForm.setEmail("newtest@test.com");
         editForm.setPassword("123456");
         editForm.setUserId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
        
@@ -223,21 +205,18 @@ public class EditFormServiceTest {
         EditForm editForm = new EditForm();
         user = new User();
         User otherUser = new User();
-        otherUser.setUsername("user");
         editForm.setFirstName("First");
         editForm.setLastName("Last");
-        editForm.setUsername("newuser");
         editForm.setEmail("newtest@test.com");
         editForm.setPassword("123456");
         editForm.setUserId(0L);
         user.setFirstName("First");
         user.setLastName("Last");
-        user.setUsername("user");
         user.setEmail("test@test.com");
         user.setPassword("123456");
        
         when(userDao.findOne(any(Long.class))).thenReturn(user);
-        when(userDao.findByUsernameLike(any(String.class))).thenReturn(otherUser);
+        when(userDao.findByEmailLike(any(String.class))).thenReturn(otherUser);
         
         editFormService.saveFrom(editForm);
     }

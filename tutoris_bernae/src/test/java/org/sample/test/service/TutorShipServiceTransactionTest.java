@@ -1,5 +1,6 @@
 package org.sample.test.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -16,18 +17,14 @@ import org.sample.model.User;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.TutorShipDao;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ServiceTransactionTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springDataTest.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class TutorShipServiceTransactionTest {	
+public class TutorShipServiceTransactionTest extends ServiceTransactionTest {	
 	@Autowired
     private TutorShipService tutorShipService ;
 	@Autowired
@@ -43,19 +40,16 @@ public class TutorShipServiceTransactionTest {
 	@Before
 	public void setUpExampleDatas(){
 		sender = new User();
-		sender.setUsername("tutortest");
 		sender.setFirstName("tutortest");
 		sender.setLastName("tutortest");
 		sender.setEmail("tutormail@mail.mail");
 		Tutor senderTutor = new Tutor();
 		tutorDao.save(senderTutor);
 		sender.setTutor(senderTutor);
-		sender.setTutor(true);
 		sender = userDao.save(sender);
 		senderTutor.setStudent(sender);
 		tutorDao.save(senderTutor);
 		receiver = new User();
-		receiver.setUsername("test");
 		receiver.setFirstName("test");
 		receiver.setLastName("test");
 		receiver.setEmail("mail@mail.mail");
@@ -114,6 +108,17 @@ public class TutorShipServiceTransactionTest {
     	TutorShip newTutorShip = tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
     	assertNotNull(newTutorShip);
     	assertTrue(newTutorShip.getConfirmed());
+    }
+    
+    @Test
+    public void increasesConfirmedTutorShipsForTutorInDatabase() throws InvalidTutorShipException {
+    	TutorShip tutorShip = new TutorShip();
+    	tutorShip.setStudent(receiver);
+    	tutorShip.setTutor(sender.getTutor());
+    	tutorShipDao.save(tutorShip);
+    	tutorShipService.confirmTutorShip(sender.getTutor(), receiver);
+    	tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
+    	assertEquals(sender.getTutor().getConfirmedTutorShips() , new Integer(1));
     }
 
 }

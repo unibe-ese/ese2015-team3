@@ -12,17 +12,7 @@
 				<div class="message">${message}</div>
 			</c:if>
 			
-			<c:if test="${pageContext.request.userPrincipal.name != null}">
-				<h2>
-					Welcome ${pageContext.request.userPrincipal.name} !
-				</h2>
-			</c:if>
-			
-			<c:if test="${pageContext.request.userPrincipal.name == null}">
-				<h2>
-					Welcome!
-				</h2>
-			</c:if>
+                                <h2>Welcome ${sessionScope.loggedInUser.firstName}!</h2>
 		<div class="grid">
 		    <div class="col-1-2">
 				Are you having some troubles with one of your exams?<br>

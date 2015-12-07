@@ -18,7 +18,6 @@ import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sample.controller.pojos.TutorForm;
-import org.sample.controller.service.CompletedClassesService;
 import org.sample.controller.service.TutorFormService;
 import org.sample.model.Classes;
 import org.sample.model.CompletedClasses;
@@ -59,15 +58,7 @@ public class TutorFormServiceTest {
             TutorFormService tutorFormService = new TutorFormService();
             return tutorFormService;
         }
-		@Bean
-		public CompletedClassesService completedClassesServiceMock() {
-			CompletedClassesService completedClassesServiceMock = mock(CompletedClassesService.class);
-			return completedClassesServiceMock;
-		}
-    }
-	@Qualifier("completedClassesServiceMock")
-	@Autowired
-	private CompletedClassesService completedClassesServiceMock;
+	}
 	@Autowired
     private TutorFormService tutorFormService;
 	@Qualifier("tutorDaoMock")
@@ -111,13 +102,11 @@ public class TutorFormServiceTest {
             public User answer(InvocationOnMock invocation) throws Throwable {
             	User user = (User) invocation.getArguments()[0];
                 assertEquals("ROLE_TUTOR", user.getRole());
-                assertEquals(true, user.isTutor());
                 return user;
             }
         });
         
         tutorFormService.saveFrom(tutorForm);
-        
         
     }
    

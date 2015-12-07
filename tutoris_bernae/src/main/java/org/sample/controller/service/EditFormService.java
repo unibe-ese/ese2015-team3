@@ -32,8 +32,7 @@ public class EditFormService{
     @Autowired TutorDao tutorDao;
     @Autowired StudyCourseDao studyCourseDao;
     @Autowired ClassesDao classesDao;
-	@Autowired CompletedClassesService completedClassesService;
-  
+
     /**
      * Saves the user with his changed details given by the EditForm to the database
      * @param editForm a EditForm, not null
@@ -51,9 +50,6 @@ public class EditFormService{
 		user.setFirstName(editForm.getFirstName());
 		user.setLastName(editForm.getLastName());
 		user.setPassword(editForm.getPassword());
-		String username = editForm.getUsername();
-		if(!username.equals(user.getUsername())&&!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
-		user.setUsername(username);
 		userDao.save(user);		// it automatically updates user (based on id)
     	return editForm;
     }
@@ -76,27 +72,17 @@ public class EditFormService{
 		user.setFirstName(editForm.getFirstName());
 		user.setLastName(editForm.getLastName());
 		user.setPassword(editForm.getPassword());
-		String username = editForm.getUsername();
-		if(!username.equals(user.getUsername())&&!usernameAvailable(username)) throw new InvalidUserException("Your username must be unique");
-		user.setUsername(username);
 		user = userDao.save(user);		// it automatically updates user (based on id)
 		Tutor tutor = tutorDao.findOne(editForm.getTutorId());
 		tutor.setCompletedClasses(new HashSet<CompletedClasses>(editForm.getClassList()));
 		tutor.setCourses(new HashSet<StudyCourse>(editForm.getStudyCourseList()));
-		tutor.setAverageGrade(completedClassesService.calculateAverageGrade(editForm.getClassList()));
 		tutor.setBio(editForm.getBio());
 		tutor.setFee(editForm.getFee());
 		tutor = tutorDao.save(tutor);
     	return editForm;
     }
     
-    private boolean usernameAvailable(String username){
-    	if(userDao.findByUsernameLike(username)==null) return true;
-    	return false;
-    }
-    
     private boolean emailAvailable(String email){
-    	if(userDao.findByEmailLike(email)==null) return true;
-    	return false;
+    	return userDao.findByEmailLike(email)==null;
     }
 }

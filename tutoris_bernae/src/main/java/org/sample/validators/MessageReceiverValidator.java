@@ -12,19 +12,17 @@ import org.springframework.validation.Validator;
 /**
  * Validates receiver in messageForms by checking if they exists in the database or not.
  * Also supports message for convenience but does nothing with them
- * @author pf15ese
  */
 @Component
 public class MessageReceiverValidator implements Validator
 {
 	private UserDao userDao;
 	
-	//Spring needs an empty one for whatever reason; Never use this!
-	
+	//Spring needs an empty constructor for whatever reason; Never use this!
 	/**
 	 * DO NOT USE!
 	 * Just there because Spring needs an empty one for yet unknown reason
-	 * Use MessagereceiverValidator(UserDao userDao) instead
+	 * Use MessageReceiverValidator(UserDao userDao) instead OR IT WIIL NOT WORK
 	 */
 	public MessageReceiverValidator() {
 	}
@@ -45,6 +43,6 @@ public class MessageReceiverValidator implements Validator
 	}
 
 	private boolean receiverExists(String receiver) {
-		return !(userDao.findByUsername(receiver) == null);
+		return !(userDao.findByEmailLike(receiver) == null);
 	}
 }

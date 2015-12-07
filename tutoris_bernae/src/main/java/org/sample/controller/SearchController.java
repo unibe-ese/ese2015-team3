@@ -14,7 +14,6 @@ import org.sample.model.StudyCourseEditor;
 import org.sample.model.Tutor;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
-import org.sample.model.dao.TutorDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -26,10 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller for search tutor feature.
- * 
  */
 @Controller
-public class SearchController {
+public class SearchController extends PageController{
     public static final String PAGE_SEARCH = "search";
     public static final String SESSIONATTRIBUE_FOUNDBYSEARCHFORM = "foundBySearchForm";
     

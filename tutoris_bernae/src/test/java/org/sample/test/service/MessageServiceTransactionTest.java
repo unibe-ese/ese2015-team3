@@ -15,18 +15,14 @@ import org.sample.model.Message;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ServiceTransactionTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springDataTest.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class MessageServiceTransactionTest {	
+public class MessageServiceTransactionTest extends ServiceTransactionTest {	
 	
 	@Autowired
     private MessageService messageService;
@@ -42,11 +38,9 @@ public class MessageServiceTransactionTest {
 	@Before
 	public void setUpExampleDatas(){
 		sender = new User();
-		sender.setUsername("test");
 		sender.setEmail("mail@mail.mail");
 		sender = userDao.save(sender);
 		receiver = new User();
-		receiver.setUsername("tutortest");
 		receiver.setEmail("tutormail@mail.mail");
 		receiver = userDao.save(receiver);
 	}
@@ -54,7 +48,7 @@ public class MessageServiceTransactionTest {
     @Test
     public void messageFormCorrectDataSavedInDatabase() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver("tutortest");
+    	messageForm.setReceiver("tutormail@mail.mail");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	messageService.sendMessageFromForm(messageForm,sender);
@@ -71,7 +65,7 @@ public class MessageServiceTransactionTest {
     @Test(expected=InvalidUserException.class) 
     public void receiverUnexisting() {
     	MessageForm messageForm = new MessageForm();
-    	messageForm.setReceiver(null);
+    	messageForm.setReceiver("notexisting");
     	messageForm.setMessageSubject("test");
     	messageForm.setMessageText(".....");
     	messageService.sendMessageFromForm(messageForm,sender);

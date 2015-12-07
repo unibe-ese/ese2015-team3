@@ -15,6 +15,7 @@ import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
+import org.sample.validators.UserEmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,13 +31,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Allows editing profiles for normal users and tutor. The 
- * edit page automatically knows if the user is a tutor or not and returns fitting editing site.
- * The submit-sites depend on whetever a tutor or a normal user changed his profile informations.
- * @author pf15ese
+ * Allows editing profiles for normal users. Tutors are automatically redirected to
+ * the correct page.
  */
 @Controller
-public class EditController {
+public class EditController extends PageController {
     
 	@Autowired
 	private UserDao userDao;
@@ -44,19 +43,21 @@ public class EditController {
 	@Autowired
 	private EditFormService editFormService;
 	
+	@InitBinder("editForm")
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(new UserEmailValidator(userDao));
+	}
+	
 	/**
-	 * Creates a page with an editing form for a normal user or a tutor,
-	 * depending on the logged in profile
-	 * @return ModelAndView with ViewName "editTutor" and ModelAttribute "tutorForm", a new TutorEditForm if the calling user
-	 * is a tutor, or ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm if the calling user
-	 * is a normal user
+	 * Creates a page with an editing form for a normal user depending on the logged in profile,
+	 * and redirects tutors.
+	 * @return ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm if the calling user
+	 * is a user, or the user gets redirected to "/editTutor" if he is a tutor
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String name = authentication.getName();
-		User user = userDao.findByUsername(name);
-		if(user.isTutor()) {	
+		User user = getCurrentUser();
+		if(user.getTutor()!=null) {	
 			return new ModelAndView("redirect:/editTutor");
 		}
 		else {
@@ -76,15 +77,15 @@ public class EditController {
      * again a new ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm
      */
     @RequestMapping(value = "/editSubmit", method = RequestMethod.POST)
-    public ModelAndView editUserProfile(@Valid EditForm editForm, BindingResult result) {
+    public ModelAndView editUserProfile(HttpServletRequest request, @Valid EditForm editForm, BindingResult result) {
     	ModelAndView model;    	
     	if (!result.hasErrors()) {
             try {
-            	
             	editFormService.saveFrom(editForm);
+            	User user = userDao.findByEmailLike(editForm.getEmail());
+            	authenticateUserAndSetSession(user,request);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {
-            	
             	model = new ModelAndView("edit");
             	model.addObject("editForm", editForm);
             	model.addObject("page_error", e.getMessage());

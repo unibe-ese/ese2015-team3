@@ -2,7 +2,9 @@ package org.sample.controller.exceptions;
 
 public class InvalidUserException extends RuntimeException {
 
-    public InvalidUserException(String s) {
+	private static final long serialVersionUID = 5224978375261435026L;
+
+	public InvalidUserException(String s) {
         super(s);
     }
 }

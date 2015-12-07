@@ -64,22 +64,16 @@ import static org.hamcrest.Matchers.*;
 
 public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	@Autowired
-	private TutorDao tutorDao;
-	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private ClassesDao classesDao;
-	
+
 	private User newUser;
-	private User newTutorUser;
-	private Tutor newTutor;
+
 	
 	MockHttpSession session;
 	@Before
 	public void setUp()
 	{
 		newUser = new User();
-		newUser.setUsername("test");
 		newUser.setFirstName("first");
 		newUser.setLastName("last");
 		newUser.setPassword("1232w%Dres");
@@ -94,13 +88,12 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void editUserProfilePage() throws Exception
 	{
-		session = createSessionWithUser("test", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("mail@mail.mail", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(get("/edit").session(session))
 										.andExpect(status().isOk())
 										.andExpect(model().attribute("editForm", is(EditForm.class)))
 										.andExpect(forwardedUrl(completeUrl("edit")))
 										// Check that fields are correctly prefilled 
-										.andExpect(model().attribute("editForm", hasProperty("username", Matchers.is("test"))))
 										.andExpect(model().attribute("editForm", hasProperty("firstName", Matchers.is("first"))))
 										.andExpect(model().attribute("editForm", hasProperty("lastName", Matchers.is("last"))))
 										.andExpect(model().attribute("editForm", hasProperty("email", Matchers.is("mail@mail.mail"))))
@@ -110,12 +103,11 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 	@Test
 	public void editUserDone() throws Exception
 	{
-		session = createSessionWithUser("test", "1232w%Dres", "ROLE_USER");
+		session = createSessionWithUser("mail@mail.mail", "1232w%Dres", "ROLE_USER");
 		mockMvc.perform(post("/editSubmit").session(session)
 										.param("userId", newUser.getId().toString())
 										.param("firstName","test")
 										.param("lastName","test")
-										.param("username","test")
 										.param("password","123A#qqq")
 										.param("email","test@mail.de"))
 										.andExpect(status().isOk())
@@ -124,20 +116,36 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 		assertEquals("test@mail.de", newUser.getEmail());
 		assertEquals("test", newUser.getLastName());
 		assertEquals("test", newUser.getFirstName());
-		assertEquals("test", newUser.getUsername());
 		assertEquals("test@mail.de", newUser.getEmail());
 		assertEquals("123A#qqq", newUser.getPassword());
 	}
 	
 	@Test
+	public void editUserDoneWithoutChanges() throws Exception
+	{
+		session = createSessionWithUser("mail@mail.mail", "1232w%Dres", "ROLE_USER");
+		mockMvc.perform(post("/editSubmit").session(session)
+										.param("userId", newUser.getId().toString())
+										.param("firstName",newUser.getFirstName())
+										.param("lastName",newUser.getLastName())
+										.param("password",newUser.getPassword())
+										.param("email",newUser.getEmail()))
+										.andExpect(status().isOk())
+										.andExpect(forwardedUrl(completeUrl("editDone")));
+		//Check if new datas are saved correctly
+		assertEquals("mail@mail.mail", newUser.getEmail());
+		assertEquals("last", newUser.getLastName());
+		assertEquals("first", newUser.getFirstName());
+		assertEquals("1232w%Dres", newUser.getPassword());
+	}
+	@Test
 	public void editUserEditFormErrors() throws Exception
 	{
-		session = createSessionWithUser("test", "123", "ROLE_USER");
+		session = createSessionWithUser("mail@mail.mail", "123", "ROLE_USER");
 		mockMvc.perform(post("/editSubmit").session(session)
 										.param("userId", newUser.getId().toString())
 										.param("firstName","")
 										.param("lastName","")
-										.param("username","")
 										.param("password","")
 										.param("email",""))
 										.andExpect(status().isOk())
@@ -145,9 +153,25 @@ public class EditControllerIntegrationTest extends ControllerIntegrationTest{
 										.andExpect(model().attributeHasFieldErrors("editForm", "email"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "firstName"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "lastName"))
-										.andExpect(model().attributeHasFieldErrors("editForm", "username"))
 										.andExpect(model().attributeHasFieldErrors("editForm", "password"));
-
+	}
+	
+	@Test
+	public void cannotChangeEmailToAlreadyUsedOne() throws Exception
+	{
+		User userWithThisEmailAdress = new User();
+		userWithThisEmailAdress.setEmail("test@test.testmail");
+		userDao.save(userWithThisEmailAdress);
+		session = createSessionWithUser("mail@mail.mail", "123", "ROLE_USER");
+		mockMvc.perform(post("/editSubmit").session(session)
+				.param("userId", newUser.getId().toString())
+				.param("firstName",newUser.getFirstName())
+				.param("lastName",newUser.getLastName())
+				.param("password",newUser.getLastName())
+				.param("email","test@test.testmail"))
+										.andExpect(status().isOk())
+										.andExpect(forwardedUrl(completeUrl("edit")))
+										.andExpect(model().attributeHasFieldErrors("editForm", "email"));
 	}
 	
 	@Test

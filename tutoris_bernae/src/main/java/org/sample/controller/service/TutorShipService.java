@@ -6,6 +6,7 @@ import org.sample.model.Message;
 import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
 import org.sample.model.User;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.TutorShipDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +14,14 @@ import org.springframework.stereotype.Service;
 /**
  * Creates and confirms Tutorships. Enhances message with links
  * to give access to confirm tutorships.
- * @author pf15ese
- *
  */
 @Service
 public class TutorShipService{
 	
 	@Autowired 
 	private TutorShipDao tutorShipDao;
+	@Autowired 
+	private TutorDao tutorDao;
 	@Autowired
 	private MessageService messageService;  
 
@@ -41,7 +42,7 @@ public class TutorShipService{
 		TutorShip newTutorShip = createTutorShip(offeringTutor, message.getReceiver());
 		message.setMessageText(message.getMessageText()+"<br>"
 				+"<a href=\"/tutoris_baernae/confirmTutorShip?tutorUserId="
-				+newTutorShip.getTutor().getId()+"\"> Click here to confirm this TutorShip </a>");
+				+newTutorShip.getTutor().getId()+"\"><u> Click here to confirm this TutorShip </u></a>");
 	}
 		
 	/**
@@ -61,7 +62,8 @@ public class TutorShipService{
 	
 	/**
 	 * Confirms a tutorship between the given tutor and student (user) and exchanges
-	 * contact details via a message between them
+	 * contact details via a message between them. Also reminds the student that he can 
+	 * rate the tutor
 	 * @param tutor the tutor who offered the tutorship, not null
 	 * @param student the user who confirmed the tutorship, not null
 	 * @throws InvalidTutorShipException if no tutorship between this tutor and student was created 
@@ -78,7 +80,11 @@ public class TutorShipService{
 		confirmedTutorShip.setConfirmed(true);
 		messageService.sendTutorShipConfirmedMessage(student, tutor.getStudent());
 		messageService.exchangeContactDetails(tutor.getStudent(), student);
+		//Currently the reminder for rating is send directly, would make more sense after a week
+		messageService.sendRatingReminder(tutor, student);
 		tutorShipDao.save(confirmedTutorShip);
+		tutor.setConfirmedTutorShips(tutor.getConfirmedTutorShips()+1);
+		tutorDao.save(tutor);
 	}
 
 }

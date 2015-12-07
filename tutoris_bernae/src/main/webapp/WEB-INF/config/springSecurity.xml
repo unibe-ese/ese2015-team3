@@ -23,21 +23,25 @@
 		    login-page="/login" 
 		    default-target-url="/" 
 			authentication-failure-url="/login?error" 
-			username-parameter="username"
-			password-parameter="password" />
+			username-parameter="email"
+			password-parameter="password" 
+			authentication-success-handler-ref="loginSuccessHandler"/>
 		<logout logout-success-url="/?logout"  />
 		<!-- enable csrf protection -->
 		<csrf/>
 	</http>
 	
+	<beans:bean id="loginSuccessHandler" class="org.sample.handler.LoginSuccessHandler">
+	<beans:property name="userDao" ref="userDao" />
+	</beans:bean>
 	<!-- Select users and user_roles from database -->
 	<authentication-manager alias="authenticationManager">
 	  <authentication-provider>
 		<jdbc-user-service data-source-ref="mainDataSource"
 		  users-by-username-query=
-		    "select username,password, TRUE from user where username=?"
+		    "select email, password, TRUE from user where email = ?"
 		  authorities-by-username-query=
-		    "select username, role from user where username =?" />
+		    "select email, role from user where email = ?" />
 	  </authentication-provider>
 	</authentication-manager>
 

@@ -6,8 +6,8 @@
 
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
-<h1>Sign Up Complete!</h1>
-
+<h1>${message}</h1>
+<h1>${page_error}</h1>
 
 
 <c:import url="template/footer.jsp" />

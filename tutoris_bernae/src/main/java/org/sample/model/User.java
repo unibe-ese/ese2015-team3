@@ -22,29 +22,15 @@ public class User {
     private String lastName;
     @Column(unique = true)
     private String email; //should be unique!
-    @Column(unique = true)
-    private String username;
     private String role;
 
 	private String password;
-    private boolean isTutor;
-    
+
     @OneToOne
     private Tutor tutor;
     
-    private boolean isTimetableActive;
-//    private Object timetable;
-    
     private String profilePicture;
 
-    public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -85,28 +71,12 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean isTutor() {
-		return isTutor;
-	}
-
-	public void setTutor(boolean isTutor) {
-		this.isTutor = isTutor;
-	}
-
 	public Tutor getTutor() {
 		return tutor;
 	}
 
 	public void setTutor(Tutor tutor) {
 		this.tutor = tutor;
-	}
-
-	public boolean isTimetableActive() {
-		return isTimetableActive;
-	}
-
-	public void setTimetableActive(boolean isTimetableActive) {
-		this.isTimetableActive = isTimetableActive;
 	}
 
 	public String getRole() {
@@ -132,12 +102,9 @@ public class User {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (isTimetableActive ? 1231 : 1237);
-		result = prime * result + (isTutor ? 1231 : 1237);
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -165,10 +132,6 @@ public class User {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (isTimetableActive != other.isTimetableActive)
-			return false;
-		if (isTutor != other.isTutor)
-			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
 				return false;
@@ -183,11 +146,6 @@ public class User {
 			if (other.role != null)
 				return false;
 		} else if (!role.equals(other.role))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}

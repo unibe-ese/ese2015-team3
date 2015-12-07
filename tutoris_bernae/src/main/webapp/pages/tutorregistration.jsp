@@ -20,7 +20,7 @@
             <div class="control-group<c:if test="${not empty feeErrors}"> error</c:if>">
                 <label class="control-label" for="field-fee">Fee</label>
                 <div class="controls">
-                <form:input path="fee" id="field-fee" tabindex="2" maxlength="35" placeholder="Fee"/>
+                <form:input type="number" path="fee" id="field-fee" tabindex="2" maxlength="3" min="1" max="999" placeholder="Fee"/>
 
                 <form:errors path="fee" cssClass="help-inline" element="span"/>
                 </div>

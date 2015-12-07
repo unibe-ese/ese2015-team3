@@ -10,7 +10,11 @@ public class ClassesEditor extends PropertyEditorSupport {
     private ClassesDao classesDao;
 
 
-    //Spring needs an empty one for some reason...
+	/**
+	 * DO NOT USE
+	 * for some reason spring wants an empty constructor
+	 * use ClassesEditor(ClassesDao classesDao) instead
+	 */
 	public ClassesEditor() {
 	}
 	

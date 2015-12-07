@@ -8,8 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 
+/**
+ * Process study and course lists after a post request containing them by
+ * looking for parameters in the request and adapting the lists accordingly
+ */
 public class ListHelper {
 
+	/**
+	 * Use this after a post request to adapt the a studycourselist.
+	 * removes a row given by the parameter "removeStudyCourse" in the request 
+	 * andd adds a new empty row if the parameter "addStudyCourse" is present
+	 * in the request
+	 * @param request the HttpServletRequest which can contain parameters like "removeStudyCourse"
+	 * or "addStudyCourse" to let the list be adapted
+	 * @param studyCourseList the list which should be changed based on the parameters in the request
+	 * @return a new List<StudyCourse> which was made of the old list by adding a new row and/or 
+	 * removing a row
+	 */
 	public static List<StudyCourse> handleStudyCourseList(HttpServletRequest request, List<StudyCourse> studyCourseList) {
 		if(studyCourseList == null)
 			studyCourseList = new LinkedList<StudyCourse>();
@@ -22,6 +37,17 @@ public class ListHelper {
 		return studyCourseList;
 	}
 	
+	/**
+	 * Use this after a post request to adapt the a list of completedclasses
+	 * removes a row given by the parameter "removeClass" in the request 
+	 * andd adds a new empty row if the parameter "addClass" is present
+	 * in the request
+	 * @param request the HttpServletRequest which can contain parameters like "removeClass"
+	 * or "addClass" to let the list be adapted
+	 * @param studyCourseList the list which should be changed based on the parameters in the request
+	 * @return a new List<CompletedClasses> which was made of the old list by adding a new row and/or 
+	 * removing a row
+	 */
 	public static List<CompletedClasses> handleClassList(HttpServletRequest request, List<CompletedClasses> classList) {
 		if(classList == null)
 			classList = new LinkedList<CompletedClasses>();
@@ -33,6 +59,5 @@ public class ListHelper {
 			classList.add(new CompletedClasses());
 		return classList;
 	}
-
 	
 }

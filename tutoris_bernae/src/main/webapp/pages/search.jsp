@@ -31,7 +31,7 @@
             <div class="control-group<c:if test="${not empty feeErrors}">error</c:if>"> 
                 <label class="control-label" for="field-fee">Fee</label>
                 <div class="controls">
-                    <form:input path="fee" id="field-fee" tabindex="3" maxlength="35" placeholder="Fee"/>
+                    <form:input path="fee" type="number" id="field-fee" tabindex="3" maxlength="35" min="1" max="999" placeholder="Fee"/>
                     <form:errors path="fee" cssClass="help-inline" element="span"/>
                 </div>
             </div>
@@ -70,7 +70,7 @@
     <table class="sortable">
     <thead>
         <tr>
-            <td>Username</td>
+            <td>Name</td>
             <td>Fee</td>
             <td>Average Grade</td>
             <td>Rating</td>
@@ -79,10 +79,10 @@
     <tbody>
         <c:forEach items="${tutors}" var="tutors">
         <tr>
-            <td><a href="/tutoris_baernae/view?tutorId=${tutors.id}"><c:out value="${tutors.student.username}"></c:out></a></td>
+            <td><a href="/tutoris_baernae/view?tutorId=${tutors.id}"><c:out value="${tutors.student.firstName}"></c:out></a></td>
             <td>${tutors.fee}</td>
             <td><c:out value="${tutors.averageGrade}"/></td>
-            <td>***</td>
+            <td><c:out value="${tutors.averageRating}"/></td>
         </tr>
         
         </c:forEach>

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.sample.controller.pojos.ClassCourseList;
+import org.sample.controller.pojos.FormWithClassCourseList;
 import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.pojos.TutorForm;
 import org.sample.model.CompletedClasses;
@@ -20,7 +20,7 @@ import org.springframework.validation.Validator;
 public class ClassCourseListValidator implements Validator
 {
 	public void validate(Object target, Errors errors) {
-		ClassCourseList formWithLists = (ClassCourseList) target;
+		FormWithClassCourseList formWithLists = (FormWithClassCourseList) target;
 		if(!checkCourseUniqueness(formWithLists.getStudyCourseList())) 
 			errors.rejectValue("studyCourseList","studyCourses.Duplication","You can select any StudyCourse only once");
 		if(!checkClassesUniqueness(formWithLists.getClassList()))

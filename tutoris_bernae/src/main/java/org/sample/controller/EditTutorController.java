@@ -16,6 +16,7 @@ import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.ClassCourseListValidator;
+import org.sample.validators.UserEmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,13 +33,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Allows editing profiles for normal users and tutor. The 
- * edit page automatically knows if the user is a tutor or not and returns fitting editing site.
- * The submit-sites depend on whetever a tutor or a normal user changed his profile informations.
- * @author pf15ese
+ * Allows editing profiles for tutors. The edit page automatically knows if the user is a tutor.
+ * If not he gets redirected to the correct edit Page.
  */
 @Controller
-public class EditTutorController {
+public class EditTutorController extends PageController{
 
     @Autowired
     private ClassesDao classesDao;
@@ -51,29 +50,26 @@ public class EditTutorController {
 	
 	@Autowired
 	private EditFormService editFormService;
-	
-	
+		
 	@InitBinder("tutorEditForm")
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Classes.class, new ClassesEditor(classesDao));
 		binder.registerCustomEditor(StudyCourse.class, new StudyCourseEditor(studyCourseDao));
 		binder.addValidators(new ClassCourseListValidator());
+		binder.addValidators(new UserEmailValidator(userDao));
 	}
 	
 	
 	/**
-	 * Creates a page with an editing form for a normal user or a tutor,
-	 * depending on the logged in profile
+	 * Creates a page with an editing form for a  a tutor, depending on the logged in profile,
+	 * or redirects if the user isn't a tutor
 	 * @return ModelAndView with ViewName "editTutor" and ModelAttribute "tutorEditForm", a new TutorEditForm if the calling user
-	 * is a tutor, or ModelAndView with ViewName "edit" and ModelAttribute "editForm", a new EditForm if the calling user
-	 * is a normal user
+	 * is a tutor, or redirects to "/edit" if the user isn't a tutor
 	 */
 	@RequestMapping(value = "/editTutor", method = RequestMethod.GET)
 	public ModelAndView viewEditProfile() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String name = authentication.getName();
-		User user = userDao.findByUsername(name);
-		if(user.isTutor()) {	
+		User user = getCurrentUser();
+		if(user.getTutor()!=null) {	
 			return createTutorEditFormPage(new TutorEditForm(user, user.getTutor()));
 		}
 		else {
@@ -129,6 +125,8 @@ public class EditTutorController {
     	if (!result.hasErrors()) {
             try {
             	editFormService.saveFrom(tutorEditForm);
+            	User user = userDao.findByEmailLike(tutorEditForm.getEmail());
+            	authenticateUserAndSetSession(user,request);
             	model = new ModelAndView("editDone");
             } catch (InvalidUserException e) {
             	model = createTutorEditFormPage(tutorEditForm);
@@ -136,11 +134,6 @@ public class EditTutorController {
             	return model;
             }
         } else {
-        	for(ObjectError o : result.getAllErrors())
-        	{
-        		System.out.println(o);
-        	}
-        	
         	model = createTutorEditFormPage(tutorEditForm);
         }   	
     	return model;

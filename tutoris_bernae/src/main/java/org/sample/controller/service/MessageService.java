@@ -12,6 +12,8 @@ import org.sample.controller.pojos.SearchForm;
 import org.sample.model.Classes;
 import org.sample.model.Message;
 import org.sample.model.StudyCourse;
+import org.sample.model.Tutor;
+import org.sample.model.TutorShip;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
@@ -42,7 +44,7 @@ public class MessageService{
 	/**
      * Compares messages by date to order them from newest to oldest
      */
-   public static final Comparator<Message> MessageDateComparator = new Comparator<Message>()
+   private static final Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {
 			return -(m1.getSendDate().compareTo(m2.getSendDate()));
@@ -64,7 +66,7 @@ public class MessageService{
     /**
      * Sends the message by saving it to the database.
      * @param messageForm a valid messageForm, not null
-     * @param Userthe sender of the message, not null
+     * @param User the sender of the message, not null
      * @throws InvalidUserException if the receiver doesn't exist/couldn't be found by the
      * string receiver given in the messageForm
      */
@@ -89,7 +91,7 @@ public class MessageService{
     
     private Message getMessageFromForm(MessageForm messageForm, User sender){
       	Message message = new Message();
-    	User receiver = userDao.findByUsername(messageForm.getReceiver());
+    	User receiver = userDao.findByEmailLike(messageForm.getReceiver());
     	if(receiver==null) throw new InvalidUserException("The user you want to send a message does not exist");
     	message.setSender(sender);
     	message.setReceiver(receiver);
@@ -137,9 +139,9 @@ public class MessageService{
 		Message contactDetails = new Message();
 	
 		String allContactInformations = new StringBuilder().append("You can contact me as follows: \n")
-				.append("Full name: "+sender.getFirstName()+" "+sender.getLastName()+" \n")
-				.append("Email: "+sender.getEmail()+" \n")
-				.append("This message is auto generated. Do not answer")
+				.append("<br>Full name: "+sender.getFirstName()+" "+sender.getLastName()+" \n")
+				.append("<br>Email: "+sender.getEmail()+" \n")
+				.append("<br>This message is auto generated. Do not answer")
 				.toString();
 		contactDetails.setMessageSubject("Contact Details");
 		contactDetails.setMessageText(allContactInformations);
@@ -150,7 +152,7 @@ public class MessageService{
 	
 	public Message sendTutorShipConfirmedMessage(User sender, User receiver) {
 		Message acceptanceMessage = new Message();
-		String messageText = new StringBuilder().append("Your Tutorship for "+sender.getFirstName()+"was accepted by him!")
+		String messageText = new StringBuilder().append("Your Tutorship for "+sender.getFirstName()+" was accepted by him!\n")
 				.append("This message is auto generated. Do not answer")
 				.toString();
 		acceptanceMessage.setMessageText(messageText);
@@ -178,4 +180,21 @@ public class MessageService{
 	}
 	
 
+	public String getMessageReceiverFirstName(String mail){
+		User receiver = userDao.findByEmailLike(mail);
+		if (receiver != null)
+			return receiver.getFirstName();
+		return null;
+	}
+
+	public void sendRatingReminder(Tutor tutor, User student) {
+		Message reminder = new Message();
+		reminder.setMessageText("Don't forget to rate your tutor:"+"<br>"
+				+"<a href=\"/tutoris_baernae/rate?tutorId="
+				+tutor.getId()+"\"><u> Click here to rate your tutor </u></a>");
+		reminder.setMessageSubject("Rate "+tutor.getStudent().getFirstName());
+		reminder.setSender(tutor.getStudent());
+		reminder.setReceiver(student);
+		send(reminder);	
+	}
 }

@@ -12,6 +12,7 @@ import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
+import org.sample.test.utils.ServiceTransactionTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,11 +32,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/springMVC.xml","file:src/main/webapp/WEB-INF/config/springData.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class EditFormServiceTransactionTest {	
+
+public class EditFormServiceTransactionTest extends ServiceTransactionTest{	
 	@Autowired
     private EditFormService editFormService;
 	@Autowired
@@ -62,7 +60,6 @@ public class EditFormServiceTransactionTest {
 	@Before
 	public void setUpExampleDatas(){
 		newUser = new User();
-		newUser.setUsername("test");
 		newUser.setFirstName("First");
 		newUser.setLastName("Last");
 		newUser.setPassword("123");
@@ -78,17 +75,14 @@ public class EditFormServiceTransactionTest {
 		newTutor.setCourses(new HashSet<StudyCourse>());
 		newTutor = tutorDao.save(newTutor);
 		newTutorUser = new User();
-		newTutorUser.setUsername("tutortest");
 		newTutorUser.setPassword("123");
 		newTutorUser.setEmail("tutormail@mail.mail");
-		newTutorUser.setTutor(true);
 		newTutorUser.setTutor(newTutor);
 		newTutorUser = userDao.save(newTutorUser);
 		
 		editForm = new EditForm();
         editForm.setFirstName("First2");
         editForm.setLastName("Last2");
-        editForm.setUsername("user");
         editForm.setEmail("test@test.com");
         editForm.setPassword("123456");
         editForm.setUserId(newUser.getId());
@@ -100,11 +94,8 @@ public class EditFormServiceTransactionTest {
         User user = userDao.findOne(editForm.getUserId());
         assertEquals("First2",user.getFirstName());
         assertEquals("Last2",user.getLastName());
-        assertEquals("user",user.getUsername());
         assertEquals("test@test.com",user.getEmail());
         assertEquals("123456",user.getPassword());
-        assertEquals(false,user.isTutor());
-        assertEquals(false,user.isTimetableActive());
     }
     
     // TODO: test changed courses list as well
@@ -118,7 +109,6 @@ public class EditFormServiceTransactionTest {
         tutorEditForm = new TutorEditForm();
         tutorEditForm.setFirstName("newTutorTest");
         tutorEditForm.setLastName("newLast");
-        tutorEditForm.setUsername("newuser");
         tutorEditForm.setEmail("newtutortest@tutortest.com");
         tutorEditForm.setPassword("123456");
         tutorEditForm.setUserId(newTutorUser.getId());
@@ -133,11 +123,8 @@ public class EditFormServiceTransactionTest {
         User user = userDao.findOne(tutorEditForm.getUserId());
         assertEquals("newTutorTest",user.getFirstName());
         assertEquals("newLast",user.getLastName());
-        assertEquals("newuser",user.getUsername());
         assertEquals("newtutortest@tutortest.com",user.getEmail());
         assertEquals("123456",user.getPassword());
-        assertEquals(true,user.isTutor());
-        assertEquals(false,user.isTimetableActive());
         Tutor tutor = tutorDao.findOne(tutorEditForm.getTutorId());
         assertEquals("newBio",tutor.getBio());
         assertEquals(new BigDecimal(20),tutor.getFee());
@@ -151,14 +138,14 @@ public class EditFormServiceTransactionTest {
         editFormService.saveFrom(editForm);
     }
     
-    
-    @Test(expected=InvalidUserException.class) 
-    public void AssertUsernameUniqueness() {
-		editForm.setUsername("tutortest"); //Will throw an exception because the tutoruser already uses this mail
-        editFormService.saveFrom(editForm);
-
-    }
-    
+//    
+//    @Test(expected=InvalidUserException.class) 
+//    public void AssertUsernameUniqueness() {
+//		editForm.setUsername("tutortest"); //Will throw an exception because the tutoruser already uses this mail
+//        editFormService.saveFrom(editForm);
+//
+//    }
+//    
     //Checks if two collections of completed classes are equals, except the id of the classes.
     //Use this if comparing a saved (in the database) collection of completedClasses and and unsaved.
     public boolean CompletedClassesCollectionEqualsWithoutId(Collection<CompletedClasses> expected, Collection<CompletedClasses> given)

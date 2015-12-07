@@ -1,22 +1,14 @@
 package org.sample.controller;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.sample.controller.exceptions.InvalidUserException;
-
-import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
-import org.sample.controller.service.RegisterFormService;
-import org.sample.controller.service.SearchService;
 import org.sample.controller.service.TutorFormService;
 import org.sample.model.Classes;
 import org.sample.model.ClassesEditor;
-import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.StudyCourseEditor;
 import org.sample.model.User;
@@ -25,31 +17,22 @@ import org.sample.model.dao.StudyCourseDao;
 import org.sample.model.dao.UserDao;
 import org.sample.validators.ClassCourseListValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Controls the creating of user and tutor profiles, as well as the profile upgrade to tutor for normal user.
- * @author pf15ese
- *
+ * Controls the creating of tutor profiles, by directly upgrade a normal user
+ * during the normal register process or later via upgrade.
  */
 @Controller
-public class TutorRegisterController {
+public class TutorRegisterController extends PageController {
 	public static final String PAGE_SUBMIT = "submitPage";
 	public static final String PAGE_REGISTER = "register";
 	
@@ -61,9 +44,6 @@ public class TutorRegisterController {
 	private TutorFormService tutorFormService;
 	@Autowired
 	private UserDao userDao;
-
-    @Autowired
-    protected AuthenticationManager authenticationManager;
     
 	@InitBinder("tutorForm")
 	public void initBinder(WebDataBinder binder) {
@@ -79,9 +59,7 @@ public class TutorRegisterController {
      */
     @RequestMapping(value = "/upgrade", method = RequestMethod.GET)
     public ModelAndView upgradePage() { 
-    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String name = authentication.getName();
-		User user = userDao.findByUsername(name);
+		User user = getCurrentUser();
     	TutorForm tutorForm = new TutorForm();
     	tutorForm.setUserId(user.getId());
         return createTutorFormPage(tutorForm);
@@ -122,30 +100,28 @@ public class TutorRegisterController {
      */
     @RequestMapping(value = "/submitastutor", method = RequestMethod.POST, params = { "save" })
     public ModelAndView submitTutorForm(@Valid TutorForm tutorForm, BindingResult result,
-            @RequestParam Boolean save,HttpServletRequest request) {
+            @RequestParam Boolean save,HttpServletRequest request, HttpSession session) {
         ModelAndView model;
         tutorForm.setStudyCourseList(ListHelper.handleStudyCourseList(request,tutorForm.getStudyCourseList()));
     	tutorForm.setClassList(ListHelper.handleClassList(request,tutorForm.getClassList()));
     	if (!result.hasErrors()){
-        	tutorFormService.saveFrom(tutorForm);
-                authenticateUserAndSetSession(userDao.findOne(tutorForm.getUserId()),request);
-        	model = new ModelAndView(PAGE_SUBMIT);
-        }
-        else { 
-        	model = createTutorFormPage(tutorForm);
-        }
-        return model;
+    		try{
+    			tutorFormService.saveFrom(tutorForm);
+    			User user = userDao.findOne(tutorForm.getUserId());
+    			authenticateUserAndSetSession(user,request);
+    			model = new ModelAndView(PAGE_SUBMIT);
+    			model.addObject("message", "Tutor registration complete!");
+    		}
+    		catch(InvalidUserException e){
+    			model = new ModelAndView(PAGE_SUBMIT);
+    			model.addObject("page_error", "You are already a tutor!");
+    		}
+    	}
+    	else { 
+    		model = createTutorFormPage(tutorForm);
+    	}
+    	return model;
 
     }
     
-    private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
-        String username = user.getUsername();
-        String password = user.getPassword();
-        
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        request.getSession();
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);    
-    }
 }

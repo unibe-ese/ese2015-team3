@@ -25,13 +25,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Allows the user to see the messages he received and writing new ones
- * @author pf15ese
  */
 @Controller
-public class MessageController {
+public class MessageController extends PageController{
 
-@Autowired
-private UserDao userDao;
 @Autowired
 private MessageService messageService;
 	
@@ -50,7 +47,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInbox", method = RequestMethod.GET)
 	public ModelAndView showMessageInbox() {
 		 ModelAndView model = new ModelAndView("messageInbox");
-		 User user = getUserFromSecurityContext();
+		 User user = getCurrentUser();
 		 model.addObject("messages", messageService.getOrderedMessagesList(user));
 		 return model;
 	}
@@ -65,7 +62,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInboxShow", method = RequestMethod.GET)
 	public ModelAndView showSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = getCurrentUser();
 		model = createInboxPage(user);
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
@@ -90,7 +87,7 @@ public void initBinder(WebDataBinder binder) {
 	@RequestMapping(value = "/messageInboxAnswer", method = RequestMethod.GET)
 	public ModelAndView answerSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId, HttpSession session) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+		User user = getCurrentUser();
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
 			session.setAttribute("answeredMessage", selectedMessage);
@@ -106,21 +103,22 @@ public void initBinder(WebDataBinder binder) {
 	/**
 	 * Creates a page with a message form to answer one selected message given by the parameter 
 	 * and all other messages that the logged in user recieved
-	 * @param reciver a String of the username that we want to contact via a message
+	 * @param receiver a String of the email that we want to contact via a message
 	 * @return ModelAndView with ViewName "messageAnswer" and modelattribute "messageForm" a prefilled message form
 	 * suited to the receiver we want to write to, "user", the logged in user,
 	 * and "messages" all his messages
 	 */
 	@RequestMapping(value = "/messageNewTo", method = RequestMethod.GET)
-	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) String receiver,
+	public ModelAndView writeNewMessage(@RequestParam(value = "receiver", required = true) Long receiver,
 										HttpSession session) {
 		ModelAndView model;
-		User user = getUserFromSecurityContext();
+        String receiverMail = userDao.findOne(receiver).getEmail();
+		User user = getCurrentUser();
 		SearchForm searchedCriterias = (SearchForm) session.getAttribute(SearchController.SESSIONATTRIBUE_FOUNDBYSEARCHFORM);
 		String searchCriteriaSubject = "Discuss tutorship details";
 		if(searchedCriterias != null)
 			searchCriteriaSubject = messageService.createSearchCriteriaSubject(searchedCriterias);
-		model = createAnswerPage(user,new MessageForm(receiver,searchCriteriaSubject),false,session);
+		model = createAnswerPage(user,new MessageForm(receiverMail,searchCriteriaSubject),false,session);
 		return model;
 	}
 	
@@ -139,34 +137,39 @@ public void initBinder(WebDataBinder binder) {
 	 */
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST)
 	public ModelAndView submitMessage(@Valid MessageForm messageForm,BindingResult result,HttpSession session) {
-		User user = getUserFromSecurityContext();
-    	if (!result.hasErrors()) {
-            try {
-            	if(session.getAttribute("answeredMessage")!=null)
-            		session.removeAttribute("answeredMessage");
-            	messageService.sendMessageFromForm(messageForm,user);
-            	ModelAndView model = createInboxPage(user);
-            	model.addObject("submitMessage", "message sent!");
-            	return model;
-            } catch (InvalidUserException e) {
-            	ModelAndView model = createAnswerPage(user,messageForm,true,session);
-            	model.addObject("submitMessage", e.getMessage());
-            	return model;
-            }
-        } else {
-        	return createAnswerPage(user,messageForm,true,session);
-        }   	
+		return submitAnyMessage(messageForm,false,result,session);
+  	
     }
 	
+	/**
+	 * Saves (sends) a message with a tutorship offer consisting of the message text and a link for the receiver 
+	 * to accept the offer. Displays a success message back on the messageInbox page. Returns to the
+	 * messageAnswer page if the form is not filled out correctly. Also deletes the sessionattribute "answeredMessaged"
+	 * if the message could be sent. 
+	 * @param messageForm a Valid MessageForm
+	 * @param result
+	 * @param session
+	 * @return a new ModelAndView with ViewName "messageInbox", a modelattribute "submitMessage", a success message
+	 * "user", the logged in user, and "messages" all his messages. Or if the form was not filled correctly
+	 * a ModelAndView with ViewName "messageAnswer", and the modelattributes "submitMessage", a message with informations about 
+	 * the fault, "messageForm" a messageForm and "user", the logged in user, and "messages"
+	 */
 	@RequestMapping(value = "/messageSubmit", method = RequestMethod.POST, params = {"offerTutorShip"})
-	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,@RequestParam Boolean offerTutorShip,
-									 BindingResult result,HttpSession session) {
-		User user = getUserFromSecurityContext();
+	public ModelAndView submitTutorOfferMessage(@Valid MessageForm messageForm,BindingResult result, @RequestParam(required=false) Boolean offerTutorShip,
+									 HttpSession session) {
+		return submitAnyMessage(messageForm, offerTutorShip, result, session);   	
+    }
+	
+	private ModelAndView submitAnyMessage(MessageForm messageForm, boolean offerTutorShip, BindingResult result, HttpSession session) {
+		User user = getCurrentUser();
     	if (!result.hasErrors()) {
             try {
             	if(session.getAttribute("answeredMessage")!=null)
             		session.removeAttribute("answeredMessage");
-            	messageService.sendTutorShipOffer(messageForm,user);
+            	if(offerTutorShip)
+            		messageService.sendTutorShipOffer(messageForm,user);
+            	else
+            		messageService.sendMessageFromForm(messageForm,user);
             	ModelAndView model = createInboxPage(user);
             	model.addObject("submitMessage", "message sent!");
             	return model;
@@ -177,8 +180,9 @@ public void initBinder(WebDataBinder binder) {
             }
         } else {
         	return createAnswerPage(user,messageForm,true,session);
-        }   	
-    }
+        } 
+		
+	}
 	
 	private ModelAndView createInboxPage(User user) {
 		ModelAndView model;
@@ -194,14 +198,8 @@ public void initBinder(WebDataBinder binder) {
 		model = new ModelAndView("messageAnswer");
 		model.addObject("messages", messageService.getOrderedMessagesList(user));
 		model.addObject("messageForm", messageForm);
+                model.addObject("messageReceiver", messageService.getMessageReceiverFirstName(messageForm.getReceiver()));
 		return model;
-	}
-	
-	private User getUserFromSecurityContext() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	     String name = authentication.getName();
-		 User user = userDao.findByUsername(name);
-		return user;
 	}
 	
 }

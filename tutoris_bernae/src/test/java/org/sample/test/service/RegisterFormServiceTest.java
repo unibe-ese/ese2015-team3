@@ -98,7 +98,6 @@ public class RegisterFormServiceTest {
         
         registerForm.setFirstName("First");
         registerForm.setLastName("Last");
-        registerForm.setUsername("user");
         registerForm.setEmail("test@test.com");
         registerForm.setPassword("123456");
 
@@ -108,7 +107,6 @@ public class RegisterFormServiceTest {
                         User user = (User) invocation.getArguments()[0];
                         assertEquals(user.getFirstName(), "First");
                         assertEquals(user.getLastName(), "Last");
-                        assertEquals(user.getUsername(), "user");
                         assertEquals(user.getEmail(), "test@test.com");
                         assertEquals(user.getPassword(), "123456");
                         user.setId(1L);

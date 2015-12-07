@@ -1,24 +1,21 @@
 package org.sample.controller.pojos;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import org.hibernate.validator.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.sample.model.User;
 
 /**
  * A simple edit form, stores all changeable
  * values of a user profile
  */
-public class EditForm {
+public class EditForm implements FormWithUserDetails{
 
     private Long userId;
     @NotEmpty
     private String firstName;
     @NotEmpty
     private String lastName;
-    @NotEmpty
-    private String username;
     @Pattern(regexp = "(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,15}$")
     private String password;
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
@@ -56,13 +53,6 @@ public class EditForm {
         this.email = email;
     }
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
 	public EditForm()
 	{
 		
@@ -71,7 +61,6 @@ public class EditForm {
 	{
 		assert(user!=null);
 		this.userId = user.getId();
-		this.username = user.getUsername();
 		this.email = user.getEmail();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();

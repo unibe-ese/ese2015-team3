@@ -12,11 +12,10 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 import org.sample.controller.RegisterController;
-import org.sample.controller.pojos.RegisterForm;
 import org.sample.controller.pojos.TutorForm;
-import org.sample.controller.service.RegisterFormService;
 import org.sample.model.Tutor;
 import org.sample.model.User;
+import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.sample.test.utils.ControllerIntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +23,18 @@ import org.springframework.mock.web.MockHttpSession;
 
 public class TutorRegisterControllerIntegrationTest extends ControllerIntegrationTest{
 	@Autowired
-	private RegisterFormService registerFormService;
-	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private TutorDao tutorDao;
 
 	@Test
 	public void upgradePage() throws Exception
 	{
 		User newUser = new User();
-		newUser.setUsername("test");
 		newUser.setPassword("123");
 		newUser.setEmail("mail@mail.mail");
 		newUser = userDao.save(newUser);
-		MockHttpSession session = createSessionWithUser("test", "123", "ROLE_USER");
+		MockHttpSession session = createSessionWithUser("mail@mail.mail", "123", "ROLE_USER");
 		mockMvc.perform(get("/upgrade").session(session)).andExpect(status().isOk())
 									.andExpect(model().attribute("tutorForm", is(TutorForm.class)))
 									.andExpect(forwardedUrl(completeUrl("tutorregistration")))
@@ -63,17 +61,40 @@ public class TutorRegisterControllerIntegrationTest extends ControllerIntegratio
 	public void submitAndSaveTutorForm() throws Exception
 	{
 		User user = new User();
+		user.setPassword("123");
+		user.setEmail("mail@mail.mail");
 		user = userDao.save(user);
 		mockMvc.perform(post("/submitastutor").param("bio", "bio")
 									.param("fee", "22")
 									.param("userId", user.getId().toString())
 									.param("save","true"))
 									.andExpect(status().isOk())
+									.andExpect(model().attributeExists("message"))
 									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_SUBMIT)));
 		Tutor tutor = user.getTutor();
 		assertEquals("bio", tutor.getBio());
 		assertEquals(new BigDecimal(22), tutor.getFee());
 		assertEquals(user, tutor.getStudent());
 	}
+	
+	@Test
+	public void tutorTriesToUpgradeToTutorAgain() throws Exception
+	{
+	 	User user = new User();
+    	user.setEmail("mail@mail.m");
+    	user = userDao.save(user);
+    	Tutor tutor = new Tutor();
+    	tutorDao.save(tutor);
+    	user.setTutor(tutor);
+    	user = userDao.save(user);
+		mockMvc.perform(post("/submitastutor").param("bio", "bio")
+									.param("fee", "22")
+									.param("userId", user.getId().toString())
+									.param("save","true"))
+									.andExpect(status().isOk())
+									.andExpect(model().attributeExists("page_error"))
+									.andExpect(forwardedUrl(completeUrl(RegisterController.PAGE_SUBMIT)));
+	}
+
 	
 }

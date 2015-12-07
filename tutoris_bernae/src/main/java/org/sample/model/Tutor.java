@@ -1,6 +1,9 @@
 package org.sample.model;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,6 +37,10 @@ public class Tutor {
     
     private BigDecimal averageGrade;
     
+    private BigDecimal averageRating;
+    
+    private Integer confirmedTutorShips = 0;
+    
     @Type(type="text")
     private String bio;
     
@@ -43,7 +50,9 @@ public class Tutor {
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<CompletedClasses> completedClasses;
 
-    
+	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+	private Set<Rating> ratings = new HashSet<Rating>();
+
 	public Long getId() {
 		return id;
 	}
@@ -72,8 +81,23 @@ public class Tutor {
 		return completedClasses;
 	}
 
+	/**
+	 * Sets the completedClasses and also automatically calculates the new average grade of them.
+	 * @param completedClasses a set of all completed classes of this tutor
+	 */
 	public void setCompletedClasses(Set<CompletedClasses> completedClasses) {
 		this.completedClasses = completedClasses;
+		BigDecimal newAverageGrade = new BigDecimal(0);
+		int gradeCount = 0;
+		for (CompletedClasses c : completedClasses){
+			BigDecimal nextGrade = c.getGrade();
+			if (nextGrade == null) continue;
+			newAverageGrade = newAverageGrade.add(nextGrade);
+			gradeCount++;
+		}
+		if(gradeCount==0) averageGrade = null;
+		else
+			averageGrade = newAverageGrade.divide(new BigDecimal(gradeCount));
 	}
 
 	public BigDecimal getFee() {
@@ -96,10 +120,42 @@ public class Tutor {
 		return averageGrade;
 	}
 
-	public void setAverageGrade(BigDecimal averageGrade) {
-		this.averageGrade = averageGrade;
+	public Integer getConfirmedTutorShips() {
+		return confirmedTutorShips;
 	}
 
+	public void setConfirmedTutorShips(Integer confirmedTutorShips) {
+		this.confirmedTutorShips = confirmedTutorShips;
+	}
+
+	public Set<Rating> getRatings() {
+		return ratings;
+	}
+
+	/**
+	 * Sets the rating and also automatically calculates the new average.
+	 * @param ratings a set of all ratings of this tutor
+	 */
+	public void setRatings(Set<Rating> ratings) {
+		this.ratings = ratings;
+		BigDecimal newAverageRating = new BigDecimal(0);
+		int ratingCount = 0;
+		for (Rating r : ratings){
+			BigDecimal nextRating = r.getRating();
+			if (nextRating == null) continue;
+			newAverageRating = newAverageRating.add(nextRating);
+			ratingCount++;
+		}
+		if(ratingCount==0) averageRating = null;
+		else
+			averageRating = newAverageRating.divide(new BigDecimal(ratingCount));
+	}
+
+	public BigDecimal getAverageRating(){
+		return averageRating;
+		
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -142,4 +198,5 @@ public class Tutor {
 			return false;
 		return true;
 	}
+
 }

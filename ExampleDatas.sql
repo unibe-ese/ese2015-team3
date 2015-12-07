@@ -1,5 +1,5 @@
-INSERT INTO studycourse(faculty,name) VALUES ('','Mathematics');
-INSERT INTO studycourse(faculty,name) VALUES ('','Computer Science');
+INSERT INTO studycourse(name) VALUES ('Mathematics');
+INSERT INTO studycourse(name) VALUES ('Computer Science');
 INSERT INTO classes(name) VALUES ('Programming 1');
 INSERT INTO classes(name) VALUES ('Programming 2');
 INSERT INTO classes(name) VALUES ('Introduction to Software Engineering');

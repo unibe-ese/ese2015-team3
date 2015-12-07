@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 /**
  * Creates and confirms Tutorships. Enhances message with links
  * to give access to confirm tutorships.
- * @author pf15ese
- *
  */
 @Service
 public class TutorShipService{

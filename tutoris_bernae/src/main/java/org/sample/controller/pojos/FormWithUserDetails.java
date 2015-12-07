@@ -6,33 +6,34 @@ package org.sample.controller.pojos;
  */
 public interface FormWithUserDetails {
 
-	String getPassword();
+	public String getPassword();
 
-	void setPassword(String password);
+	public void setPassword(String password);
 	
-	String getFirstName();
+	public String getFirstName();
 
-	void setFirstName(String firstName);
+	public void setFirstName(String firstName);
 
-	String getLastName();
+	public String getLastName();
 
-	void setLastName(String lastName);
+	public void setLastName(String lastName);
 
-	String getEmail();
+	public String getEmail();
 
-	void setEmail(String email);
+	public void setEmail(String email);
 	
 	/**
 	 * @return the Id of the user in the database treated by this form
 	 * Should be 0L if the form handles a new user
 	 */
-	Long getUserId();
+	public Long getUserId();
 
 	/**
 	 * Defines the user changed by this form, should be 0
 	 * if the form is used to create a new user
 	 * @param id of the user which this form
-	 * cares about
+	 * cares about, 0L if the user doesn't exist in
+	 * the database yet
 	 */
-	void setUserId(Long id);
+	public void setUserId(Long id);
 }

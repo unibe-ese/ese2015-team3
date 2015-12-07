@@ -18,11 +18,6 @@ public class Classes {
     @GeneratedValue
     private Long id;
 	
-	//Currently not in use but could be required for more granular searches.
-    @ManyToOne
-    private StudyCourse studyCourse;
-    
-
     private String name;
     
 	public Long getId() {
@@ -31,14 +26,6 @@ public class Classes {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public StudyCourse getStudyCourse() {
-		return studyCourse;
-	}
-
-	public void setStudyCourse(StudyCourse studycourse) {
-		this.studyCourse = studycourse;
 	}
 
 	public String getName() {
@@ -55,7 +42,6 @@ public class Classes {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((studyCourse == null) ? 0 : studyCourse.hashCode());
 		return result;
 	}
 

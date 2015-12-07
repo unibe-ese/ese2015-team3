@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.pojos.RatingForm;
 import org.sample.controller.service.RatingService;
-import org.sample.model.dao.TutorDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

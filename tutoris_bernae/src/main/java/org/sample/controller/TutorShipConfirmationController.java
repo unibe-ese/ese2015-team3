@@ -1,7 +1,5 @@
 package org.sample.controller;
 
-import java.util.List;
-
 import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.service.TutorShipService;
 import org.sample.model.Tutor;
@@ -9,8 +7,6 @@ import org.sample.model.User;
 import org.sample.model.dao.TutorDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,8 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class TutorShipConfirmationController extends PageController{
 
-@Autowired
-private UserDao userDao;
 @Autowired
 private TutorDao tutorDao;
 @Autowired

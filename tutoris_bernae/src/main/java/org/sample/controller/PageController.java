@@ -32,9 +32,10 @@ public abstract class PageController {
     public static final String SESSIONATTRIBUTE_USER="loggedInUser";
     
     /**
-     * Login the for the 
+     * Login the user in the given request and adds him to the session under 
+     * SESSIONATTRIBUTE_USER
      * @param user the user you want to login
-     * @param request
+     * @param request the request to which session you want to add the user to
      */
     protected void authenticateUserAndSetSession(User user, HttpServletRequest request) {
         String username = user.getEmail();

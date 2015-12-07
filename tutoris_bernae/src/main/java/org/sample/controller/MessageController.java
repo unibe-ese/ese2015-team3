@@ -9,11 +9,8 @@ import org.sample.controller.pojos.SearchForm;
 import org.sample.controller.service.MessageService;
 import org.sample.model.Message;
 import org.sample.model.User;
-import org.sample.model.dao.UserDao;
 import org.sample.validators.MessageReceiverValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,16 +26,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MessageController extends PageController{
 
-@Autowired
-private MessageService messageService;
-	
-
-@InitBinder("messageForm")
-public void initBinder(WebDataBinder binder) {
-	binder.addValidators(new MessageReceiverValidator(userDao));
-}
+	@Autowired
+	private MessageService messageService;
 
 
+	@InitBinder("messageForm")
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(new MessageReceiverValidator(userDao));
+	}
 	/**
 	 * Creates a page with all messages that the logged in user received
 	 * @return ModelAndView with ViewName "messageInbox" and modelattribute "user", the logged in user,

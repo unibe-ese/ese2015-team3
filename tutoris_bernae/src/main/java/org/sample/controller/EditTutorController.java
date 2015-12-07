@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.sample.controller.exceptions.InvalidUserException;
-import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
 import org.sample.controller.service.EditFormService;
 import org.sample.model.Classes;
@@ -14,15 +13,11 @@ import org.sample.model.StudyCourseEditor;
 import org.sample.model.User;
 import org.sample.model.dao.ClassesDao;
 import org.sample.model.dao.StudyCourseDao;
-import org.sample.model.dao.UserDao;
 import org.sample.validators.ClassCourseListValidator;
 import org.sample.validators.UserEmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,9 +39,6 @@ public class EditTutorController extends PageController{
     
     @Autowired
     private StudyCourseDao studyCourseDao;
-    
-	@Autowired
-	private UserDao userDao;
 	
 	@Autowired
 	private EditFormService editFormService;

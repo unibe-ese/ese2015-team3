@@ -16,16 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-public class IndexController {
-    @Autowired
-    private UserDao userDao;
-    private static final String SESSIONATTRIBUTE_USER="loggedInUser";
+public class IndexController extends PageController{
     
     /**
      * Creates the homepage. Users also get here after logging out.
      * @param logout a non required String RequestParam
      * @param session
-     * @return a ModelAndView with ViewName "index", if the user got here by logging out the object "msg"
+     * @return a ModelAndView with ViewName "index", if the user got here by logging out the object "message"
      * a logout message is added
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -35,7 +32,6 @@ public class IndexController {
     			model.addObject("message", "You've been logged out successfully.");
                         session.removeAttribute(SESSIONATTRIBUTE_USER);
     		  }
-         
         return model;
     }
 }

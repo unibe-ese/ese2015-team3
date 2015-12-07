@@ -36,9 +36,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class EditController extends PageController {
-    
-	@Autowired
-	private UserDao userDao;
 	
 	@Autowired
 	private EditFormService editFormService;

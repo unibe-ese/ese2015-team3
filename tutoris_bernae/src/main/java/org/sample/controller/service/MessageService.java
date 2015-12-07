@@ -44,7 +44,7 @@ public class MessageService{
 	/**
      * Compares messages by date to order them from newest to oldest
      */
-   private static final Comparator<Message> MessageDateComparator = new Comparator<Message>()
+   private final static Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {
 			return -(m1.getSendDate().compareTo(m2.getSendDate()));

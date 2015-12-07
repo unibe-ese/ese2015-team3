@@ -324,6 +324,23 @@ public class MessageServiceTest {
     	assertTrue(subject.contains("MathClass"));
     }
     
+    @Test(expected = InvalidUserException.class)
+    public void cannotSendYourselfAMessage() {
+    	MessageForm messageForm = new MessageForm();
+    	messageForm.setReceiver("mail@mail.mail");
+    	messageForm.setMessageSubject("test");
+    	messageForm.setMessageText(".....");
+    	
+    	when(userDao.findByEmailLike(any(String.class)))
+           .thenAnswer(new Answer<User>() {
+               public User answer(InvocationOnMock invocation) throws Throwable {	
+                   return sender;
+               }
+           });
+        
+        messageService.sendMessageFromForm(messageForm,sender);
+    }
+    
     @After
     public void reset_mocks() {
         reset(userDao);

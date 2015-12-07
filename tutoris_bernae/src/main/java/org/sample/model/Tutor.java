@@ -1,6 +1,7 @@
 package org.sample.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class Tutor {
 		}
 		if(gradeCount==0) averageGrade = null;
 		else
-			averageGrade = newAverageGrade.divide(new BigDecimal(gradeCount));
+			averageGrade = newAverageGrade.divide(new BigDecimal(gradeCount), RoundingMode.HALF_UP);
 	}
 
 	public BigDecimal getFee() {
@@ -148,7 +149,7 @@ public class Tutor {
 		}
 		if(ratingCount==0) averageRating = null;
 		else
-			averageRating = newAverageRating.divide(new BigDecimal(ratingCount));
+			averageRating = newAverageRating.divide(new BigDecimal(ratingCount), RoundingMode.HALF_UP);
 	}
 
 	public BigDecimal getAverageRating(){

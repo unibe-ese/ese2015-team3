@@ -64,8 +64,6 @@ public class RegisterControllerIntegrationTest extends ControllerIntegrationTest
 		assertEquals("1Password*", user.getPassword());
 	}
 
-	//TODO find out how to correctly add class and course list as parameters
-
 	@Test
 	public void wrongFieldsRegisterForm() throws Exception
 	{

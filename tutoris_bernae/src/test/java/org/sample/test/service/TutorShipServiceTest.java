@@ -111,11 +111,7 @@ public class TutorShipServiceTest {
 	private User sender;
 	private User receiver;
 	private Tutor senderTutor;
-	private Message message1;
-	private Message message2;
-	private Message message3;
-	private List<Message> unorderedMessageList = new LinkedList<Message>();
-	private List<Message> orderedMessageList = new LinkedList<Message>();
+
 
 	
 	@Before

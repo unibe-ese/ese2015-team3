@@ -108,6 +108,7 @@ public class MessageService{
     private Message send(Message message)
     {
     	assert message.getSendDate() == null;
+    	if(message.getReceiver().equals(message.getSender())) throw new InvalidUserException("You cannot send yourself a message");
     	message.setSendDate(new Date());
 		
     	message = messageDao.save(message);

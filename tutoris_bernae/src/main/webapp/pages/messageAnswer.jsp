@@ -23,7 +23,7 @@
                 </a>
             </c:forEach>
         </div>
-        <div class="flex-item-2">
+        <div class="flex-item" style="width:50%;">
             <form:form method="post" modelAttribute="messageForm" action="messageSubmit" id="messageForm" cssClass="form-horizontal"  autocomplete="off">
                 <fieldset>
                     <c:set var="receiverErrors"><form:errors path="receiver"/></c:set>
@@ -42,11 +42,7 @@
                             <form:select path="messageSubject" id="messageSubject">
 		  					<form:option value="Discuss tutorship details">Discuss tutorship details</form:option>
 		  					<form:option value="${messageForm.messageSubject}">${messageForm.messageSubject}</form:option>
-		  					 <sec:authorize access="hasRole('ROLE_TUTOR')">
-		  					<form:option value="TutorShip Offer">TutorShip Offer</form:option>
-		  					</sec:authorize>
 		  					</form:select>
-		  					
                             <form:errors path="messageSubject" cssClass="help-inline" element="span"/>
                         </div>
                     </div>
@@ -63,17 +59,17 @@
                     <div class="form-actions">
                         <button type="submit" tabindex="4" class="btn btn-primary">Send</button>
                         <sec:authorize access="hasRole('ROLE_TUTOR')">
-                            <button type="submit" tabindex="2" name="offerTutorShip" value="true" class="btn btn-primary">Offer TutorShip</button>
+                            <button type="submit" tabindex="2" name="offerTutorShip" value="true" class="btn btn-primary">Offer Tutorship</button>
    						</sec:authorize>   
                     </div>
                 </fieldset>
             </form:form>
         </div>
         <c:if test = "${not empty answeredMessage}">
-        <div class="flex-item">
-                <div class="module bottom-border">From: ${answeredMessage.sender.firstName}</div>
-		<div class="module bottom-border">Subject: ${answeredMessage.messageSubject}</div>
-                <div class="module no-border"><p><pre>${answeredMessage.messageText}</pre><p></div>
+        <div class="col-1-4 module no-pad">
+            <div class="module bottom-border">From: ${answeredMessage.sender.firstName}</div>
+            <div class="module message-subject bottom-border">Subject: ${answeredMessage.messageSubject}</div>
+            <div class="module no-border"><p><pre>${answeredMessage.messageText}</pre><p></div>
         </div>
         </c:if>
     </div>

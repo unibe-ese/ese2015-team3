@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.sample.controller.PageController;
 import org.sample.model.User;
 import org.sample.model.dao.UserDao;
 import org.springframework.security.core.Authentication;
@@ -14,16 +15,15 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 
 /**
  * A custom authenticationSucessHandler which adds the user under
- * the session attribute SESSIONATTRIBUTE_USER to the session, 
+ * the session attribute PageController.SESSIONATTRIBUTE_USER to the session, 
  * so we have access to all user data on every page after login
- * (Which we need for example in the header to show the username)
+ * (Which we need for example in the header to show the users first name)
  */
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	
 	private UserDao userDao;
 
-	public static final String SESSIONATTRIBUTE_USER="loggedInUser";
-
+	//Setter injection, reference defined in springSecurity.xml
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}
@@ -38,7 +38,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 		User user = userDao.findByEmailLike(authentication.getName());
 
-		session.setAttribute(SESSIONATTRIBUTE_USER, user);
+		session.setAttribute(PageController.SESSIONATTRIBUTE_USER, user);
 	}
 
 

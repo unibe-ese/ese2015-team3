@@ -69,7 +69,7 @@
         <div class="col-1-4 module no-pad">
             <div class="module bottom-border">From: ${answeredMessage.sender.firstName}</div>
             <div class="module message-subject bottom-border">Subject: ${answeredMessage.messageSubject}</div>
-            <div class="module no-border"><p><pre>${answeredMessage.messageText}</pre><p></div>
+            <div class="module message-preview no-border"><p><pre>${answeredMessage.messageText}</pre><p></div>
         </div>
         </c:if>
     </div>

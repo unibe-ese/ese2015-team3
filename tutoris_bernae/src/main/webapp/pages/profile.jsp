@@ -78,7 +78,7 @@
     <div class="flex-item module"><pre>${tutor.bio}</pre></div>
     <div class="module" style="margin-left: 1em; width: 50%;">
     	<c:forEach items="${tutor.ratings}" var="rating">
-            <div class="col-2-3">${rating.commentator.firstName}: ${rating.feedback}</div>
+            <div class="col-2-3 feedback"><b>${rating.commentator.firstName}:</b> ${rating.feedback}</div>
             <div class="col-1-3">${rating.rating}</div>
         </c:forEach>
     </div>

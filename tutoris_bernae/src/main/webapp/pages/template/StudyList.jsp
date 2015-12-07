@@ -7,7 +7,6 @@
     <thead>
         <tr>
             <th>Course name</th>
-            <th>Faculty</th>
             <th></th>
         </tr>
     </thead>

@@ -41,8 +41,8 @@ public class TutorShipService{
 				throw new InvalidUserException("The sender of this message cannot offer a tutorship");
 		TutorShip newTutorShip = createTutorShip(offeringTutor, message.getReceiver());
 		message.setMessageText(message.getMessageText()+"<br>"
-				+"<a href=\"/tutoris_baernae/confirmTutorShip?tutorUserId="
-				+newTutorShip.getTutor().getId()+"\"><u> Click here to confirm this TutorShip </u></a>");
+				+"<a href=\"/tutoris_baernae/paypal?tutorshipId="+newTutorShip.getId()
+				+"\"><u> Click here to confirm this TutorShip and pay the fee.</u></a>");
 	}
 		
 	/**
@@ -69,15 +69,15 @@ public class TutorShipService{
 	 * @throws InvalidTutorShipException if no tutorship between this tutor and student was created 
 	 * or when the tutorship was already confirmed
 	 */
-	public void confirmTutorShip(Tutor tutor, User student) throws InvalidTutorShipException {
-		assert(tutor!=null);
-		assert(student!=null);
-		TutorShip confirmedTutorShip = tutorShipDao.findByTutorAndStudent(tutor, student);
+	public void confirmTutorShip(Long tutorshipId) throws InvalidTutorShipException {
+		TutorShip confirmedTutorShip = tutorShipDao.findOne(tutorshipId);
 		if(confirmedTutorShip == null)
 			throw new InvalidTutorShipException("No such tutorship has been offered");
 		if(confirmedTutorShip.getConfirmed())
 			throw new InvalidTutorShipException("This tutorship has already been confirmed");
 		confirmedTutorShip.setConfirmed(true);
+		Tutor tutor = confirmedTutorShip.getTutor();
+		User student = confirmedTutorShip.getStudent();
 		messageService.sendTutorShipConfirmedMessage(student, tutor.getStudent());
 		messageService.exchangeContactDetails(tutor.getStudent(), student);
 		//Currently the reminder for rating is send directly, would make more sense after a week

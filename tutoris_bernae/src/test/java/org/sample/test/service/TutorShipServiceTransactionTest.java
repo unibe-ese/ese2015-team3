@@ -94,8 +94,8 @@ public class TutorShipServiceTransactionTest extends ServiceTransactionTest {
     	TutorShip newTutorShip = tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
     	assertNotNull(newTutorShip);
     	assertTrue(newTutorShip.getTutor().getId().equals(sender.getTutor().getId()));
-    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/confirmTutorShip?tutorUserId="
-				+newTutorShip.getTutor().getId()+"\">"));
+    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/paypal?tutorshipId="
+				+newTutorShip.getId()+"\">"));
     }
        
     @Test
@@ -104,7 +104,7 @@ public class TutorShipServiceTransactionTest extends ServiceTransactionTest {
     	tutorShip.setStudent(receiver);
     	tutorShip.setTutor(sender.getTutor());
     	tutorShipDao.save(tutorShip);
-    	tutorShipService.confirmTutorShip(sender.getTutor(), receiver);
+    	tutorShipService.confirmTutorShip(tutorShip.getId());
     	TutorShip newTutorShip = tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
     	assertNotNull(newTutorShip);
     	assertTrue(newTutorShip.getConfirmed());
@@ -116,7 +116,7 @@ public class TutorShipServiceTransactionTest extends ServiceTransactionTest {
     	tutorShip.setStudent(receiver);
     	tutorShip.setTutor(sender.getTutor());
     	tutorShipDao.save(tutorShip);
-    	tutorShipService.confirmTutorShip(sender.getTutor(), receiver);
+    	tutorShipService.confirmTutorShip(tutorShip.getId());
     	tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
     	assertEquals(sender.getTutor().getConfirmedTutorShips() , new Integer(1));
     }

@@ -7,8 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * Models the classes that a tutor can register.
- * @author G.Corsini
+ * Entitiy for classes that a tutor can register.
+ * {@code id} automatically generated unique identifier
+ *
+ * @version 1.1
+ * @author ESE Team 3
  *
  */
 @Entity

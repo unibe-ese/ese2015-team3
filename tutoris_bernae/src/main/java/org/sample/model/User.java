@@ -7,8 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- * Models the user.
- * @author G.Corsini
+ * Entity for user
+ * {@code id} automatically generated unique identifier
+ * {@code email} unique and used for login
+ * {@code password} needed to confirm user's identity
+ * {@code role} differentiation between a regular user and a tutor
+ *
+ * @version 1.3
+ * @author ESE Team 3
  *
  */
 @Entity
@@ -21,7 +27,7 @@ public class User {
     private String firstName;
     private String lastName;
     @Column(unique = true)
-    private String email; //should be unique!
+    private String email;
     private String role;
 
 	private String password;

@@ -6,8 +6,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.sample.controller.exceptions.InvalidTutorShipException;
+import org.sample.controller.service.TutorShipService;
 import org.sample.general.Constants;
+import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
+import org.sample.model.User;
 import org.sample.model.dao.TutorShipDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +32,8 @@ public class PayPalController {
 	
 	@Autowired 
 	private TutorShipDao tutorShipDao;
+	@Autowired 
+	private TutorShipService tutorShipService;
 	
     /**
      * Starts the PayPal process and generates a link for payments on PayPal.
@@ -110,20 +116,15 @@ public class PayPalController {
     @RequestMapping(value = "/paypal/response/{tutorshipId}", method = RequestMethod.GET)
     public ModelAndView response(@PathVariable long tutorshipId, @RequestParam(value = "token", required = true) String token,
     		@RequestParam(value = "PayerID", required = true) String payerId) {
-    	ModelAndView model = new ModelAndView("paypal_success");
-    	TutorShip ts = tutorShipDao.findOne(tutorshipId);
-    	if(ts != null){
-    		ts.setConfirmed(true);
-    		tutorShipDao.save(ts);
-        	model = new ModelAndView("paypalSuccess");
-    	} else {
-        	model = new ModelAndView("paypalFailed");
-        	model.addObject("error", "Tutorship not found.");
+    	try{
+    		tutorShipService.confirmTutorShip(tutorshipId);
+    		return new ModelAndView("paypal_success");
     	}
-    	
-
-   		//model.addObject("link", tutorshipId);
-    	return model;
+    	catch(InvalidTutorShipException e){
+    		ModelAndView model = new ModelAndView("confirmFailed");
+    		model.addObject("page_error", e.getMessage());
+    		return model;
+    	}
     }
 
  

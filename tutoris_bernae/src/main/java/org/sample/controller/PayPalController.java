@@ -49,6 +49,12 @@ public class PayPalController {
     		model.addObject("error", "TutorShip not found");
     		return model;
     	}
+    	if(ts.getConfirmed())
+    	{
+    		model = new ModelAndView("paypalFailed");
+    		model.addObject("error", "TutorShip is already confirmed");
+    		return model;
+    	}
     	model.addObject("user", ts.getStudent().getFirstName());
     	model.addObject("tutor", ts.getTutor().getStudent().getFirstName());
     	

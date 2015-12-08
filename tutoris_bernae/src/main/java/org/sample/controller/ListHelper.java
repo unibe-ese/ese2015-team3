@@ -15,7 +15,7 @@ import org.sample.model.StudyCourse;
 public class ListHelper {
 
 	/**
-	 * Use this after a post request to adapt the a studycourselist.
+	 * Use this after a post request to adapt a studycourselist.
 	 * removes a row given by the parameter "removeStudyCourse" in the request 
 	 * andd adds a new empty row if the parameter "addStudyCourse" is present
 	 * in the request

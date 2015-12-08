@@ -54,7 +54,7 @@ public class Tutor implements Serializable {
     private String bio;
     
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<StudyCourse> courses = new HashSet<StudyCourse>(); //Studiengänge
+    private Set<StudyCourse> courses = new HashSet<StudyCourse>(); //Studiengänge 
 
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<CompletedClasses> completedClasses = new HashSet<CompletedClasses>();

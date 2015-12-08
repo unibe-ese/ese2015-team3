@@ -42,10 +42,10 @@ public class MessageService{
 	@Autowired 
 	private TutorShipService tutorShipService;
     
-	@SuppressFBWarnings(value="MS_SHOULD_BE_FINAL", justification="Is already final.")
 	/**
      * Compares messages by date to order them from newest to oldest
      */
+	@SuppressFBWarnings(value="MS_SHOULD_BE_FINAL", justification="Is already final.")
 	private final static Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {
@@ -53,6 +53,7 @@ public class MessageService{
 		}
     	
     };
+    
     /**
      * Returns all messages the user has received, ordered form newest send date to oldest.
      * @param user from which we want to get all messages

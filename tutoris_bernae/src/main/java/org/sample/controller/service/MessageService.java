@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Offers services to load messages, to send (by saving them to the database) and 
  * to "read" them. Creates generated messages and also automatically sends notification for new messages
@@ -44,7 +46,8 @@ public class MessageService{
 	/**
      * Compares messages by date to order them from newest to oldest
      */
-   private final static Comparator<Message> MessageDateComparator = new Comparator<Message>()
+	@SuppressFBWarnings(justification="Is already final.", value="MS_SHOULD_BE_FINAL")
+	private final static Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {
 			return -(m1.getSendDate().compareTo(m2.getSendDate()));

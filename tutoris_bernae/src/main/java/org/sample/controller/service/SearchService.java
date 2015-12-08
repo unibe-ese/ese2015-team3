@@ -36,7 +36,7 @@ public class SearchService {
     /**
      * Find tutors matching provided criteria.
      * For multiple criteria only tutors matching all of them are returned.
-     * 
+     * If no criteria is provided, all tutors are returned
      * @param searchForm stores the search criteria, not null 
      * @return a set of tutors matching the criteria
      */
@@ -58,6 +58,9 @@ public class SearchService {
         if(fee!= null){
         	 searchResults.add((List<Tutor>) tutorDao.findByFeeBetween(new BigDecimal(0),fee));
         }
+        //Return all users if no criteria was given
+        if(classCriteria==null&&courseCriteria==null&&fee==null)
+        	return  new HashSet<Tutor>((List<Tutor>) tutorDao.findAll());
         return findCommonElements(searchResults);
     }
     

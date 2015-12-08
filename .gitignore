@@ -13,8 +13,6 @@ tutoris_bernae/tmp/
 # Maven/Spring MVC
 tutoris_bernae/log/
 tutoris_bernae/target/
-tutoris_bernae/src/main/webapp/WEB-INF/config/springData.xml
-./tutoris_bernae/src/main/webapp/WEB-INF/config/springData.xml
 tutoris_bernae/.springbeans
 
 # Windows image file caches

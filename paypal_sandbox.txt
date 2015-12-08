@@ -1,3 +1,0 @@
-# Sandbox user to test paypal:
-ese-test-buyer@tmp.ch
-eseTester1234

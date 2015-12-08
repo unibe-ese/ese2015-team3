@@ -1,0 +1,18 @@
+Please do the following steps to get the page running correctly:
+
+1. In springData.xml adjust the database correctly, by setting the username, the password
+and if needed the port right
+(\tutoris_bernae\src\main\webapp\WEB-INF\config\springData.xml)
+2. In your command type mvn jetty:run
+3. Load ExampleDatas.sql in your database and execute it
+4. Now you can access your site under http://localhost:8080/tutoris_baernae/ in your browser and start using it
+
+Important account datas:
+
+# Sandbox user to test paypal:
+Email: ese-test-buyer@tmp.ch
+Password: eseTester1234
+
+Username = tutoris.baernae@openmailbox.org
+password = scel13
+(Email account used to send the mails, you can find it under https://www.openmailbox.org/)

@@ -17,8 +17,6 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * Entity for tutor
  * {@code id} automatically generated unique identifier

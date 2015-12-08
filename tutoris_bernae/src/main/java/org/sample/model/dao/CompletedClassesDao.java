@@ -1,9 +1,6 @@
 package org.sample.model.dao;
 
-import java.util.List;
-
 import org.sample.model.Classes;
-import org.sample.model.Tutor;
 import org.springframework.data.repository.CrudRepository;
 
 /**

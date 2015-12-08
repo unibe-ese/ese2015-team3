@@ -53,11 +53,9 @@ public class Tutor implements Serializable {
     @Type(type="text")
     private String bio;
     
-	//@SuppressFBWarnings(value="SE_BAD_FIELD", justification="Can't make every method accept only HashSet as Set is needed.")
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<StudyCourse> courses = new HashSet<StudyCourse>(); //Studiengang
+    private Set<StudyCourse> courses = new HashSet<StudyCourse>(); //Studiengänge
 
-	//@SuppressFBWarnings(value="SE_BAD_FIELD", justification="Can't make every method accept only HashSet as Set is needed.")
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<CompletedClasses> completedClasses = new HashSet<CompletedClasses>();
 

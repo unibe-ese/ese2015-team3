@@ -150,7 +150,7 @@ public class TutorShipServiceTest {
         });
     	tutorShipService.addOfferedTutorShip(message);
     	//assert that it contains a link
-    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/confirmTutorShip?tutorUserId="));
+    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/paypal?tutorshipId"));
     }
     
     @Test(expected=InvalidUserException.class)
@@ -167,14 +167,14 @@ public class TutorShipServiceTest {
     	final TutorShip tutorShip = new TutorShip();
     	tutorShip.setStudent(receiver);
     	tutorShip.setTutor(senderTutor);
-    	when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class)))
+    	when(tutorShipDao.findOne(any(Long.class)))
         .thenAnswer(new Answer<TutorShip>() {
             public TutorShip answer(InvocationOnMock invocation) throws Throwable {	
                 return tutorShip;
             }
         });
     	
-    	tutorShipService.confirmTutorShip(senderTutor, receiver);
+    	tutorShipService.confirmTutorShip(0L);
     	
     	assertTrue(tutorShip.getConfirmed());
     }
@@ -185,14 +185,14 @@ public class TutorShipServiceTest {
     	assertEquals(senderTutor.getConfirmedTutorShips() , new Integer(0));
     	tutorShip.setStudent(receiver);
     	tutorShip.setTutor(senderTutor);
-    	when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class)))
+    	when(tutorShipDao.findOne(any(Long.class)))
         .thenAnswer(new Answer<TutorShip>() {
             public TutorShip answer(InvocationOnMock invocation) throws Throwable {	
                 return tutorShip;
             }
         });
     	
-    	tutorShipService.confirmTutorShip(senderTutor, receiver);
+    	tutorShipService.confirmTutorShip(0L);
     	
     	assertEquals(senderTutor.getConfirmedTutorShips() , new Integer(1));
     	verify(tutorDao).save(any(Tutor.class));
@@ -203,27 +203,27 @@ public class TutorShipServiceTest {
     	final TutorShip tutorShip = new TutorShip();
     	tutorShip.setStudent(receiver);
     	tutorShip.setTutor(senderTutor);
-    	when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class)))
+    	when(tutorShipDao.findOne(any(Long.class)))
         .thenAnswer(new Answer<TutorShip>() {
             public TutorShip answer(InvocationOnMock invocation) throws Throwable {	
                 return tutorShip;
             }
         });
     	
-    	tutorShipService.confirmTutorShip(senderTutor, receiver);
+    	tutorShipService.confirmTutorShip(0L);
     	verify(messageService).exchangeContactDetails(any(User.class), any(User.class));
     }
     
     @Test(expected = InvalidTutorShipException.class)
     public void confirmUnexistingTutorShip() throws InvalidTutorShipException {
-    	when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class)))
+    	when(tutorShipDao.findOne(any(Long.class)))
         .thenAnswer(new Answer<TutorShip>() {
             public TutorShip answer(InvocationOnMock invocation) throws Throwable {	
                 return null;
             }
         });
     	
-    	tutorShipService.confirmTutorShip(senderTutor, receiver);   	
+    	tutorShipService.confirmTutorShip(0L);   	
     }
     
     @Test(expected = InvalidTutorShipException.class)
@@ -232,17 +232,16 @@ public class TutorShipServiceTest {
     	tutorShip.setStudent(receiver);
     	tutorShip.setTutor(senderTutor);
     	tutorShip.setConfirmed(true);
-    	when(tutorShipDao.findByTutorAndStudent(any(Tutor.class), any(User.class)))
+    	when(tutorShipDao.findOne(any(Long.class)))
         .thenAnswer(new Answer<TutorShip>() {
             public TutorShip answer(InvocationOnMock invocation) throws Throwable {	
                 return tutorShip;
             }
         });
     	
-    	tutorShipService.confirmTutorShip(senderTutor, receiver);   	
+    	tutorShipService.confirmTutorShip(0L);   	
     }
    
-    
     @After
     public void reset_mocks() {
     	reset(tutorShipDao);

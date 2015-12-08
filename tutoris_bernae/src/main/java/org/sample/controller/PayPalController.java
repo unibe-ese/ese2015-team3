@@ -42,10 +42,16 @@ public class PayPalController {
      * 			if the API authentication was successful.
      */
     @SuppressWarnings("deprecation")
-	@RequestMapping(value = "/paypal/{tutorshipId}", method = RequestMethod.GET)
-    public ModelAndView paypal(@PathVariable long tutorshipId) {
+	@RequestMapping(value = "/paypal", method = RequestMethod.GET)
+    public ModelAndView paypal(@RequestParam(value = "tutorshipId", required = true) Long tutorshipId) {
     	ModelAndView model = new ModelAndView("paypal");
     	TutorShip ts = tutorShipDao.findOne(tutorshipId);
+    	if(ts==null)
+    	{
+    		model = new ModelAndView("paypalFailed");
+    		model.addObject("error", "TutorShip not found");
+    		return model;
+    	}
     	model.addObject("user", ts.getStudent().getFirstName());
     	model.addObject("tutor", ts.getTutor().getStudent().getFirstName());
     	
@@ -61,7 +67,7 @@ public class PayPalController {
     	nvp = nvp + "&amount=1";
     	nvp = nvp + "&no_shipping=1";
     	nvp = nvp + "&ALLOWNOTE=0";
-    	nvp = nvp + "&RETURNURL=" + java.net.URLEncoder.encode("http://localhost:8080/tutoris_baernae/paypal/response/" + tutorshipId);
+    	nvp = nvp + "&RETURNURL=" + java.net.URLEncoder.encode("http://localhost:8080/tutoris_baernae/finishPaypal?tutorshipId=" + tutorshipId);
     	nvp = nvp + "&CANCELURL=" + java.net.URLEncoder.encode("http://localhost:8080/tutoris_baernae/paypal/");
 
     	// Connect to the PayPal API. The response is a token that is needed for the user.
@@ -113,12 +119,12 @@ public class PayPalController {
      * @return a ModelAndView with ViewName "paypal_success", that will redirect to the homescreen
      * 				after a few seconds.
      */
-    @RequestMapping(value = "/paypal/response/{tutorshipId}", method = RequestMethod.GET)
-    public ModelAndView response(@PathVariable long tutorshipId, @RequestParam(value = "token", required = true) String token,
+    @RequestMapping(value = "/finishPaypal", method = RequestMethod.GET)
+    public ModelAndView response(@RequestParam(value = "tutorshipId", required = true) Long tutorshipId, @RequestParam(value = "token", required = true) String token,
     		@RequestParam(value = "PayerID", required = true) String payerId) {
     	try{
     		tutorShipService.confirmTutorShip(tutorshipId);
-    		return new ModelAndView("paypal_success");
+    		return new ModelAndView("paypalSuccess");
     	}
     	catch(InvalidTutorShipException e){
     		ModelAndView model = new ModelAndView("confirmFailed");

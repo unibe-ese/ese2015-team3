@@ -94,7 +94,7 @@ public class TutorShipServiceTransactionTest extends ServiceTransactionTest {
     	TutorShip newTutorShip = tutorShipDao.findByTutorAndStudent(sender.getTutor(), receiver);
     	assertNotNull(newTutorShip);
     	assertTrue(newTutorShip.getTutor().getId().equals(sender.getTutor().getId()));
-    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/paypal?tutorshipId"
+    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/paypal?tutorshipId="
 				+newTutorShip.getId()+"\">"));
     }
        

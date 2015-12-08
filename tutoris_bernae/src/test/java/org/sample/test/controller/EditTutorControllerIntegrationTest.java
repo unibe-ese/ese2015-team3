@@ -108,7 +108,6 @@ public class EditTutorControllerIntegrationTest extends ControllerIntegrationTes
 		mockMvc.perform(get("/editTutor")).andExpect(status().isMovedTemporarily()); //moved Temporarily because your moved to the login page
 	}
 
-	//TODO find out how to correctly add class and course list as parameters
 	@Test
 	public void editTutorDone() throws Exception
 	{

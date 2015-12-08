@@ -41,7 +41,7 @@ public class TutorShipService{
 				throw new InvalidUserException("The sender of this message cannot offer a tutorship");
 		TutorShip newTutorShip = createTutorShip(offeringTutor, message.getReceiver());
 		message.setMessageText(message.getMessageText()+"<br>"
-				+"<a href=\"/tutoris_baernae/paypal?tutorshipId"+newTutorShip.getId()
+				+"<a href=\"/tutoris_baernae/paypal?tutorshipId="+newTutorShip.getId()
 				+"\"><u> Click here to confirm this TutorShip and pay the fee.</u></a>");
 	}
 		

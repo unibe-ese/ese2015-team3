@@ -150,7 +150,7 @@ public class TutorShipServiceTest {
         });
     	tutorShipService.addOfferedTutorShip(message);
     	//assert that it contains a link
-    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/paypal?tutorshipId"));
+    	assertTrue(message.getMessageText().contains("<a href=\"/tutoris_baernae/paypal?tutorshipId="));
     }
     
     @Test(expected=InvalidUserException.class)

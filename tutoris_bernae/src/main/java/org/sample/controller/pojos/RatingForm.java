@@ -8,7 +8,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.sample.model.Tutor;
 
 /**
  * Stores a message consisting of a subject, a text and the wished receiver

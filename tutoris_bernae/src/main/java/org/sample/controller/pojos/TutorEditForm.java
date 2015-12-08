@@ -9,7 +9,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.sample.model.Classes;
 import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;

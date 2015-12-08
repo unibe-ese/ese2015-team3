@@ -6,7 +6,6 @@ import java.util.HashSet;
 import org.sample.controller.exceptions.InvalidUserException;
 import org.sample.controller.pojos.EditForm;
 import org.sample.controller.pojos.TutorEditForm;
-import org.sample.model.Classes;
 import org.sample.model.CompletedClasses;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;

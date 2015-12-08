@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -20,8 +18,16 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.Type;
 
 /**
- * Models the tutor.
- * @author G.Corsini
+ * Entity for tutor
+ * {@code id} automatically generated unique identifier
+ * {@code student} relationship to the user that upgraded his account
+ * {@code bio} can contain several lines of text
+ * {@code courses} relationship to courses that the tutor took
+ * {@code completedClasses} relationship to classes that the tutor completed
+ * {@code ratings} relationship to ratings that the tutor received
+ *
+ * @version 1.5
+ * @author ESE Team 3
  *
  */
 @Entity
@@ -47,11 +53,13 @@ public class Tutor implements Serializable {
     @Type(type="text")
     private String bio;
     
+	//@SuppressFBWarnings(value="SE_BAD_FIELD", justification="Can't make every method accept only HashSet as Set is needed.")
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<StudyCourse> courses; //Studiengang
+    private Set<StudyCourse> courses = new HashSet<StudyCourse>(); //Studiengang
 
+	//@SuppressFBWarnings(value="SE_BAD_FIELD", justification="Can't make every method accept only HashSet as Set is needed.")
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-    private Set<CompletedClasses> completedClasses;
+    private Set<CompletedClasses> completedClasses = new HashSet<CompletedClasses>();
 
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
 	private Set<Rating> ratings = new HashSet<Rating>();

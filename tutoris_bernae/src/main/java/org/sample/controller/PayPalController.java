@@ -2,10 +2,8 @@ package org.sample.controller;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.sample.general.Constants;
@@ -22,7 +20,7 @@ import urn.ebay.apis.eBLBaseComponents.CurrencyCodeType;
 
 
 /**
- * Controls the flow regarding paypal
+ * Controls the payment flow regarding PayPal
  *
  */
 @Controller
@@ -37,10 +35,13 @@ public class PayPalController {
      * @return a ModelAndView with ViewName "paypal", containing a link to PayPal
      * 			if the API authentication was successful.
      */
-    @RequestMapping(value = "/paypal/{tutorshipId}", method = RequestMethod.GET)
+    @SuppressWarnings("deprecation")
+	@RequestMapping(value = "/paypal/{tutorshipId}", method = RequestMethod.GET)
     public ModelAndView paypal(@PathVariable long tutorshipId) {
     	ModelAndView model = new ModelAndView("paypal");
-    	long itemNumber = tutorshipId;
+    	TutorShip ts = tutorShipDao.findOne(tutorshipId);
+    	model.addObject("user", ts.getStudent().getFirstName());
+    	model.addObject("tutor", ts.getTutor().getStudent().getFirstName());
     	
     	// Add parameters for the API request to PayPal
     	String paypalParams = "?METHOD=SetExpressCheckout&version=124.0&" + Constants.PAYPAL_AUTHENTICATION_NVP;
@@ -50,11 +51,11 @@ public class PayPalController {
     	nvp = nvp + "&PAYMENTREQUEST_0_INVNUM=1";
     	nvp = nvp + "&PAYMENTREQUEST_0_PAYMENTACTION=Sale";
     	nvp = nvp + "&item_name=Tutorshipfee";
-    	nvp = nvp + "&item_number=" + itemNumber;
+    	nvp = nvp + "&item_number=" + tutorshipId;
     	nvp = nvp + "&amount=1";
     	nvp = nvp + "&no_shipping=1";
     	nvp = nvp + "&ALLOWNOTE=0";
-    	nvp = nvp + "&RETURNURL=" + java.net.URLEncoder.encode("http://localhost:8080/tutoris_baernae/paypal/response/" + itemNumber);
+    	nvp = nvp + "&RETURNURL=" + java.net.URLEncoder.encode("http://localhost:8080/tutoris_baernae/paypal/response/" + tutorshipId);
     	nvp = nvp + "&CANCELURL=" + java.net.URLEncoder.encode("http://localhost:8080/tutoris_baernae/paypal/");
 
     	// Connect to the PayPal API. The response is a token that is needed for the user.
@@ -69,7 +70,9 @@ public class PayPalController {
     		conn.setRequestMethod("GET");
 
     		// Read the input from the input stream.
-    		DataInputStream in = new DataInputStream (conn.getInputStream());
+    		@SuppressWarnings("unused")
+			DataInputStream in = new DataInputStream (conn.getInputStream());
+    		
     		int responseCode = conn.getResponseCode();
     		if (responseCode != -1) {
 	    		BufferedReader is = new BufferedReader(new InputStreamReader( conn.getInputStream()));
@@ -79,8 +82,7 @@ public class PayPalController {
 	    		}	    		
 			}
     		
-    		// The user can use the link generated below to pay the fee.
-    		String link = Constants.PAYPAL_URL;
+    		// Get the parameters from the response
     		String[] splitted = responseParams.split("&");
     		String token = "";
     		for (String s : splitted){
@@ -90,7 +92,8 @@ public class PayPalController {
     		if(token != "")
     			splitted = token.split("=");
     		token = java.net.URLDecoder.decode(splitted[1]);
-    		link = link + token + "&useraction=commit";
+    		// The user can use the link generated below to pay the fee.
+    		String link = Constants.PAYPAL_URL + token + "&useraction=commit";
 			model.addObject("link", link);
     	} catch (Exception e) {
     		e.printStackTrace();
@@ -108,10 +111,18 @@ public class PayPalController {
     public ModelAndView response(@PathVariable long tutorshipId, @RequestParam(value = "token", required = true) String token,
     		@RequestParam(value = "PayerID", required = true) String payerId) {
     	ModelAndView model = new ModelAndView("paypal_success");
-/*    	TutorShip ts = tutorShipDao.findOne(tutorshipId);
-    	ts.setConfirmed(true);
-    	tutorShipDao.save(ts);
-*/   		//model.addObject("link", tutorshipId);
+    	TutorShip ts = tutorShipDao.findOne(tutorshipId);
+    	if(ts != null){
+    		ts.setConfirmed(true);
+    		tutorShipDao.save(ts);
+        	model = new ModelAndView("paypalSuccess");
+    	} else {
+        	model = new ModelAndView("paypalFailed");
+        	model.addObject("error", "Tutorship not found.");
+    	}
+    	
+
+   		//model.addObject("link", tutorshipId);
     	return model;
     }
 

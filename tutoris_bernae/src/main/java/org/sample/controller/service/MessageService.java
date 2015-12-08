@@ -13,7 +13,6 @@ import org.sample.model.Classes;
 import org.sample.model.Message;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
-import org.sample.model.TutorShip;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
@@ -43,10 +42,10 @@ public class MessageService{
 	@Autowired 
 	private TutorShipService tutorShipService;
     
+	@SuppressFBWarnings(value="MS_SHOULD_BE_FINAL", justification="Is already final.")
 	/**
      * Compares messages by date to order them from newest to oldest
      */
-	@SuppressFBWarnings(justification="Is already final.", value="MS_SHOULD_BE_FINAL")
 	private final static Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {

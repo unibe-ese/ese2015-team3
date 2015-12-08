@@ -9,13 +9,10 @@ import java.net.URL;
 import org.sample.controller.exceptions.InvalidTutorShipException;
 import org.sample.controller.service.TutorShipService;
 import org.sample.general.Constants;
-import org.sample.model.Tutor;
 import org.sample.model.TutorShip;
-import org.sample.model.User;
 import org.sample.model.dao.TutorShipDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,6 +73,7 @@ public class PayPalController {
     	try {
     		URL postURL = new URL(Constants.PAYPAL_API_URL+paypalParams + nvp);
     		HttpURLConnection conn = (HttpURLConnection)postURL.openConnection();
+    		
     		// Set the connection parameters. Input and output are required, therefore both are set to true.
     		conn.setDoInput (true);
     		conn.setDoOutput (true);

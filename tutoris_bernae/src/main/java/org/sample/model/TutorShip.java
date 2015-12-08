@@ -7,8 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- * A message send form one user to another
- * @author pf15ese
+ * A tutorship between a user and a tutor.
+ * {@code id} automatically generated unique identifier
+ * {@code student} relationship to one user that receives the tutorship.
+ * {@code tutor} relationship to one tutor that gives the tutorship.
+ * 
+ * @version 1.0
+ * @author ESE Team 3
  */
 
 @Entity

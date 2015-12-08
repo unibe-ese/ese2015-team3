@@ -13,13 +13,14 @@ import org.sample.model.Classes;
 import org.sample.model.Message;
 import org.sample.model.StudyCourse;
 import org.sample.model.Tutor;
-import org.sample.model.TutorShip;
 import org.sample.model.User;
 import org.sample.model.dao.MessageDao;
 import org.sample.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Offers services to load messages, to send (by saving them to the database) and 
@@ -44,13 +45,15 @@ public class MessageService{
 	/**
      * Compares messages by date to order them from newest to oldest
      */
-   private static final Comparator<Message> MessageDateComparator = new Comparator<Message>()
+	@SuppressFBWarnings(value="MS_SHOULD_BE_FINAL", justification="Is already final.")
+	private final static Comparator<Message> MessageDateComparator = new Comparator<Message>()
     {
 		public int compare(Message m1, Message m2) {
 			return -(m1.getSendDate().compareTo(m2.getSendDate()));
 		}
     	
     };
+    
     /**
      * Returns all messages the user has received, ordered form newest send date to oldest.
      * @param user from which we want to get all messages

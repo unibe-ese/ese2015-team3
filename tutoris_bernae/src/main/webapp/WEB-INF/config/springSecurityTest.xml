@@ -12,9 +12,10 @@
 		<intercept-url pattern="/profile**" access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" />
 		<intercept-url pattern="/edit**" access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" />
 		<intercept-url pattern="/view**" access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" />
+		<intercept-url pattern="/upgrade**" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/notutorfound" access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" />
 		<intercept-url pattern="/message**" access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" />
-		
+		<intercept-url pattern="/rate**" access="hasAnyRole('ROLE_USER','ROLE_TUTOR')" />
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
 		

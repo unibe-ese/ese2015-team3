@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Allows the user to see the messages he received and writing new ones
  */
@@ -83,6 +85,8 @@ public class MessageController extends PageController{
 	public ModelAndView answerSelectedMessage(@RequestParam(value = "messageId", required = true) Long messageId, HttpSession session) {
 		ModelAndView model;
 		User user = getCurrentUser();
+		@SuppressFBWarnings(value="J2EE_STORE_OF_NON_SERIALIZABLE_OBJECT_INTO_SESSION",
+				justification="Temporarly storing which message is beeing answered. No issue regarding passivation/migration.")
 		Message selectedMessage = messageService.read(messageId,user);
 		if(selectedMessage != null) {
 			session.setAttribute("answeredMessage", selectedMessage);

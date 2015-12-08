@@ -1,7 +1,5 @@
 package org.sample.controller.pojos;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotEmpty;
 import org.sample.model.Message;
 

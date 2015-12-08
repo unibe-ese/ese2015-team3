@@ -2,8 +2,6 @@ package org.sample.model;
 
 
 import java.math.BigDecimal;
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

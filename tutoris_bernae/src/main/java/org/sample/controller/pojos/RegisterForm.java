@@ -1,6 +1,5 @@
 package org.sample.controller.pojos;
 
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
 

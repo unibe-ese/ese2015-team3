@@ -17,8 +17,6 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * Entity for tutor
  * {@code id} automatically generated unique identifier
@@ -63,7 +61,6 @@ public class Tutor implements Serializable {
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
     private Set<CompletedClasses> completedClasses = new HashSet<CompletedClasses>();
 
-	//@SuppressFBWarnings(value="SE_BAD_FIELD", justification="Can't make every method accept only HashSet as Set is needed.")
 	@OneToMany(orphanRemoval=true,fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
 	private Set<Rating> ratings = new HashSet<Rating>();
 

@@ -7,7 +7,7 @@
 <c:import url="template/header.jsp" />
 <c:import url="template/function.jsp" />
 
-<h1>PayPal Payment Success</h1>
+<h1>PayPal Payment</h1>
 		<div>Thank you for using our website. Please click the "Pay now" button below to confirm and pay the fee
 		for the tutorship between ${user} and ${tutor}.</div></br>
 		<div>

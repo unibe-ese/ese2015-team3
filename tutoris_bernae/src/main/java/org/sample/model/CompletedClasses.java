@@ -1,6 +1,7 @@
 package org.sample.model;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
@@ -18,7 +19,9 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class CompletedClasses {
+public class CompletedClasses implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue

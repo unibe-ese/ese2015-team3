@@ -1,6 +1,7 @@
 package org.sample.model;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,8 +20,10 @@ import org.hibernate.annotations.Type;
  * @author ESE Team 3
  */
 @Entity
-public class Rating {
-	
+public class Rating implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private Long id;

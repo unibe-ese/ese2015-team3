@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * Entity for user
  * {@code id} automatically generated unique identifier
@@ -22,7 +20,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  */
 @Entity
-@SuppressFBWarnings(value=" SE_BAD_FIELD", justification="This object contains only serializable objects.")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;

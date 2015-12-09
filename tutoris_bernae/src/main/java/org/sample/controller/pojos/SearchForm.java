@@ -1,5 +1,6 @@
 package org.sample.controller.pojos;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.validation.constraints.Digits;
@@ -11,7 +12,9 @@ import org.sample.model.StudyCourse;
  *  Search Form stores filter criteria.
  *  Available filters are: study course, class and fee.
  */
-public class SearchForm {
+public class SearchForm implements Serializable {
+
+	private static final long serialVersionUID = 1L;
     
     private long id;
     

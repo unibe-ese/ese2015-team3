@@ -22,7 +22,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  */
 @Entity
-@SuppressFBWarnings(value=" SE_BAD_FIELD", justification="This object contains only serializable objects.")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;

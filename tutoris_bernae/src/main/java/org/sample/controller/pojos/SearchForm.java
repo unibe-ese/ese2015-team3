@@ -8,13 +8,13 @@ import javax.validation.constraints.Digits;
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  *  Search Form stores filter criteria.
  *  Available filters are: study course, class and fee.
  */
-public class SearchForm implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class SearchForm {
     
     private long id;
     

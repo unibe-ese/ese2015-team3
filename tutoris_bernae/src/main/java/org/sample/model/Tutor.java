@@ -31,7 +31,9 @@ import org.hibernate.annotations.Type;
  *
  */
 @Entity
-public class Tutor {
+public class Tutor implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
     @Id
     @GeneratedValue

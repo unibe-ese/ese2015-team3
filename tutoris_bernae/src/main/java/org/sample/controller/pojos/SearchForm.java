@@ -1,14 +1,11 @@
 package org.sample.controller.pojos;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.validation.constraints.Digits;
 
 import org.sample.model.Classes;
 import org.sample.model.StudyCourse;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  *  Search Form stores filter criteria.

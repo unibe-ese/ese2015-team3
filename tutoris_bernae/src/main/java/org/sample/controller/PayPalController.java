@@ -1,7 +1,6 @@
 package org.sample.controller;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;

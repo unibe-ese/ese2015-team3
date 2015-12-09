@@ -84,14 +84,11 @@ public class PayPalController {
     		conn.setDoInput (true);
     		conn.setDoOutput (true);
     		conn.setRequestMethod("GET");
-
-    		// Read the input from the input stream.
-    		@SuppressWarnings("unused")
-			DataInputStream in = new DataInputStream (conn.getInputStream());
     		
     		int responseCode = conn.getResponseCode();
     		if (responseCode != -1) {
-	    		BufferedReader is = new BufferedReader(new InputStreamReader( conn.getInputStream()));
+        		// Read the input from the input stream.
+	    		BufferedReader is = new BufferedReader(new InputStreamReader( conn.getInputStream(), "UTF-8"));
 	    		String line = null;
 	    		while (((line = is.readLine()) !=null)) {
 	    			responseParams = responseParams + line;
